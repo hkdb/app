@@ -1,0 +1,98 @@
+package arch
+
+import (
+	"github.com/hkdb/app/env"
+	"github.com/hkdb/app/utils"
+	"github.com/hkdb/app/db"
+	
+	"os"
+	"os/exec"
+	"fmt"
+)
+
+func AddRepo(s, g string) {
+
+	repo := s
+	if sExt := utils.GetFileExtension(s); sExt == "sh" {
+		repo = utils.GetFileName(s)
+	} else {
+		utils.PrintErrorMsgExit("Input Error:", "Arch based distros will only take bash scripts as the add-repo arg...")
+	}
+	exists, err := db.RepoExists("pacman", repo)
+	if err != nil {
+		utils.PrintErrorExit("Error:", err)
+	}
+	if exists == true {
+		utils.PrintErrorMsgExit("Error:", "This repo has already been added to app before...")
+	}
+
+	if ws := utils.HasWhiteSpace(s); ws == true {
+		utils.PrintErrorMsgExit("Input Error:", "Can't add more than one repo at a time...")
+	}
+
+	sFull := utils.GetWorkPath() + "/" + s
+	fLine, err := utils.ReadFileLine(sFull, 1)
+	if err != nil {
+		utils.PrintErrorExit("File Error:", err)
+	}
+	if fLine != "#!/bin/bash" {
+		utils.PrintErrorMsgExit("File Syntax Error:", "Did you add #!/bin/bash to the top of the script?")
+	}
+	os.Chmod(sFull, 0755)
+	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
+	utils.RunCmd(runScript, "Script Error:")
+	utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/pacman")
+	utils.Copy(sFull, env.DBDir + "/packages/repo/local/pacman/" + s)
+	name := utils.GetFileName(s)
+
+	fmt.Println("\n" + name + " has been added...\n")
+	// Record added repo
+	if err := db.RecordRepo("pacman", name); err != nil {
+		utils.PrintErrorExit("Repo Record Error:", err)
+	}
+
+}
+
+func RemoveRepo(s string) {
+
+	repo := s
+	if sExt := utils.GetFileExtension(s); sExt == "sh" {
+		repo = utils.StripExtension(s, "."+sExt)
+	} else {
+		utils.PrintErrorMsgExit("Input Error:", "Arch based distros will only take bash scripts as the rm-repo arg...")
+	}
+	exists, err := db.RepoExists("pacman", repo)
+	if err != nil {
+		utils.PrintErrorExit("Error:", err)
+	}
+	if exists == false {
+		utils.PrintErrorMsgExit("Error:", "This repo does not exist or was not added by app...")
+	}
+
+	if ws := utils.HasWhiteSpace(s); ws == true {
+		utils.PrintErrorMsgExit("Input Error:", "Can't remove more than one repo at a time...")
+	}
+
+	sFull := utils.GetWorkPath() + "/" + s
+	fLine, err := utils.ReadFileLine(sFull, 1)
+	if err != nil {
+		utils.PrintErrorExit("File Error:", err)
+	}
+	if fLine != "#!/bin/bash" {
+		utils.PrintErrorMsgExit("File Syntax Error:", "Did you add #!/bin/bash to the top of the script?")
+	}
+	os.Chmod(sFull, 0755)
+	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
+	utils.RunCmd(runScript, "Script Error:")
+
+	// Record removed repo
+	if err = db.RemoveRepo("pacman", "sh", repo); err != nil {
+		utils.PrintErrorExit("Repo Remove Error:", err)
+	}
+
+	utils.DeleteDirIfEmpty(env.DBDir + "/packages/repo/local/pacman")
+
+	fmt.Println(repo + " has been removed...\n")
+
+}
+

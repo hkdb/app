@@ -1,0 +1,29 @@
+package utils
+
+import (
+	"os"
+	"os/exec"
+)
+
+func RunCmd(c *exec.Cmd, msg string) {
+
+	cmd := c
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	if err := cmd.Run(); err != nil {
+    PrintErrorExit(msg, err)
+  }
+
+}
+
+func RunCmdQuiet(c *exec.Cmd, msg string) {
+	
+	cmd := c
+	if err := cmd.Run(); err != nil {
+		PrintErrorExit(msg, err)
+	}
+
+}
+
