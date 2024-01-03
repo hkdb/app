@@ -155,6 +155,19 @@ For any of the native package managers (apt, dnf, pacman), you can remove stale 
 app autoremove
 ```
 
+To upgrade all installed packages:
+```
+app upgrade all
+```
+
+If you only want to update one package manager at a time manually:
+```
+app upgrade # apt, dnf, and pacman
+app -m yay upgrade
+app -m flatpak upgrade
+app -m snap upgrade
+```
+
 If you use 3rd party repos for apt, dnf, or flatpak, no worries. They will be automatically restored from the restore command prior to package installation if you add them the following way:
 
 #### EXAMPLE 1 ~ Official Graphics Driver PPA for Ubuntu
@@ -510,6 +523,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### CHANGE
 
+- 01032024 - Added upgrade examples in README
 - 01032024 - Updated README
 - 01022024 - Fixed flatpak remove
 - 12312023 - Initial commit
