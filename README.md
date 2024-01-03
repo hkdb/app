@@ -5,7 +5,7 @@ maintained by: @hkdb
 
 ### SUMMARY
 
-A cross-platform package management wrapper written in Go that remembers all the additional packages a user installs beyond the base OS so that it can be easily moved over to a new machine and automatically reinstalled with one command. It also provides the same command line interface across different distros/OS's and package managers so you don't have to remember the different syntax across different OS's and package managers. Last but not least, it allows users to upgrade their system with a user defined set of package managers (ie. apt, flatpak, and AppImage) with a single command.
+A cross-platform (Linux / Mac [coming soon] / Windows [coming soon]) package management wrapper (apt, dnf, pacman, yay, flatpak, snap, & more coming soon...) written in Go that remembers all the additional packages a user installs beyond the base install so that it can be easily moved over to a new machine and automatically reinstalled with one command. It also provides the same command line interface across different distros/OS's and package managers so you don't have to remember the different syntax across different OS's and package managers. Last but not least, it allows users to upgrade their system with a user defined set of package managers (ex. apt, flatpak, and AppImage) with a single command.
 
 This fun project came to life because I have multiple machines and am constantly re-installing them. I also review and or get new laptops fairly often.
 
@@ -23,8 +23,8 @@ Last but not least, it's only natural that I get slowed down during work because
 
 And so......... out came this project that was born over some time off from work during the winter holidays in 2023. It aims to solve the problem by:
 
-- Providing the same command structure across distros and package managers to reduce the brain teasing task of remembering which command structure is for which distro
-- Automatically remember what repos you added and what packages you installed on each package manager
+- Providing the same command structure across OS/distros and package managers to reduce the brain teasing task of remembering which command structure is for which package manager
+- Automatically remember what repos you added and what packages you installed on each package manager and be able to restore them for you
 - Provide a single command upgrade of all the software across all package managers used
 - Provide a way to allow for a single command install of everything you have ever installed on another computer if it's the same distro base or OS
 
@@ -34,7 +34,7 @@ In other words, <b>THIS IS STILL ALPHA SOFTWARE</b>.
 
 ### HOW IT WORKS
 
-Instead of using your package manager, you use app's CLI to install/remove packages so that it records everything inside `~/.config/app`. So when you move that directory to a new machine of the same based distro or OS, you can just install all the packages you have installed on the old machine with one command. In fact, if you move your `~/.config` directory on a Linux machine to the next, it should retain most of your app settings that reside in `~/.config` as well. Be aware of config structual changes between varying versions of the same software though. 
+Instead of using your package manager, you use the app command to install/remove packages so that it records everything inside `~/.config/app`. So when you move that directory to a new machine of the same based distro or OS, you can just install all the packages you have installed on the old machine with one command. In fact, if you move your `~/.config` directory on a Linux machine to the next, it should retain most of your app settings that reside in `~/.config` as well but be aware of config structual changes between varying versions of the same software. 
 
 See the "APP CONFIG DIRECTORY STRUCTURE" section to learn more about what's inside ~/.config.
 
@@ -62,6 +62,17 @@ app -m flatpak install Geary
 app -m appimage install Densify-v0.3.1-x86_64.AppImage # from the directory where the .AppImage resides
 app -m snap install spotify
 ```
+
+If you need to install a piece of software in the form of a .deb or .rpm:
+
+```
+app install rustdesk-1.1.9.deb
+
+# OR
+
+app install jwhois-4.0-18.el6.x86_64.rpm
+```
+
 if you run into an issue of installing a snap that requires classic confinement like flow:
 ```
 app -m snap -classic install flow
@@ -71,11 +82,19 @@ If you wanted to install the spotify from the `edge` channel instead, run the fo
 app -m snap -c edge install spotify
 ```
 
-neovim, Geary, Densify, and Spotify will then be automatically added to a record that contains a space separated string of packages per package manager along with some other options saved in various .json files inside `~/.config/app` so that when the directory gets moved to a new machine, all you have to do on the new machine is:
+If you don't remember the package names or you just want to verify that they exist in the repos, you can always search for them per package managers:
+```
+app search tilix # apt, dnf, pacman
+app -m yay search tilix
+app -m flatpak search geary
+app -m snap search spotify
+```
+
+All of the packages installed above will then be automatically added to a record that contains a space separated string of packages per package manager along with some other options and the local packages saved in various areas inside `~/.config/app` so that when the directory gets moved to a new machine, all you have to do on the new machine is:
 ```
 app -r all
 ```
-and all of the packages that has been installed on your previous machine will be installed in the new machine.
+and all packages recorded/saved on your previous machine will be installed in the new machine.
 
 Note* By default `app -r all` always starts with the native package manager first (ie. apt for Debian, dnf for Fedora, and pacman for Arch) and then moves down to flatpak, snaps, and AppImages. If you need to install out of order for your specific use case, you can always install all per package manager manually.
 
@@ -90,6 +109,7 @@ app -r appimage
 To see what has been installed by app before:
 ```
 app history # apt, dnf, and pacman
+app -m yay history
 app -m flatpak history
 app -m snap history
 app -m appimage history
@@ -98,6 +118,7 @@ app -m appimage history
 To see everything that was ever installed on the system:
 ```
 app list # app, dnf, and pacman
+app -m yay list
 app -m flatpak list
 app -m snap list
 app -m appimage list
@@ -106,15 +127,17 @@ app -m appimage list
 You can also search for what's installed on the system by including a search keyword:
 ```
 app list neovim
+app -m yay list neovim
 app -m flatpak list geary
 app -m snap list spotify
 app -m appimage yubi
 ```
 
-If you want to remove any software packages, you can use the following commands:
+If you want to remove any software packages, you can use one of the following commands:
 
 ```
 app remove neovim
+app -m yay remove neovim
 app -m flatpak remove org.gnome.Geary
 app -m appimage remove Densify
 app -m snap remove 'flow spotify'
@@ -333,7 +356,7 @@ OPTIONS:
     	
 ```
 
-### SUPPORT
+### SUPPORT & ROADMAP
 
 - GNU/Linux (apt, dnf, pacman, flatpak, snap, appimage)
   - Debian derivatives
@@ -355,7 +378,7 @@ Currently in the roadmap:
 
 `Pre-requisites`:
 
-There's an install script that comes with this repo which is the preferred way to install app. It takes care of most of the dependencies but I leave having each of your package managers setup properly to the end user before running app. For example, if you don't have the right packages installed to have add-apt-repository work properly on Debian or flatpak can't be used without sudo, then app will inevitably fail. I am however open to installing more dependencies in the future if this ends up being used by others and that's something that everyone wants.
+There's an install script that comes with this repo which is the preferred way to install app. It takes care of most of the immediate dependencies but I leave having each of your package managers proper setup/configuration to the end user before running app. For example, if you don't have the right packages installed to have add-apt-repository work properly on Debian or flatpak can't be used without sudo, then app will inevitably fail. I am however open to installing or auto-configuring more dependencies in the future if this ends up being used by others and that's something that everyone wants.
 
 If there are enabled package managers that you absolutely hate and want out of the auto restore/install all loop, you can disable them manually (ie. `app -m snap disable`) and app will remember this whereever you bring your `~/.config/app` directory. You can also re-enable them anytime by just running `app -m <package manager> enable`
 
@@ -363,7 +386,9 @@ If there are enabled package managers that you absolutely hate and want out of t
 
 Some distros are easily supported by just simply identifying them under each of the 3 base distros respectively so if there's a distro that it doesn't support already, feel free to submit an issue including the output of `lsb_release -a` to request for it to be added and I will try to find time to get it added on.
 
-Also, I primarily use Pop, Ubuntu, Debian, Fedora, Arch, and Garuda so other distros are a bit less tested. If you notice any issues on the other "supported" distros, please let me know by submitting an issue here. 
+Also, I primarily use Pop, Ubuntu, Debian, Fedora, Arch, and Garuda so other distros are a bit less tested. If you notice any issues on the other "supported" distros, please let me know by submitting an issue here.
+
+Immutable distros and distros like nixos will most likely never make it to this list since for example, nixos' package manager pretty much addresses the same problem but just in a different way and perhaps maybe even better...
 
 `Caveat`: Arch Derivatives
 
@@ -465,7 +490,7 @@ You can of course choose to work backwards and mannually edit/compose the data i
 
 Tracking versioned release:
 
-1. cd back into the repo whreever you put it. `~/.config/app` if you took my recommendation 
+1. cd back into the repo whereever you put it. `~/.config/app` if you took my recommendation 
 2. `git pull`
 3. `git checkout <version tag>`
 3. `./update.sh`
@@ -478,13 +503,14 @@ Tracking main branch:
 
 ### SUPPORT US!
 
-If this repo was useful to you, feel free to buy us some coffees! :)
+If this repo was useful to you, feel free to buy us some coffee! :)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/3dfosi)
 
 
 ### CHANGE
 
+- 01032024 - Updated README
 - 01022024 - Fixed flatpak remove
 - 12312023 - Initial commit
 
