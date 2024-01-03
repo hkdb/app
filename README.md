@@ -485,6 +485,7 @@ If this repo was useful to you, feel free to buy us some coffees! :)
 
 ### CHANGE
 
+- 01022024 - Fixed flatpak remove
 - 12312023 - Initial commit
 
 ### DISCLAIMER

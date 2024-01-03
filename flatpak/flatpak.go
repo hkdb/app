@@ -42,7 +42,7 @@ func Remove(pkg string) {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
 	
-	if inst == true {
+	if inst == false {
 		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
 	}
 
