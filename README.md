@@ -5,7 +5,7 @@ maintained by: @hkdb
 
 ### SUMMARY
 
-A cross-platform (Linux / Mac [coming soon] / Windows [coming soon]) package management wrapper (apt, dnf, pacman, yay, flatpak, snap, & more coming soon...) written in Go that remembers all the additional packages a user installs beyond the base install so that it can be easily moved over to a new machine and automatically reinstalled with one command. It also provides the same command line interface across different distros/OS's and package managers so you don't have to remember the different syntax across different OS's and package managers. Last but not least, it allows users to upgrade their system with a user defined set of package managers (ex. apt, flatpak, and AppImage) with a single command.
+A cross-platform (Linux / Mac [coming soon] / Windows [coming soon]) package management wrapper (apt, dnf, pacman, yay, Flatpak, Snap, AppImage & more coming soon...) written in Go that remembers all the additional packages a user installs beyond the base install so that it can be easily moved over to a new machine and automatically reinstalled with one command. It also provides the same command line interface across different distros/OS's and package managers so you don't have to remember the different syntax across different OS's and package managers. Last but not least, it allows users to upgrade their system with a user defined set of package managers (ex. apt, flatpak, and AppImage) with a single command.
 
 This fun project came to life because I have multiple machines and am constantly re-installing them. I also review and or get new laptops fairly often.
 
@@ -527,6 +527,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### CHANGE
 
+- 01042024 - Updated summary of README
 - 01042024 - Updated background of README
 - 01032024 - Added upgrade examples in README
 - 01032024 - Updated README
