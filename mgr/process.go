@@ -341,6 +341,10 @@ func execute(m, a, p, g, c string, classic bool) {
 			case "pacman":
 				fmt.Println("\nUpgrading with PACMAN:\n")
 				arch.Upgrade()
+			case "brew":
+				if env.OSType != "Mac" {
+					utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
+				}
 			default:
 				utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
 			}

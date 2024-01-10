@@ -162,6 +162,8 @@ func GetEnv() {
 		if werr := utils.WriteToFile("BREW = y", dir + "/settings.conf"); werr != nil {
 			utils.PrintErrorExit("Write settings.conf Error:", werr)
 		}
+
+		env.Brew = true
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}	

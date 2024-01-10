@@ -33,6 +33,7 @@ func isEnabled(pm string) bool {
 		if env.Brew == false {
 			return false
 		}
+		return true
 	}
 
 	return false

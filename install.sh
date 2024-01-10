@@ -96,7 +96,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   echo -e "\nOS: macos\n"
-  $PKGMGR="brew"
+  PKGMGR="brew"
   read -p "Install Homebrew? (Y/n)" HOMEBREW
   if [[ "$HOMEBREW" != "N" ]] && [[ "$HOMEBREW" != "n" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
