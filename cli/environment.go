@@ -33,42 +33,6 @@ func GetEnv() {
 	dir := homedir + "/.config/app"
 	dBase := ""
 
-	// Getting settings from settings.conf if it exists
-	if _, conferr := os.Stat(dir + "/settings.conf"); conferr == nil {
-		err := godotenv.Load(dir + "/settings.conf")
-		if err != nil {
-			fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
-		}
-		
-
-		if yay := os.Getenv("YAY"); yay == "n" {
-			env.Yay = false
-		}
-		if flatpak := os.Getenv("FLATPAK"); flatpak == "n" {
-			env.Flatpak = false
-		}
-		if snap := os.Getenv("SNAP"); snap == "n" {
-			env.Snap = false
-		}
-		if appimage := os.Getenv("APPIMAGE"); appimage == "n" {
-			env.AppImage = false
-		}
-	} else {
-		if _, err := os.Stat(dir); os.IsNotExist(err) {	
-			fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
-			err := os.MkdirAll(dir, 0700)
-			if err != nil {
-				fmt.Println("Error:", err)
-				fmt.Println("Exiting...\n")
-				os.Exit(1)
-			}
-		} 
-
-		if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nAPPIMAGE = n", dir + "/settings.conf"); werr != nil {
-			utils.PrintErrorExit("Write settings.conf Error:", werr)
-		}
-	}
-
 	// determine OS
 	osType := runtime.GOOS
 	switch osType {
@@ -83,7 +47,46 @@ func GetEnv() {
 		os.Exit(1)
 	}
 
-	if osType == "linux" {
+	switch osType {
+	case "linux":
+		// Getting settings from settings.conf if it exists
+		if _, conferr := os.Stat(dir + "/settings.conf"); conferr == nil {
+			err := godotenv.Load(dir + "/settings.conf")
+			if err != nil {
+				fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
+			}
+			
+			if yay := os.Getenv("YAY"); yay == "n" {
+				env.Yay = false
+			}
+			if flatpak := os.Getenv("FLATPAK"); flatpak == "n" {
+				env.Flatpak = false
+			}
+			if snap := os.Getenv("SNAP"); snap == "n" {
+				env.Snap = false
+			}
+			if brew := os.Getenv("BREW"); brew == "n" {
+				env.Brew = false
+			}
+			if appimage := os.Getenv("APPIMAGE"); appimage == "n" {
+				env.AppImage = false
+			}
+		} else {
+			if _, err := os.Stat(dir); os.IsNotExist(err) {	
+				fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
+				err := os.MkdirAll(dir, 0700)
+				if err != nil {
+					fmt.Println("Error:", err)
+					fmt.Println("Exiting...\n")
+					os.Exit(1)
+				}
+			} 
+
+			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n", dir + "/settings.conf"); werr != nil {
+				utils.PrintErrorExit("Write settings.conf Error:", werr)
+			}
+		}
+
 		d, err := exec.Command("/usr/bin/lsb_release", "-i", "-s").Output()
 		if err != nil {
 			fmt.Println("Error:", err)
@@ -144,6 +147,25 @@ func GetEnv() {
 				fmt.Println(utils.ColorYellow, "Temporarily disabling Snap because it's not installed on your system. Suppress this message by disabling Snap on app by running \"app -m snap disable\"...\n", utils.ColorReset)
 			}
 		}
+	case "darwin":
+		// Write settings just for consistency
+		if _, err := os.Stat(dir); os.IsNotExist(err) {	
+			fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
+			err := os.MkdirAll(dir, 0700)
+			if err != nil {
+				fmt.Println("Error:", err)
+				fmt.Println("Exiting...\n")
+				os.Exit(1)
+			}
+		} 
+
+		if werr := utils.WriteToFile("BREW = y", dir + "/settings.conf"); werr != nil {
+			utils.PrintErrorExit("Write settings.conf Error:", werr)
+		}
+
+		env.Brew = true
+	case "windows":
+		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}	
 
 }

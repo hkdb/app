@@ -10,9 +10,9 @@ import (
 )
 
 var m = flag.String("m", "", 
-	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman>\n   example: app -a install -p neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- appimage\n")
+	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman>\n   example: app -a install -p neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- appimage\n")
 var r = flag.String("r", "", 
-	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- appimage\n\t- all\n")
+	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- appimage\n\t- all\n")
 var y = flag.Bool("y", false, 
 	"Auto Yes - Skips the package manager confirmation (APT & DNF Only)\n   usage: app -y install neovim\n")
 var gpg = flag.String("gpg", "", 
@@ -168,7 +168,7 @@ func usage() {
 	fmt.Printf("\n\t\tapp -m flatpak install Geary")
 	fmt.Printf("\n\n")
 
-	fmt.Printf("ACTIONS:\n\t- install ~ Install package. Takes package name as argument\n\t- remove ~ Uninstall package. Takes package name as argument\n\t- update ~ Refreshes repos\n\t- upgrade ~ Upgrade packages. Takes \"all\" as a value to upgrade with all package managers\n\t- dist-upgrade ~ A more advanced upgrade that can add or remove packages during upgrade (APT Only)\n\t- autoremove ~ Remove dependency packages that are no longer required\n\t- purge ~ Same as remove but removes configs too (APT only)\n\t- search ~ Search for packages in repos\n\t- list ~ List packages installed on system. Greps for package if argument is provided.\n\t- history ~ List pacakges installed by app. Takes package name as argument to search.\n\t- enable ~ Enable Package Manager (Flatpak, Snap, AppImage)\n\t- disable ~ Disable Package Manager (Flatpak, Snap, AppImage)\n\t- add-repo ~ Add package manager repo. Takes a .sh, ppa, or url as argument.\n\t- rm-repo ~ Remove package manager repo. Takes repo identifier as argument\n\t- ls-repo ~ List package manager repos\n\t- settings ~ List settings including the status of packages managers (enabled/disabled)\n\n")
+	fmt.Printf("ACTIONS:\n\t- install ~ Install package. Takes package name as argument\n\t- remove ~ Uninstall package. Takes package name as argument\n\t- update ~ Refreshes repos\n\t- upgrade ~ Upgrade packages. Takes \"all\" as a value to upgrade with all package managers\n\t- dist-upgrade ~ A more advanced upgrade that can add or remove packages during upgrade (APT Only)\n\t- autoremove ~ Remove dependency packages that are no longer required\n\t- purge ~ Same as remove but removes configs too (APT only)\n\t- search ~ Search for packages in repos\n\t- list ~ List packages installed on system. Greps for package if argument is provided.\n\t- history ~ List pacakges installed by app. Takes package name as argument to search.\n\t- enable ~ Enable Package Manager (yay, flatpak, snap, brew, appimage)\n\t- disable ~ Disable Package Manager (yay, flatpak, snap, brew, appimage)\n\t- add-repo ~ Add package manager repo. Takes a .sh, ppa, or url as argument.\n\t- rm-repo ~ Remove package manager repo. Takes repo identifier as argument\n\t- ls-repo ~ List package manager repos\n\t- settings ~ List settings including the status of packages managers (enabled/disabled)\n\n")
 	fmt.Printf("PACKAGE:\n\tPackage name(s). For multiple packages, wrap the argument with quotes.")
 	fmt.Printf("\n\tEXAMPLE:\n\t\tapp install 'neovim whois nmap'")
 	fmt.Printf("\n\n")

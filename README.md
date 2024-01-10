@@ -1,7 +1,7 @@
 # app - A Package Management Assistant with Super Powers 
 maintained by: @hkdb
 
-![ScreenShot](docs/assets/ss2.png)
+![ScreenShot](docs/assets/ss3.png)
 
 ### SUMMARY
 
@@ -11,7 +11,7 @@ App is a cross-platform package management wrapper written in Go that remembers 
 
 Supported OS:
 - Linux 
-- Mac [coming soon] 
+- Mac (Homebrew) 
 - Windows [coming soon]
 
 Supported Package Managers:
@@ -21,6 +21,7 @@ Supported Package Managers:
 - yay
 - Flatpak
 - Snap
+- Homebrew
 - AppImage
 - And more coming soon! (See `SUPPORT & ROADMAP` section)
 
@@ -67,6 +68,7 @@ By default, yay, flatpak, snap, and AppImage are disabled. You can enable whiche
 app -m yay enable
 app -m flatpak enable
 app -m snap enable
+app -m brew enable # If Linux. In Mac, it's default.
 app -m appimage enable
 ```
 
@@ -76,12 +78,13 @@ if you regret it and say for example, just hate snap with a passion, you can dis
 app -m snap disable
 ```
 
-To install software, instead of `sudo apt install neovim` and `flatpak install Geary` you would execute:
+To install software, instead of `sudo apt install neovim`, `flatpak install Geary`, and etc, you would execute:
 ```
 app install neovim
 app -m flatpak install Geary
 app -m appimage install Densify-v0.3.1-x86_64.AppImage # from the directory where the .AppImage resides
 app -m snap install spotify
+app -m brew install gimp # In macOS, just "app install gimp" will do
 ```
 
 If you need to install a piece of software in the form of a .deb or .rpm:
@@ -108,6 +111,7 @@ If you don't remember the package names or you just want to verify that they exi
 app search tilix # apt, dnf, pacman
 app -m yay search tilix
 app -m flatpak search geary
+app -m brew search gimp # or just "app search gimp" in macOS
 app -m snap search spotify
 ```
 
@@ -124,6 +128,8 @@ For Example:
 ```
 app -r flatpak
 app -r apt
+app -r brew
+app -r snap
 app -r appimage
 ```
 
@@ -133,6 +139,7 @@ app history # apt, dnf, and pacman
 app -m yay history
 app -m flatpak history
 app -m snap history
+app -m brew history # or just "app history" in macOS
 app -m appimage history
 ```
 
@@ -142,6 +149,7 @@ app list # app, dnf, and pacman
 app -m yay list
 app -m flatpak list
 app -m snap list
+app -m brew list # or just "app list" in macOS
 app -m appimage list
 ```
 
@@ -151,6 +159,7 @@ app list neovim
 app -m yay list neovim
 app -m flatpak list geary
 app -m snap list spotify
+app -m brew list gimp # or just "app list gimp" in macOS
 app -m appimage yubi
 ```
 
@@ -160,6 +169,7 @@ If you want to remove any software packages, you can use one of the following co
 app remove neovim
 app -m yay remove neovim
 app -m flatpak remove org.gnome.Geary
+app -m brew remove gimp # or just "app remove gimp" in macOS
 app -m appimage remove Densify
 app -m snap remove 'flow spotify'
 ```
@@ -186,6 +196,7 @@ If you only want to update one package manager at a time manually:
 app upgrade # apt, dnf, and pacman
 app -m yay upgrade
 app -m flatpak upgrade
+app -m brew upgrade # or just "app upgrade" in macOS
 app -m snap upgrade
 ```
 
@@ -364,12 +375,13 @@ OPTIONS:
     	   default: auto-detect of native pkg manager <apt/dnf/pacman>
     	   example: app -a install -p neovim
     	   options:
-    		- apt
-    		- dnf
-    		- pacman
+    		- apt (default if debian based)
+    		- dnf (default if redhat based)
+    		- pacman (default if arch based)
     		- yay
     		- flatpak
     		- snap
+            - brew (default if macOS)
     		- appimage
     	
   -r string
@@ -382,6 +394,7 @@ OPTIONS:
     		- yay
     		- flatpak
     		- snap
+            - brew
     		- appimage
     		- all
     	
@@ -392,20 +405,20 @@ OPTIONS:
 
 ### SUPPORT & ROADMAP
 
-- GNU/Linux (apt, dnf, pacman, flatpak, snap, appimage)
+- GNU/Linux (apt, dnf, pacman, flatpak, snap, brew, appimage)
   - Debian derivatives
     - Debian, Ubuntu, Pop, MX, Kali, Raspbian   
   - Redhat derivatives
     - Fedora, RHEL, Rocky, CentOS, Oracle, ClearOS, AmazonAMI
   - Arch derivatives
     - Arch, Manjaro, Garuda, Endeavour
+- macOS (brew)
 
 Currently in the roadmap:
 
 - Go
 - Rust (cargo)
 - Suse Based Linux
-- MacOS (brew)
 - Python (pip)
 - Windows (scoop)
 - Windows (chocolatey)
@@ -452,6 +465,8 @@ The config directory app creates on your machine has the following structure to 
           |_ apt.json
           |
           |_ deb.json - a list of packages
+          |
+          |_ brew.json
           |
           |_ dnf.json
           |
@@ -542,8 +557,24 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/3dfosi)
 
 
+### VERSIONS
+
+#### v0.02 - Jan 10th, 2024
+
+Added Homebrew & macOS support
+
+If you are upgrading rather than installing for the first time on Linux, after upgrading to this version, execute the following command:
+```
+echo "BREW = n" >> ~/.config/app/settings.conf
+```
+
+#### v0.01 - Jan 6th, 2024
+
+First Alpha Release
+
 ### CHANGE
 
+- 01102024 - Added brew, mac support, & fixed settings
 - 01042024 - Summary edit
 - 01042024 - Updated summary of README
 - 01042024 - Updated background of README

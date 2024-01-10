@@ -29,6 +29,11 @@ func isEnabled(pm string) bool {
 			return false
 		}
 		return true
+	case "brew":
+		if env.Brew == false {
+			return false
+		}
+		return true
 	}
 
 	return false
