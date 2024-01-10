@@ -574,7 +574,7 @@ First Alpha Release
 
 ### CHANGE
 
-- 01102024 - Added brew & macOS support
+- 01102024 - Added brew, mac support, & fixed settings
 - 01042024 - Summary edit
 - 01042024 - Updated summary of README
 - 01042024 - Updated background of README

@@ -185,7 +185,7 @@ func restoreOne(r string) {
 		case "scoop":
 			utils.PrintErrorMsgExit("Error:", "Not implemented yet... Coming Soon!")
 		default:
-		utils.PrintErrorMsgExit("Error:", "Package manager not supported...")
+			utils.PrintErrorMsgExit("Error:", "Package manager not supported...")
 		}
 	case "Mac":
 		if r != "brew" {
@@ -201,6 +201,10 @@ func restoreOne(r string) {
 
 func execute(m, a, p, g, c string, classic bool) {
 	
+	if env.OSType == "Mac" && m != "brew" {
+		utils.PrintErrorMsgExit("Error:", "macOS currently only supports Homebrew...")
+	}
+
 	switch a {
 	case "install":
 		switch m {
