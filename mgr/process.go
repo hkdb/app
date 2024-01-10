@@ -541,6 +541,9 @@ func execute(m, a, p, g, c string, classic bool) {
 			utils.EditSettings("SNAP = ", "y")
 			fmt.Println("Snap has been enabled...\n")
 		case "brew":
+			if env.OSType == "Mac" {
+				utils.PrintErrorMsgExit("", "Homebrew is the default for macOS. It's already enabled...")
+			}
 			env.Brew = true
 			utils.EditSettings("BREW = ", "y")
 			fmt.Println("Homebrew has been enabled...\n")
@@ -567,6 +570,9 @@ func execute(m, a, p, g, c string, classic bool) {
 			utils.EditSettings("SNAP = ", "n")
 			fmt.Println("Snap has been disabled...\n")
 		case "brew":
+			if env.OSType == "Mac" {
+				utils.PrintErrorMsgExit("Error:", "Homebrew is the default for macOS. It can't be disabled...")
+			}
 			env.Brew = false
 			utils.EditSettings("BREW = ", "n")
 			fmt.Println("Homebrew has been disabled...\n")
@@ -620,23 +626,46 @@ func execute(m, a, p, g, c string, classic bool) {
 		}
 	case "settings":
 		fmt.Println("Package Managers:\n")
-		fmt.Print("yay: ")
-		if env.Yay == true {
-			fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
-		} else {
-			fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+		if env.OSType == "Linux" {
+			fmt.Print("yay: ")
+			if env.Yay == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("flatpak: ")
+			if env.Flatpak == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("snap: ")
+			if env.Snap == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("brew: ")
+			if env.Brew == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("appimage: ")
+			if env.AppImage == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
 		}
-		fmt.Print("flatpak: ")
-		if env.Flatpak == true {
-			fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
-		} else {
-			fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
-		}
-		fmt.Print("snap: ")
-		if env.Snap == true {
-			fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
-		} else {
-			fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+
+		if env.OSType == "Mac" {
+			fmt.Print("brew: ")
+			if env.Brew == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
 		}
 		fmt.Println("")
 	default:

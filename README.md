@@ -557,6 +557,21 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/3dfosi)
 
 
+### VERSIONS
+
+#### v0.02 - Jan 10th, 2024
+
+Added Homebrew & macOS support
+
+If you are upgrading rather than installing for the first time, after upgrading to this version, execute the following command:
+```
+echo "BREW = n" >> ~/.config/app/settings.conf
+```
+
+#### v0.01 - Jan 6th, 2024
+
+First Alpha Release
+
 ### CHANGE
 
 - 01102024 - Added brew & macOS support
