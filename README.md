@@ -1,7 +1,7 @@
 # app - A Package Management Assistant with Super Powers 
 maintained by: @hkdb
 
-![ScreenShot](docs/assets/ss2.png)
+![ScreenShot](docs/assets/ss3.png)
 
 ### SUMMARY
 
@@ -11,7 +11,7 @@ App is a cross-platform package management wrapper written in Go that remembers 
 
 Supported OS:
 - Linux 
-- Mac 
+- Mac (Homebrew) 
 - Windows [coming soon]
 
 Supported Package Managers:
@@ -21,7 +21,7 @@ Supported Package Managers:
 - yay
 - Flatpak
 - Snap
-- brew
+- Homebrew
 - AppImage
 - And more coming soon! (See `SUPPORT & ROADMAP` section)
 
@@ -405,7 +405,7 @@ OPTIONS:
 
 ### SUPPORT & ROADMAP
 
-- GNU/Linux (apt, dnf, pacman, flatpak, snap, appimage)
+- GNU/Linux (apt, dnf, pacman, flatpak, snap, brew, appimage)
   - Debian derivatives
     - Debian, Ubuntu, Pop, MX, Kali, Raspbian   
   - Redhat derivatives
