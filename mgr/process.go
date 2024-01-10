@@ -8,6 +8,7 @@ import (
 	"github.com/hkdb/app/arch"
 	"github.com/hkdb/app/flatpak"
 	"github.com/hkdb/app/snap"
+	brew "github.com/hkdb/app/macos"
 	"github.com/hkdb/app/appimage"
 	"github.com/hkdb/app/restore"
 	
@@ -92,6 +93,14 @@ func restoreAll() {
 			}
 		}
 
+		if env.Brew == true {
+			fmt.Print("Restore all Homebrew apps? (Y/n) ")
+			s := utils.Confirm()
+			if s == true {
+				brew.InstallAll()
+			}
+		}
+
 		if env.AppImage == true {
 			fmt.Print("Restore all AppImage apps? (Y/n) ")
 			s := utils.Confirm()
@@ -100,7 +109,11 @@ func restoreAll() {
 			}
 		}
 	case "Mac":
-		fmt.Println("Not implemented yet... Coming Soon!")
+		fmt.Print("Restore all Homebrew apps? (Y/n) ")
+		s := utils.Confirm()
+		if s == true {
+			brew.InstallAll()
+		}
 	case "Windows":
 		fmt.Println("Not implemented yet... Coming Soon!")
 	default:
@@ -111,64 +124,77 @@ func restoreAll() {
 }
 
 func restoreOne(r string) {
-
-	switch r {
-	case "apt":
-		npm := utils.GetNativePkgMgr()
-		if npm == "apt" {
-			restore.RestoreAllRepos("apt")
-			debian.InstallAll()
-		} else {
-			utils.PrintErrorMsgExit("Error:", "You are trying to restore with apt on a non-apt system...\n")
+	switch env.OSType {
+	case "Linux":
+		switch r {
+		case "apt":
+			npm := utils.GetNativePkgMgr()
+			if npm == "apt" {
+				restore.RestoreAllRepos("apt")
+				debian.InstallAll()
+			} else {
+				utils.PrintErrorMsgExit("Error:", "You are trying to restore with apt on a non-apt system...\n")
+			}
+		case "dnf":
+			npm := utils.GetNativePkgMgr()
+			if npm == "dnf" {
+				restore.RestoreAllRepos("dnf")
+				redhat.InstallAll()
+			} else {
+				utils.PrintErrorMsgExit("Error:", "You are trying to restore with dnf on a non-dnf system...\n")
+			}
+		case "pacman":
+			npm := utils.GetNativePkgMgr()
+			if npm == "pacman" {
+				restore.RestoreAllRepos("pacman")
+				arch.InstallAll()
+			} else {
+				utils.PrintErrorMsgExit("Error:", "You are trying to restore with pacman on a non-Arch system...\n")
+			}
+		case "yay":
+			if env.Yay == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run", "app -m " + r + " enable\n")
+			}
+			npm := utils.GetNativePkgMgr()
+			if npm == "pacman" {
+				arch.YayInstallAll()
+			} else {
+				utils.PrintErrorMsgExit("Error:", "You are trying to restore with yay on a non-Arch system...\n")
+			}
+		case "flatpak":
+			if env.Flatpak == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run", "app -m " + r + " enable\n")
+			}
+			restore.RestoreAllRepos("flatpak")
+			flatpak.InstallAll()
+		case "snap":
+			if env.Snap == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+			}
+			snap.InstallAll()
+		case "appimage":
+			if env.AppImage == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+			}
+			appimage.InstallAll()
+		case "brew":
+			if env.Brew == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+			}
+			brew.InstallAll()
+		case "scoop":
+			utils.PrintErrorMsgExit("Error:", "Not implemented yet... Coming Soon!")
+		default:
+		utils.PrintErrorMsgExit("Error:", "Package manager not supported...")
 		}
-	case "dnf":
-		npm := utils.GetNativePkgMgr()
-		if npm == "dnf" {
-			restore.RestoreAllRepos("dnf")
-			redhat.InstallAll()
-		} else {
-			utils.PrintErrorMsgExit("Error:", "You are trying to restore with dnf on a non-dnf system...\n")
+	case "Mac":
+		if r != "brew" {
+			utils.PrintErrorMsgExit("Error:", "Package Manager not supported...")
 		}
-	case "pacman":
-		npm := utils.GetNativePkgMgr()
-		if npm == "pacman" {
-			restore.RestoreAllRepos("pacman")
-			arch.InstallAll()
-		} else {
-			utils.PrintErrorMsgExit("Error:", "You are trying to restore with pacman on a non-Arch system...\n")
-		}
-	case "yay":
-		if env.Yay == false {
-			utils.PrintErrorMsgExit(r + " is disabled... To enable it, run", "app -m " + r + " enable\n")
-		}
-		npm := utils.GetNativePkgMgr()
-		if npm == "pacman" {
-			arch.YayInstallAll()
-		} else {
-			utils.PrintErrorMsgExit("Error:", "You are trying to restore with yay on a non-Arch system...\n")
-		}
-	case "flatpak":
-		if env.Flatpak == false {
-			utils.PrintErrorMsgExit(r + " is disabled... To enable it, run", "app -m " + r + " enable\n")
-		}
-		restore.RestoreAllRepos("flatpak")
-		flatpak.InstallAll()
-	case "snap":
-		if env.Snap == false {
-			utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
-		}
-		snap.InstallAll()
-	case "appimage":
-		if env.AppImage == false {
-			utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
-		}
-		appimage.InstallAll()
-	case "brew":
-		fmt.Println("Not implemented yet... Coming Soon!")
-	case "scoop":
-		fmt.Println("Not implemented yet... Coming Soon!")
+	case "Windows":
+		utils.PrintErrorMsgExit("Error:", "Windows support is not implemented yet...")
 	default:
-	utils.PrintErrorMsgExit("Error:", "Package manager not supported...")
+		utils.PrintErrorMsgExit("Error:", "Unspported operating system...")
 	}
 
 }
@@ -190,6 +216,8 @@ func execute(m, a, p, g, c string, classic bool) {
 			flatpak.Install(p)
 		case "snap":
 			snap.Install(p, c, classic)			
+		case "brew":
+			brew.Install(p)
 		case "appimage":
 			appimage.Install(p)			
 		default:
@@ -210,6 +238,8 @@ func execute(m, a, p, g, c string, classic bool) {
 			flatpak.Remove(p)
 		case "snap":
 			snap.Remove(p)
+		case "brew":
+			brew.Remove(p)
 		case "appimage":
 			appimage.Remove(p)			
 		default:
@@ -230,6 +260,8 @@ func execute(m, a, p, g, c string, classic bool) {
 			flatpak.Purge(p)
 		case "snap":
 			snap.Purge(p)
+		case "brew":
+			brew.Purge(p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -248,6 +280,8 @@ func execute(m, a, p, g, c string, classic bool) {
 			flatpak.Search(p)
 		case "snap":
 			snap.Search(p)
+		case "brew":
+			brew.Search(p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -266,6 +300,8 @@ func execute(m, a, p, g, c string, classic bool) {
 			flatpak.Update()
 		case "snap":
 			snap.Update()
+		case "brew":
+			brew.Update()
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -286,6 +322,8 @@ func execute(m, a, p, g, c string, classic bool) {
 				flatpak.Upgrade()
 			case "snap":
 				snap.Upgrade()
+			case "brew":
+				brew.Upgrade()
 			default:
 				fmt.Println("Unsupported package manager... Exiting...\n")
 				os.Exit(1)
@@ -325,6 +363,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			} else {
 				fmt.Println("Snap is disabled... Skipping...\n")
 			}
+			if env.Brew != false {
+				fmt.Println("\nUpgrading with HOMEBREW:\n")
+				brew.Upgrade()
+			} else {
+				fmt.Println("Brew is disabled... Skipping...\n")
+			}
 		default:
 			utils.PrintErrorMsgExit("Not a recognized value for the upgrade action...\n", "")
 		}
@@ -344,6 +388,8 @@ func execute(m, a, p, g, c string, classic bool) {
 				flatpak.Upgrade()
 			case "snap":
 				snap.Upgrade()
+			case "brew":
+				brew.Upgrade()
 			default:
 				fmt.Println("Unsupported package manager...\n")
 				os.Exit(1)
@@ -374,6 +420,10 @@ func execute(m, a, p, g, c string, classic bool) {
 				fmt.Println("\nUpgrading with SNAP:\n")
 				snap.Upgrade()
 			}
+			if env.Brew != false {
+				fmt.Println("\nUpgrading with HOMEBREW:\n")
+				brew.Upgrade()
+			}
 		default:
 			utils.PrintErrorMsgExit("Not a recognized value for the dist-upgrade action...\n", "")
 		}
@@ -391,6 +441,8 @@ func execute(m, a, p, g, c string, classic bool) {
 			flatpak.AutoRemove()
 		case "snap":
 			snap.AutoRemove()
+		case "brew":
+			brew.AutoRemove()
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -402,7 +454,7 @@ func execute(m, a, p, g, c string, classic bool) {
 				debian.ListSystem()
 			} else {
 				debian.ListSystemSearch(p)
-			}
+			}	
 		case "dnf":
 			if p == "" {
 				redhat.ListSystem()
@@ -433,6 +485,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			} else {
 				snap.ListSystemSearch(p)
 			}
+		case "brew":
+			if p == "" {
+				brew.ListSystem()
+			} else {
+				brew.ListSystemSearch(p)
+			}
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -450,6 +508,8 @@ func execute(m, a, p, g, c string, classic bool) {
 		case "flatpak":
 			utils.History(m, p)
 		case "snap":
+			utils.History(m, p)
+		case "brew":
 			utils.History(m, p)
 		case "appimage":
 			utils.History(m, p)
@@ -473,6 +533,10 @@ func execute(m, a, p, g, c string, classic bool) {
 			env.Snap = true
 			utils.EditSettings("SNAP = ", "y")
 			fmt.Println("Snap has been enabled...\n")
+		case "brew":
+			env.Brew = true
+			utils.EditSettings("BREW = ", "y")
+			fmt.Println("Homebrew has been enabled...\n")
 		case "appimage":
 			env.AppImage = true
 			utils.EditSettings("APPIMAGE = ", "y")
@@ -495,6 +559,10 @@ func execute(m, a, p, g, c string, classic bool) {
 			env.Snap = false
 			utils.EditSettings("SNAP = ", "n")
 			fmt.Println("Snap has been disabled...\n")
+		case "brew":
+			env.Brew = false
+			utils.EditSettings("BREW = ", "n")
+			fmt.Println("Homebrew has been disabled...\n")
 		case "appimage":
 			env.AppImage = false
 			utils.EditSettings("APPIMAGE = ", "n")

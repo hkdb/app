@@ -23,5 +23,6 @@ var Flatpak = true
 var FlatpakCmd = "/usr/bin/flatpak"
 var Snap = true
 var SnapCmd = "/usr/bin/snap"
+var Brew = true
 var AppImage = true
 var AutoYes = false
