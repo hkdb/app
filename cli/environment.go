@@ -82,7 +82,7 @@ func GetEnv() {
 				}
 			} 
 
-			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nAPPIMAGE = n", dir + "/settings.conf"); werr != nil {
+			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n", dir + "/settings.conf"); werr != nil {
 				utils.PrintErrorExit("Write settings.conf Error:", werr)
 			}
 		}

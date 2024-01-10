@@ -348,24 +348,27 @@ func execute(m, a, p, g, c string, classic bool) {
 			default:
 				utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
 			}
-			if m == "pacman" && env.Yay != false {
-				fmt.Println("\nUpgrade with YAY:\n")
-				arch.YayUpgrade()
-			}
-			if m == "pacman" && env.Yay == false {
-				fmt.Println("Yay is disabled... Skipping...\n")
-			}
-			if env.Flatpak != false {
-				fmt.Println("\nUpgrading with FLATPAK:\n")
-				flatpak.Upgrade()
-			} else {
-				fmt.Println("Flatpak is disabled... Skipping...\n")
-			}
-			if env.Snap != false {
-				fmt.Println("\nUpgrading with SNAP:\n")
-				snap.Upgrade()
-			} else {
-				fmt.Println("Snap is disabled... Skipping...\n")
+
+			if env.OSType == "Linux" {
+				if m == "pacman" && env.Yay != false {
+					fmt.Println("\nUpgrade with YAY:\n")
+					arch.YayUpgrade()
+				}
+				if m == "pacman" && env.Yay == false {
+					fmt.Println("Yay is disabled... Skipping...\n")
+				}
+				if env.Flatpak != false {
+					fmt.Println("\nUpgrading with FLATPAK:\n")
+					flatpak.Upgrade()
+				} else {
+					fmt.Println("Flatpak is disabled... Skipping...\n")
+				}
+				if env.Snap != false {
+					fmt.Println("\nUpgrading with SNAP:\n")
+					snap.Upgrade()
+				} else {
+					fmt.Println("Snap is disabled... Skipping...\n")
+				}
 			}
 			if env.Brew != false {
 				fmt.Println("\nUpgrading with HOMEBREW:\n")
