@@ -563,7 +563,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 Added Homebrew & macOS support
 
-If you are upgrading rather than installing for the first time, after upgrading to this version, execute the following command:
+If you are upgrading rather than installing for the first time on Linux, after upgrading to this version, execute the following command:
 ```
 echo "BREW = n" >> ~/.config/app/settings.conf
 ```
