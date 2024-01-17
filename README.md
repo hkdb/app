@@ -1,7 +1,7 @@
 # app - A Package Management Assistant with Super Powers 
 maintained by: @hkdb
 
-![ScreenShot](docs/assets/ss3.png)
+![ScreenShot](docs/assets/ss4.png)
 
 ### SUMMARY
 
@@ -156,10 +156,10 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
-#### v0.03 - Jan 16th, 2024
+#### v0.03 - Jan 17th, 2024
 
 - Minor fixes
-- Added go, pip, and cargo
+- Added go, pip, and cargo support
 
 
 #### v0.02 - Jan 10th, 2024
@@ -178,7 +178,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
-- 01162024 - Minor fixes & added go, pip, and cargo
+- 01172024 - Minor fixes & added go, pip, and cargo
 - 01102024 - Added brew, mac support, & fixed settings
 - 01042024 - Summary edit
 - 01042024 - Updated summary of README
