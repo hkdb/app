@@ -34,6 +34,21 @@ func isEnabled(pm string) bool {
 			return false
 		}
 		return true
+	case "go":
+		if env.Go == false {
+			return false
+		}
+		return true
+	case "pip":
+		if env.Pip == false {
+			return false
+		}
+		return true
+	case "cargo":
+		if env.Cargo == false {
+			return false
+		}
+		return true
 	}
 
 	return false

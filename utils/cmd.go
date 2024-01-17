@@ -27,3 +27,9 @@ func RunCmdQuiet(c *exec.Cmd, msg string) {
 
 }
 
+func ChkIfCmdRuns(c *exec.Cmd) error {
+
+	err := c.Run()
+	return err
+
+}

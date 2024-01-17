@@ -1,6 +1,7 @@
-package flatpak
+package cargo
 
 import (
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
@@ -9,12 +10,12 @@ import (
 	"fmt"
 )
 
-var mgr = "flatpak"
+var mgr = "cargo"
 
 func Install(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "flatpak", pkg)
+	inst, ierr := db.IsInstalled("", "packages", mgr, pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -27,7 +28,7 @@ func Install(pkg string) {
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
-	rerr := db.RecordPkg("", "packages", "flatpak", pkg)
+	rerr := db.RecordPkg("", "packages", mgr, pkg)
 	if rerr != nil {
 		utils.PrintErrorExit("Record Error: ", rerr)
 	}
@@ -37,7 +38,7 @@ func Install(pkg string) {
 func Remove(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "flatpak", pkg)
+	inst, ierr := db.IsInstalled("", "packages", mgr, pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -50,7 +51,7 @@ func Remove(pkg string) {
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
-	derr := db.RemovePkg("", "packages", "flatpak", pkg)
+	derr := db.RemovePkg("", "packages", mgr, pkg)
 	if derr != nil {
 		utils.PrintErrorExit("Delete Error: ", derr)
 	}
@@ -59,46 +60,56 @@ func Remove(pkg string) {
 
 func Purge(pkg string) {
 
-	fmt.Println("This is an apt only command. Just use app -m flatpak remove " + pkg + "...")
+	fmt.Println("This is an apt only command. Just use app -m cargo remove " + pkg + "...")
 
 }
 
 func AutoRemove() {
 
-	fmt.Println("This is an apt only command. It does not apply to Flatpak...")
+	fmt.Println("This is an apt only command. It does not apply to Cargo...")
 
 }
 
 func ListSystem() {
 
-	list := exec.Command(mgr, "list")
+	list := exec.Command("ls", "-lah", env.HomeDir + "/.cargo/bin")
 	utils.RunCmd(list, "List Package Error:")
 
 }
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command(mgr, "list", "|", "grep", pkg)
+	listSearch := exec.Command("/bin/bash", "-c", "ls -lah " + "/.cargo/bin |grep " + pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
 func Update() {
 
-	update := exec.Command(mgr, "update")
-	utils.RunCmd(update, "Update Error:")
+	fmt.Println("This is an apt only command. Just use app -m cargo upgrade...")
 
 }
 
 func Upgrade() {
+	
+	chkDep := exec.Command("/bin/bash", "-c", "cargo --list |grep install-update")
+	err := utils.ChkIfCmdRuns(chkDep)
+	if err != nil {
+		fmt.Print("The \"install-update\" Cargo command isn't installed... Do you want to install it? (Y/n) ")
+		resp := utils.Confirm()
+		if resp == true {
+			installDep := exec.Command("cargo", "install", "cargo-update")
+			utils.RunCmd(installDep, "Upgrade Dependency Installation Error:")
+		}
+	}
 
-	upgrade := exec.Command(mgr, "update")
+	upgrade := exec.Command(mgr, "install-update", "-a")
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
 }
 
 func DistUpgrade() {
 
-	fmt.Println("This is an apt only command. Just use app -m flatpak upgrade...")
+	fmt.Println("This is an apt only command. Just use app -m cargo upgrade...")
 
 }
 
@@ -111,11 +122,11 @@ func Search(pkg string) {
 
 func InstallAll() {
 	
-	// flatpak
-	fmt.Println("Flatpak:\n")
-	pkgs, fperr := db.ReadPkgs("", "packages", "flatpak")
+	// cargo
+	fmt.Println("Cargo:\n")
+	pkgs, fperr := db.ReadPkgs("", "packages", mgr)
 	if fperr != nil {
-		utils.PrintErrorExit("Flatpak - Read ERROR:", fperr)
+		utils.PrintErrorExit("Cargo - Read ERROR:", fperr)
 		os.Exit(1)
 	}
 	installAll := exec.Command(mgr, "install", pkgs)

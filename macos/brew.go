@@ -59,7 +59,7 @@ func Remove(pkg string) {
 
 func Purge(pkg string) {
 
-	fmt.Println("This is an apt only command. Just use app -m brew -a remove -p " + pkg + "...")
+	fmt.Println("This is an apt only command. Just use app -m brew remove " + pkg + "...")
 
 }
 
@@ -98,7 +98,7 @@ func Upgrade() {
 
 func DistUpgrade() {
 
-	fmt.Println("This is an apt only command. Just use app -m brew -a upgrade...")
+	fmt.Println("This is an apt only command. Just use app -m brew upgrade...")
 
 }
 
