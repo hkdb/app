@@ -30,6 +30,8 @@ Supported Package Managers:
 
 This fun project came to life because I have multiple machines and am constantly re-installing them. I also review and or get new laptops fairly often.
 
+Skip all the mumbo jumbo and see how to [INSTALL](docs/INSTALL.md) and [UPGRADE](docs/UPGRADE.md) app.
+
 ### BACKGROUND (Probably TL;DR for most)
 
 `If you found this repo via Medium, skip to the next section (HOW IT WORKS).`
@@ -65,7 +67,7 @@ See [APP CONFIG DIRECTORY STRUCTURE](docs/STRUCTURE.md) to learn more about what
 
 See the [available options (flags)](docs/USAGE.md) of app.
 
-See [USAGE EXAMPLES](docs/EXAMPLE.md) to see a more complete dive into how to use app.
+See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to use app.
 
 See what's inside the [config directory] (~/.config/app).
 

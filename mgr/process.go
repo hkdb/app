@@ -666,7 +666,7 @@ func execute(m, a, p, g, c string, classic bool) {
 			fmt.Println("Homebrew has been enabled...\n")
 		case "go":
 			env.Go = true
-			utils.EditSettings("GO = ", "y")
+			utils.EditSettings("GOLANG = ", "y")
 			fmt.Println("Go has been enabled...\n")
 		case "pip":
 			env.Pip = true
@@ -707,7 +707,7 @@ func execute(m, a, p, g, c string, classic bool) {
 			fmt.Println("Homebrew has been disabled...\n")
 		case "go":
 			env.Go = false
-			utils.EditSettings("GO = ", "n")
+			utils.EditSettings("GOLANG = ", "n")
 			fmt.Println("Go has been disabled...\n")
 		case "pip":
 			env.Pip = false
@@ -792,6 +792,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
 			}
+			fmt.Print("appimage: ")
+			if env.AppImage == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
 			fmt.Print("go: ")
 			if env.Go == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
@@ -806,12 +812,6 @@ func execute(m, a, p, g, c string, classic bool) {
 			}
 			fmt.Print("cargo: ")
 			if env.Cargo == true {
-				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
-			} else {
-				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
-			}
-			fmt.Print("appimage: ")
-			if env.AppImage == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)

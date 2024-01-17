@@ -82,7 +82,7 @@ func GetEnv() {
 				}
 			} 
 
-			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nGO = n\nPIP = n\nCARGO = n\nAPPIMAGE = n", dir + "/settings.conf"); werr != nil {
+			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n\nGOLANG = n\nPIP = n\nCARGO = n", dir + "/settings.conf"); werr != nil {
 				utils.PrintErrorExit("Write settings.conf Error:", werr)
 			}
 		}
@@ -168,12 +168,12 @@ func GetEnv() {
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}	
 
-	golang := os.Getenv("GO")
+	golang := os.Getenv("GOLANG")
 	if golang == "n" {
 		env.Go = false
 	}
 	if golang == "" {
-		utils.AppendToFile("GO = n", env.DBDir + "/settings.conf")
+		utils.AppendToFile("GOLANG = n", env.DBDir + "/settings.conf")
 	}
 	pip := os.Getenv("PIP")
 	if pip == "n" {
