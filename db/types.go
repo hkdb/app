@@ -11,8 +11,9 @@ type Repos struct {
 
 type Classics struct {
 	Classic bool `json:"classic"`
-} 
+}
 
 type Channels struct {
 	Channel string `json:"channel"`
 }
+

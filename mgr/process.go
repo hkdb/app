@@ -28,7 +28,7 @@ func Process(flag env.Flags) {
 	g := flag.G
 	c := flag.C
 	classic := flag.Classic
-	
+
 	if r != "" {
 		if r == "all" {
 			restoreAll()

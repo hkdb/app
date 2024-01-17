@@ -8,7 +8,8 @@ type Flags struct {
 	Y bool	 // Auto-Yes for certain package managers
 	G string // URL to GPG key for dnf/yum/rpm based distros when adding repo 
 	C string // Channel for specifying channel when install snaps
-	Classic bool
+	Classic bool // Classic confinement for snaps
+	Opts string // Options for go, pip, & cargo 
 }
 
 var OSType string

@@ -24,7 +24,7 @@ func Install(pkg string) {
 		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
 	}
 
-	install := exec.Command(mgr, "install", pkg)
+	install := exec.Command("/bin/bash", "-c", mgr + " install " + pkg)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")

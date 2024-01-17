@@ -162,9 +162,10 @@ func InstallAll() {
 	// snap	
 	action := " install "
 
+	fmt.Println("Snap:\n")
+
 	nochan, _ := utils.DirIsEmpty(env.DBDir + "/packages/repo/channel/snap")
 	if nochan == true {
-		fmt.Println("Snap:\n")
 		pkgs, sperr := db.ReadPkgs("", "packages", "snap")
 		if sperr != nil {
 			utils.PrintErrorExit("Snap - Read ERROR:", sperr)
@@ -181,7 +182,6 @@ func InstallAll() {
 		install := exec.Command(sudo[0], sudo[1], sudo[2], command + " " + pkgs + classic)
 		utils.RunCmd(install, "Installation Error:")
 	} else {
-		fmt.Println("Snap:\n")
 		pkgs, sperr := db.ReadPkgSlice("", "packages", "snap")
 		if sperr != nil {
 			utils.PrintErrorExit("Snap - Read ERROR:", sperr)
