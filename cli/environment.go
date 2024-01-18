@@ -82,7 +82,7 @@ func GetEnv() {
 				}
 			} 
 
-			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n", dir + "/settings.conf"); werr != nil {
+			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n\nGOLANG = n\nPIP = n\nCARGO = n", dir + "/settings.conf"); werr != nil {
 				utils.PrintErrorExit("Write settings.conf Error:", werr)
 			}
 		}
@@ -167,6 +167,49 @@ func GetEnv() {
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}	
+
+	golang := os.Getenv("GOLANG")
+	if golang == "n" {
+		env.Go = false
+	}
+	if golang == "" {
+		utils.AppendToFile("GOLANG = n", env.DBDir + "/settings.conf")
+	}
+	pip := os.Getenv("PIP")
+	if pip == "n" {
+		env.Pip = false
+	}
+	if pip == "" {
+		utils.AppendToFile("PIP = n", env.DBDir + "/settings.conf")
+	}
+	cargo := os.Getenv("CARGO")
+	if cargo == "n" {
+		env.Cargo = false
+	}
+	if cargo == "" {
+		utils.AppendToFile("CARGO = n", env.DBDir + "/settings.conf")
+	}
+
+	if env.Go == true {
+		golang, _ := utils.CheckIfExists(env.GoCmd)
+		if golang == false {
+			fmt.Println(utils.ColorYellow, "Temporarily disabling Go because it's not installed on your system. Suppress this message by disabling Go on app by running \"app -m go disable\"...\n", utils.ColorReset)
+		}
+	}
+
+	if env.Pip == true {
+		pip, _ := utils.CheckIfExists(env.PipCmd)
+		if pip == false {
+			fmt.Println(utils.ColorYellow, "Temporarily disabling Pip because it's not installed on your system. Suppress this message by disabling Pip on app by running \"app -m pip disable\"...\n", utils.ColorReset)
+		}
+	}
+
+	if env.Cargo == true {
+		cargo, _ := utils.CheckIfExists(env.CargoCmd)
+		if cargo == false {
+			fmt.Println(utils.ColorYellow, "Temporarily disabling Cargo because it's not installed on your system. Suppress this message by disabling Cargo on app by running \"app -m cargo disable\"...\n", utils.ColorReset)
+		}
+	}
 
 }
 

@@ -1,4 +1,4 @@
-package flatpak
+package pip
 
 import (
 	"github.com/hkdb/app/db"
@@ -9,12 +9,12 @@ import (
 	"fmt"
 )
 
-var mgr = "flatpak"
+var mgr = "pip"
 
 func Install(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "flatpak", pkg)
+	inst, ierr := db.IsInstalled("", "packages", mgr, pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -27,7 +27,7 @@ func Install(pkg string) {
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
-	rerr := db.RecordPkg("", "packages", "flatpak", pkg)
+	rerr := db.RecordPkg("", "packages", mgr, pkg)
 	if rerr != nil {
 		utils.PrintErrorExit("Record Error: ", rerr)
 	}
@@ -37,7 +37,7 @@ func Install(pkg string) {
 func Remove(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "flatpak", pkg)
+	inst, ierr := db.IsInstalled("", "packages", mgr, pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -50,7 +50,7 @@ func Remove(pkg string) {
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
-	derr := db.RemovePkg("", "packages", "flatpak", pkg)
+	derr := db.RemovePkg("", "packages", mgr, pkg)
 	if derr != nil {
 		utils.PrintErrorExit("Delete Error: ", derr)
 	}
@@ -59,13 +59,13 @@ func Remove(pkg string) {
 
 func Purge(pkg string) {
 
-	fmt.Println("This is an apt only command. Just use app -m flatpak remove " + pkg + "...")
+	fmt.Println("This is an apt only command. Just use app -m pip remove " + pkg + "...")
 
 }
 
 func AutoRemove() {
 
-	fmt.Println("This is an apt only command. It does not apply to Flatpak...")
+	fmt.Println("This is an apt only command. It does not apply to pip...")
 
 }
 
@@ -78,44 +78,53 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command(mgr, "list", "|", "grep", pkg)
+	listSearch := exec.Command("/bin/bash", "-c", mgr + " list |grep " + pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
 func Update() {
 
-	update := exec.Command(mgr, "update")
-	utils.RunCmd(update, "Update Error:")
+	fmt.Println("This is an apt only command. Just use app -m pip upgrade...")
 
 }
 
 func Upgrade() {
 
-	upgrade := exec.Command(mgr, "update")
+	chkDep := exec.Command("/bin/bash", "-c", "pip-review")
+	err := utils.ChkIfCmdRuns(chkDep)
+	if err != nil {
+		fmt.Print("The pip-review command isn't installed... Do you want to install it? (Y/n) ")
+		resp := utils.Confirm()
+		if resp == true {
+			installDep := exec.Command("pip", "install", "pip-review")
+			utils.RunCmd(installDep, "Upgrade Dependency Installation Error:")
+		}
+	}
+
+	upgrade := exec.Command("pip-review", "--local", "--interactive")
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
 }
 
 func DistUpgrade() {
 
-	fmt.Println("This is an apt only command. Just use app -m flatpak upgrade...")
+	fmt.Println("This is an apt only command. Just use app -m pip upgrade...")
 
 }
 
 func Search(pkg string) {
 
-	search := exec.Command(mgr, "search", pkg)
-	utils.RunCmd(search, "Search Error:")
+	fmt.Println("This is not a supported action. ... Search for packages at https://pypi.org/search")
 
 }
 
 func InstallAll() {
 	
-	// flatpak
-	fmt.Println("Flatpak:\n")
-	pkgs, fperr := db.ReadPkgs("", "packages", "flatpak")
+	// pip
+	fmt.Println("Pip:\n")
+	pkgs, fperr := db.ReadPkgs("", "packages", mgr)
 	if fperr != nil {
-		utils.PrintErrorExit("Flatpak - Read ERROR:", fperr)
+		utils.PrintErrorExit("Pip - Read ERROR:", fperr)
 		os.Exit(1)
 	}
 	installAll := exec.Command(mgr, "install", pkgs)

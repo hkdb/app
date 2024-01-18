@@ -8,7 +8,8 @@ type Flags struct {
 	Y bool	 // Auto-Yes for certain package managers
 	G string // URL to GPG key for dnf/yum/rpm based distros when adding repo 
 	C string // Channel for specifying channel when install snaps
-	Classic bool
+	Classic bool // Classic confinement for snaps
+	Tag string // Tag (version) for installing git url with cargo 
 }
 
 var OSType string
@@ -24,5 +25,11 @@ var FlatpakCmd = "/usr/bin/flatpak"
 var Snap = true
 var SnapCmd = "/usr/bin/snap"
 var Brew = true
+var Go = true
+var GoCmd = "/usr/bin/go"
+var Pip = true
+var PipCmd = "/usr/bin/pip"
+var Cargo = true
+var CargoCmd = "/usr/bin/cargo"
 var AppImage = true
 var AutoYes = false

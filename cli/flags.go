@@ -10,7 +10,7 @@ import (
 )
 
 var m = flag.String("m", "", 
-	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman>\n   example: app -a install -p neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- appimage\n")
+	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman>\n   example: app install neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- appimage\n")
 var r = flag.String("r", "", 
 	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- appimage\n\t- all\n")
 var y = flag.Bool("y", false, 
@@ -21,8 +21,10 @@ var c = flag.String("c", "",
 	"Channel - Used in combination with installing snap packages (SNAP Only)\n   usage: app -m snap -c <channel> install vlc\n   options:\n\t- beta\n\t- candidate\n\t- edge\n\t- stable\n")
 var classic = flag.Bool("classic", false,
 	"Classic Confinement for Snaps (SNAP Only)\n   usage: app -m snap -classic install flow\n")
+var tag = flag.String("tag", "",
+	"Tag (version) for cargo\n   usage: app -m cargo -tag <version> install <git url>\n   example: app -m cargo -tag 0.2.0 install https://github.com/donovanglover/hyprnome\n")
 
-	func ParseFlags() env.Flags {
+func ParseFlags() env.Flags {
 
 	flag.Usage = usage
 	flag.Parse()
@@ -147,6 +149,12 @@ var classic = flag.Bool("classic", false,
 			utils.PrintErrorMsgExit("Error: The \"settings\" action can't be executed with any flags or options...", "")
 		}
 	}
+	
+	if *tag != "" {
+		if *m != "cargo" || a != "install" {
+			utils.PrintErrorMsgExit("Error: This flag is only available for installing git url with cargo...", "")
+		}
+	}
 
 	f := env.Flags{}
 	f.A = a
@@ -156,7 +164,7 @@ var classic = flag.Bool("classic", false,
 	f.G = *gpg
 	f.C = *c
 	f.Classic = *classic
-
+	f.Tag = *tag
 	return f
 
 }

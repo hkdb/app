@@ -1,6 +1,7 @@
-package flatpak
+package golang
 
 import (
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
@@ -9,12 +10,12 @@ import (
 	"fmt"
 )
 
-var mgr = "flatpak"
+var mgr = "go"
 
 func Install(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "flatpak", pkg)
+	inst, ierr := db.IsInstalled("", "packages", "go", pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -27,7 +28,7 @@ func Install(pkg string) {
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
-	rerr := db.RecordPkg("", "packages", "flatpak", pkg)
+	rerr := db.RecordPkg("", "packages", "go", pkg)
 	if rerr != nil {
 		utils.PrintErrorExit("Record Error: ", rerr)
 	}
@@ -37,7 +38,7 @@ func Install(pkg string) {
 func Remove(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "flatpak", pkg)
+	inst, ierr := db.IsInstalled("", "packages", "go", pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -46,11 +47,11 @@ func Remove(pkg string) {
 		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
 	}
 
-	remove := exec.Command(mgr, "uninstall", pkg)
+	remove := exec.Command("rm", env.HomeDir + "/go/bin/" + pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
-	derr := db.RemovePkg("", "packages", "flatpak", pkg)
+	derr := db.RemovePkg("", "packages", "go", pkg)
 	if derr != nil {
 		utils.PrintErrorExit("Delete Error: ", derr)
 	}
@@ -59,63 +60,72 @@ func Remove(pkg string) {
 
 func Purge(pkg string) {
 
-	fmt.Println("This is an apt only command. Just use app -m flatpak remove " + pkg + "...")
+	fmt.Println("This is an apt only command. Just use app -m go remove " + pkg + "...")
 
 }
 
 func AutoRemove() {
 
-	fmt.Println("This is an apt only command. It does not apply to Flatpak...")
+	fmt.Println("This is an apt only command. It does not apply to go...")
 
 }
 
 func ListSystem() {
 
-	list := exec.Command(mgr, "list")
+	list := exec.Command("ls", "-lah", env.HomeDir + "/go/bin")
 	utils.RunCmd(list, "List Package Error:")
 
 }
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command(mgr, "list", "|", "grep", pkg)
+	listSearch := exec.Command("ls", "-lah", env.HomeDir + "/go/bin", "|", "grep", pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
 func Update() {
 
-	update := exec.Command(mgr, "update")
-	utils.RunCmd(update, "Update Error:")
+	fmt.Println("This is an apt only command. Just use app -m go upgrade...")
 
 }
 
 func Upgrade() {
 
-	upgrade := exec.Command(mgr, "update")
+	chkDep := exec.Command("/bin/bash", "-c", "go-global-update")
+	err := utils.ChkIfCmdRuns(chkDep)
+	if err != nil {
+		fmt.Print("The \"go-global-update\" command isn't installed... Do you want to install it? (Y/n) ")
+		resp := utils.Confirm()
+		if resp == true {
+			installDep := exec.Command("go", "install", "github.com/Gelio/go-global-update@latest")
+			utils.RunCmd(installDep, "Upgrade Dependency Installation Error:")
+		}
+	}
+
+	upgrade := exec.Command("go-global-update")
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
 }
 
 func DistUpgrade() {
 
-	fmt.Println("This is an apt only command. Just use app -m flatpak upgrade...")
+	fmt.Println("This is an apt only command. Just use app -m go upgrade...")
 
 }
 
 func Search(pkg string) {
 
-	search := exec.Command(mgr, "search", pkg)
-	utils.RunCmd(search, "Search Error:")
+	utils.PrintErrorMsgExit("Errors:", "This is not a supported action...")
 
 }
 
 func InstallAll() {
 	
-	// flatpak
-	fmt.Println("Flatpak:\n")
-	pkgs, fperr := db.ReadPkgs("", "packages", "flatpak")
+	// go
+	fmt.Println("go:\n")
+	pkgs, fperr := db.ReadPkgs("", "packages", "go")
 	if fperr != nil {
-		utils.PrintErrorExit("Flatpak - Read ERROR:", fperr)
+		utils.PrintErrorExit("go - Read ERROR:", fperr)
 		os.Exit(1)
 	}
 	installAll := exec.Command(mgr, "install", pkgs)

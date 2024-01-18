@@ -9,6 +9,9 @@ import (
 	"github.com/hkdb/app/flatpak"
 	"github.com/hkdb/app/snap"
 	brew "github.com/hkdb/app/macos"
+	"github.com/hkdb/app/golang"
+	"github.com/hkdb/app/pip"
+	"github.com/hkdb/app/cargo"
 	"github.com/hkdb/app/appimage"
 	"github.com/hkdb/app/restore"
 	
@@ -25,7 +28,8 @@ func Process(flag env.Flags) {
 	g := flag.G
 	c := flag.C
 	classic := flag.Classic
-	
+	tag := flag.Tag
+
 	if r != "" {
 		if r == "all" {
 			restoreAll()
@@ -39,7 +43,7 @@ func Process(flag env.Flags) {
 				utils.PrintErrorMsgExit(m + " has been disabled. You must first enable it before using it in app...\n", "")
 			}
 		}
-		execute(m, a, p, g, c, classic)
+		execute(m, a, p, g, c, classic, tag)
 	}
 
 }
@@ -119,6 +123,31 @@ func restoreAll() {
 	default:
 		utils.PrintErrorMsgExit("OS not supported...", "")
 	}
+	
+	if env.Go == true {
+		fmt.Print("Restore all Go apps? (Y/n) ")
+		s := utils.Confirm()
+		if s == true {
+			golang.InstallAll()
+		}
+	}
+
+	if env.Pip == true {
+		fmt.Print("Restore all Python(pip) apps? (Y/n) ")
+		s := utils.Confirm()
+		if s == true {
+			pip.InstallAll()
+		}
+	}
+
+	if env.Cargo == true {
+		fmt.Print("Restore all Rust(cargo) apps? (Y/n) ")
+		s := utils.Confirm()
+		if s == true {
+			cargo.InstallAll()
+		}
+	}
+
 	fmt.Println("")
 
 }
@@ -182,6 +211,21 @@ func restoreOne(r string) {
 				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
 			}
 			brew.InstallAll()
+		case "go":
+			if env.Go == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+			}
+			brew.InstallAll()
+		case "pip":
+			if env.Pip == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+			}
+			pip.InstallAll()
+		case "cargo":
+			if env.Cargo == false {
+				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+			}
+			cargo.InstallAll()
 		case "scoop":
 			utils.PrintErrorMsgExit("Error:", "Not implemented yet... Coming Soon!")
 		default:
@@ -199,7 +243,7 @@ func restoreOne(r string) {
 
 }
 
-func execute(m, a, p, g, c string, classic bool) {
+func execute(m, a, p, g, c string, classic bool, tag string) {
 	
 	if env.OSType == "Mac" && m != "brew" {
 		utils.PrintErrorMsgExit("Error:", "macOS currently only supports Homebrew...")
@@ -222,6 +266,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			snap.Install(p, c, classic)			
 		case "brew":
 			brew.Install(p)
+		case "go":
+			golang.Install(p)
+		case "pip":
+			pip.Install(p)
+		case "cargo":
+			cargo.Install(p, tag)
 		case "appimage":
 			appimage.Install(p)			
 		default:
@@ -244,6 +294,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			snap.Remove(p)
 		case "brew":
 			brew.Remove(p)
+		case "go":
+			golang.Remove(p)
+		case "pip":
+			pip.Remove(p)
+		case "cargo":
+			cargo.Remove(p)
 		case "appimage":
 			appimage.Remove(p)			
 		default:
@@ -266,6 +322,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			snap.Purge(p)
 		case "brew":
 			brew.Purge(p)
+		case "go":
+			golang.Purge(p)
+		case "pip":
+			pip.Purge(p)
+		case "cargo":
+			cargo.Purge(p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -286,6 +348,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			snap.Search(p)
 		case "brew":
 			brew.Search(p)
+		case "go":
+			golang.Search(p)
+		case "pip":
+			pip.Search(p)
+		case "cargo":
+			cargo.Search(p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -306,6 +374,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			snap.Update()
 		case "brew":
 			brew.Update()
+		case "go":
+			golang.Update()
+		case "pip":
+			pip.Update()
+		case "cargo":
+			cargo.Update()
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -328,6 +402,12 @@ func execute(m, a, p, g, c string, classic bool) {
 				snap.Upgrade()
 			case "brew":
 				brew.Upgrade()
+			case "go":
+				golang.Upgrade()
+			case "pip":
+				pip.Upgrade()
+			case "cargo":
+				cargo.Upgrade()
 			default:
 				fmt.Println("Unsupported package manager... Exiting...\n")
 				os.Exit(1)
@@ -380,6 +460,24 @@ func execute(m, a, p, g, c string, classic bool) {
 			} else {
 				fmt.Println("Brew is disabled... Skipping...\n")
 			}
+			if env.Go != false {
+				fmt.Println("\nUpgrading GO binaries:\n")
+				golang.Upgrade()
+			} else {
+				fmt.Println("Go is disabled... Skipping...\n")
+			}
+			if env.Pip != false {
+				fmt.Println("\nUpgrading with PIP installed packages:\n")
+				pip.Upgrade()
+			} else {
+				fmt.Println("PIP is disabled... Skipping...\n")
+			}
+			if env.Cargo != false {
+				fmt.Println("\nUpgrading with CARGO:\n")
+				cargo.Upgrade()
+			} else {
+				fmt.Println("Cargo is disabled... Skipping...\n")
+			}
 		default:
 			utils.PrintErrorMsgExit("Not a recognized value for the upgrade action...\n", "")
 		}
@@ -401,6 +499,12 @@ func execute(m, a, p, g, c string, classic bool) {
 				snap.Upgrade()
 			case "brew":
 				brew.Upgrade()
+			case "go":
+				golang.Upgrade()
+			case "pip":
+				pip.Upgrade()
+			case "cargo":
+				cargo.Upgrade()
 			default:
 				fmt.Println("Unsupported package manager...\n")
 				os.Exit(1)
@@ -454,6 +558,12 @@ func execute(m, a, p, g, c string, classic bool) {
 			snap.AutoRemove()
 		case "brew":
 			brew.AutoRemove()
+		case "go":
+			golang.AutoRemove()
+		case "pip":
+			pip.AutoRemove()
+		case "cargo":
+			cargo.AutoRemove()
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -502,27 +612,31 @@ func execute(m, a, p, g, c string, classic bool) {
 			} else {
 				brew.ListSystemSearch(p)
 			}
+		case "go":
+			if p == "" {
+				golang.ListSystem()
+			} else {
+				golang.ListSystemSearch(p)
+			}
+		case "pip":
+			if p == "" {
+				pip.ListSystem()
+			} else {
+				pip.ListSystemSearch(p)
+			}
+		case "cargo":
+			if p == "" {
+				cargo.ListSystem()
+			} else {
+				cargo.ListSystemSearch(p)
+			}
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
 		}
 	case "history":
 		switch m {
-		case "apt":
-			utils.History(m, p)
-		case "dnf":
-			utils.History(m, p)
-		case "pacman":
-			utils.History(m, p)
-		case "yay":
-			utils.History(m, p)
-		case "flatpak":
-			utils.History(m, p)
-		case "snap":
-			utils.History(m, p)
-		case "brew":
-			utils.History(m, p)
-		case "appimage":
+		case "apt", "dnf", "pacman", "yay", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
 			utils.History(m, p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
@@ -551,6 +665,18 @@ func execute(m, a, p, g, c string, classic bool) {
 			env.Brew = true
 			utils.EditSettings("BREW = ", "y")
 			fmt.Println("Homebrew has been enabled...\n")
+		case "go":
+			env.Go = true
+			utils.EditSettings("GOLANG = ", "y")
+			fmt.Println("Go has been enabled...\n")
+		case "pip":
+			env.Pip = true
+			utils.EditSettings("PIP = ", "y")
+			fmt.Println("Pip has been enabled...\n")
+		case "cargo":
+			env.Cargo = true
+			utils.EditSettings("CARGO = ", "y")
+			fmt.Println("Cargo has been enabled...\n")
 		case "appimage":
 			env.AppImage = true
 			utils.EditSettings("APPIMAGE = ", "y")
@@ -580,6 +706,18 @@ func execute(m, a, p, g, c string, classic bool) {
 			env.Brew = false
 			utils.EditSettings("BREW = ", "n")
 			fmt.Println("Homebrew has been disabled...\n")
+		case "go":
+			env.Go = false
+			utils.EditSettings("GOLANG = ", "n")
+			fmt.Println("Go has been disabled...\n")
+		case "pip":
+			env.Pip = false
+			utils.EditSettings("PIP = ", "n")
+			fmt.Println("Pip has been disabled...\n")
+		case "cargo":
+			env.Cargo = false
+			utils.EditSettings("CARGO = ", "n")
+			fmt.Println("Cargo has been disabled...\n")
 		case "appimage":
 			env.AppImage = false
 			utils.EditSettings("APPIMAGE = ", "n")
@@ -657,6 +795,24 @@ func execute(m, a, p, g, c string, classic bool) {
 			}
 			fmt.Print("appimage: ")
 			if env.AppImage == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("go: ")
+			if env.Go == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("pip: ")
+			if env.Pip == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("cargo: ")
+			if env.Cargo == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
