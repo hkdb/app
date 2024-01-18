@@ -17,3 +17,7 @@ type Channels struct {
 	Channel string `json:"channel"`
 }
 
+type Git struct {
+	Url string `json:"url"`
+	Tag string `json:"tag"`
+}

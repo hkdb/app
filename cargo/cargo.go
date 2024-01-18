@@ -5,30 +5,51 @@ import (
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
-	"os"
 	"os/exec"
 	"fmt"
 )
 
 var mgr = "cargo"
 
-func Install(pkg string) {
+func Install(pkg, tag string) {
 
+	isUrl := utils.IsUrl(pkg)
+	p := pkg
+	if isUrl == true {
+		pRaw := utils.GetFileFromUrl(pkg)
+		pExt := utils.GetFileExtension(pRaw)
+		p = pRaw
+		if pExt == ".git" {
+			p = utils.GetFileName(pRaw)
+		}
+	}
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", mgr, pkg)
+	inst, ierr := db.IsInstalled("", "packages", mgr, p)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
 	
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
+		utils.PrintErrorMsgExit(p + " is already installed...", "")
 	}
 
-	install := exec.Command("/bin/bash", "-c", mgr + " install " + pkg)
+	cmd := mgr + " install " + pkg
+	if isUrl == true {
+		cmd = mgr + " install --tag " + tag + " --git " + pkg 
+	}
+	install := exec.Command("/bin/bash", "-c", cmd)
 	utils.RunCmd(install, "Installation Error:")
 
-	fmt.Println("\n Recording " + pkg + " to app history...\n")
-	rerr := db.RecordPkg("", "packages", mgr, pkg)
+	fmt.Println("\n Recording " + p + " to app history...\n")
+	gerr := db.RecordGit("cargo", p)
+	if gerr != nil {
+		utils.PrintErrorExit("Git Record Error: ", gerr)
+	}
+	serr := db.RecordGitSetup("cargo", p, pkg, tag)
+	if serr != nil {
+		utils.PrintErrorExit("Git Data Record Error: ", serr)
+	}
+	rerr := db.RecordPkg("", "packages", mgr, p)
 	if rerr != nil {
 		utils.PrintErrorExit("Record Error: ", rerr)
 	}
@@ -124,13 +145,31 @@ func InstallAll() {
 	
 	// cargo
 	fmt.Println("Cargo:\n")
-	pkgs, fperr := db.ReadPkgs("", "packages", mgr)
+	pkgs, fperr := db.ReadPkgSlice("", "packages", mgr)
 	if fperr != nil {
 		utils.PrintErrorExit("Cargo - Read ERROR:", fperr)
-		os.Exit(1)
 	}
-	installAll := exec.Command(mgr, "install", pkgs)
-	utils.RunCmd(installAll, "Installation Error:")
+
+	for i := 0; i < len(pkgs); i++ {
+		p := pkgs[i]
+		git, err := db.GitExists(mgr, p)
+		if err != nil {
+			utils.PrintErrorExit("Cargo - Read Repo ERROR:", err)
+		}
+		if git == true {
+			url, tag, err := db.GetGitSetup(mgr, p)
+			if err != nil {
+				utils.PrintErrorExit("Cargo - Get Repo Data ERROR:", err)
+			}
+			install := exec.Command("/bin/bash", "-c", mgr + " install --git " + url + " --tag " + tag)
+			utils.RunCmd(install, "Installation Error:")
+		} else {
+			install := exec.Command(mgr, "install", p)
+			utils.RunCmd(install, "Installation Error:")
+		}
+	}
+
+	fmt.Println("Cargo Install All Completed...\n")
 
 }
 

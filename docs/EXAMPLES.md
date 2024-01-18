@@ -28,7 +28,8 @@ app -m snap install spotify
 app -m brew install gimp # In macOS, just "app install gimp" will do
 app -m go install github.com/charmbracelet/glow@latest
 app -m pip install mdv
-app -m cargo install hyprnome
+app -m cargo install fd
+app -m cargo -tag 0.2.0 install https://github.com/donovanglover/hyprnome
 ```
 
 If you need to install a piece of software in the form of a .deb or .rpm:

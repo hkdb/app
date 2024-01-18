@@ -28,6 +28,7 @@ func Process(flag env.Flags) {
 	g := flag.G
 	c := flag.C
 	classic := flag.Classic
+	tag := flag.Tag
 
 	if r != "" {
 		if r == "all" {
@@ -42,7 +43,7 @@ func Process(flag env.Flags) {
 				utils.PrintErrorMsgExit(m + " has been disabled. You must first enable it before using it in app...\n", "")
 			}
 		}
-		execute(m, a, p, g, c, classic)
+		execute(m, a, p, g, c, classic, tag)
 	}
 
 }
@@ -242,7 +243,7 @@ func restoreOne(r string) {
 
 }
 
-func execute(m, a, p, g, c string, classic bool) {
+func execute(m, a, p, g, c string, classic bool, tag string) {
 	
 	if env.OSType == "Mac" && m != "brew" {
 		utils.PrintErrorMsgExit("Error:", "macOS currently only supports Homebrew...")
@@ -270,7 +271,7 @@ func execute(m, a, p, g, c string, classic bool) {
 		case "pip":
 			pip.Install(p)
 		case "cargo":
-			cargo.Install(p)
+			cargo.Install(p, tag)
 		case "appimage":
 			appimage.Install(p)			
 		default:

@@ -144,7 +144,7 @@ func Upgrade() {
 
 func DistUpgrade() {
 
-	fmt.Println("This is an apt only command. Just use app -m snap -a upgrade -p...")
+	fmt.Println("This is an apt only command. Just use app -m snap upgrade...")
 
 }
 

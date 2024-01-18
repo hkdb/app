@@ -76,7 +76,12 @@ OPTIONS:
             - brew
     		- appimage
     		- all
-    	
+  
+  -tag string
+    	Tag (version) for cargo
+    	   usage: app -m cargo -tag <version> install <git url>
+    	   example: app -m cargo -tag 0.2.0 install https://github.com/donovanglover/hyprnome 	
+  
   -y	Auto Yes - Skips the package manager confirmation (APT & DNF Only)
     	   usage: app -y install neovim
     	

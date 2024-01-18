@@ -9,7 +9,7 @@ type Flags struct {
 	G string // URL to GPG key for dnf/yum/rpm based distros when adding repo 
 	C string // Channel for specifying channel when install snaps
 	Classic bool // Classic confinement for snaps
-	Opts string // Options for go, pip, & cargo 
+	Tag string // Tag (version) for installing git url with cargo 
 }
 
 var OSType string

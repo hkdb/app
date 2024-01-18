@@ -21,8 +21,8 @@ var c = flag.String("c", "",
 	"Channel - Used in combination with installing snap packages (SNAP Only)\n   usage: app -m snap -c <channel> install vlc\n   options:\n\t- beta\n\t- candidate\n\t- edge\n\t- stable\n")
 var classic = flag.Bool("classic", false,
 	"Classic Confinement for Snaps (SNAP Only)\n   usage: app -m snap -classic install flow\n")
-//var opts = flag.String("opts", "",
-//	"Install Options for go, pip, & cargo\n   usage: app -m <go/pip/cargo> -opts '<options/flags>' install <package name>\n   example: app -m cargo -opts '--git <url> --tag <version>' install hyprnome\n")
+var tag = flag.String("tag", "",
+	"Tag (version) for cargo\n   usage: app -m cargo -tag <version> install <git url>\n   example: app -m cargo -tag 0.2.0 install https://github.com/donovanglover/hyprnome\n")
 
 func ParseFlags() env.Flags {
 
@@ -149,14 +149,12 @@ func ParseFlags() env.Flags {
 			utils.PrintErrorMsgExit("Error: The \"settings\" action can't be executed with any flags or options...", "")
 		}
 	}
-
-	/*
-	if opts != "" {
-		if a != "go" && a != "pip" && a != "cargo" {
-			utils.PrintErrorMsgExit("Error: This flag is only for go, pip, or cargo...", "")
+	
+	if *tag != "" {
+		if *m != "cargo" || a != "install" {
+			utils.PrintErrorMsgExit("Error: This flag is only available for installing git url with cargo...", "")
 		}
 	}
-	*/
 
 	f := env.Flags{}
 	f.A = a
@@ -166,7 +164,7 @@ func ParseFlags() env.Flags {
 	f.G = *gpg
 	f.C = *c
 	f.Classic = *classic
-
+	f.Tag = *tag
 	return f
 
 }

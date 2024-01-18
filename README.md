@@ -3,6 +3,7 @@ maintained by: @hkdb
 
 ![ScreenShot](docs/assets/ss4.png)
 
+
 ### SUMMARY
 
 A Unified Package Management Experience for users who handle a lot of machines.
@@ -32,6 +33,7 @@ This fun project came to life because I have multiple machines and am constantly
 
 Skip all the mumbo jumbo and see how to [INSTALL](docs/INSTALL.md) and [UPGRADE](docs/UPGRADE.md) app.
 
+
 ### BACKGROUND (Probably TL;DR for most)
 
 `If you found this repo via Medium, skip to the next section (HOW IT WORKS).`
@@ -59,6 +61,7 @@ This is more of a proof-of-concept(POC) from a week or two of "free time" hackin
 
 In other words, yes, <b>THIS IS STILL ALPHA SOFTWARE</b>.
 
+
 ### HOW IT WORKS
 
 Instead of using your package manager, you use the app command to install/remove packages so that it records everything inside `~/.config/app`. So when you move that directory to a new machine of the same based distro or OS, you can just install all the packages you have installed on the old machine with one command. In fact, if you move your `~/.config` directory on a Linux machine to the next, it should retain most of your app settings that reside in `~/.config` as well but be aware of config structual changes between varying versions of the same software. 
@@ -71,9 +74,11 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
 
 See what's inside the [config directory] (~/.config/app).
 
+
 ### IN ACTION
 
 [![asciicast](https://asciinema.org/a/YmpvOaXS2dviXXOIPM7EppyKf.svg)](https://asciinema.org/a/YmpvOaXS2dviXXOIPM7EppyKf)
+
 
 ### SUPPORT & ROADMAP
 
@@ -123,6 +128,11 @@ app does not handle local packages for Arch based distros as most of the time, u
 
 As far as I know, there's no way to easily add third party repos especially since the whole backend is closed source.
 
+`go/pip/cargo`:
+
+The go, pip, and cargo support is not meant to be a replacement for development purposes but rather for users that use software that are distributed via go, pip, and cargo. 
+
+
 ### INSTALL
 
 1. Make sure all the package managers you want app to manage are installed and configured properly
@@ -131,6 +141,7 @@ As far as I know, there's no way to easily add third party repos especially sinc
 4. `git clone https://github.com/hkdb/app.git`
 5. `cd app`
 6. `./install.sh`
+
 
 ### UPDATE/UPGRADE
 
@@ -176,6 +187,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 - First Alpha Release
 
+
 ### CHANGE
 
 - 01172024 - Minor fixes & added go, pip, and cargo
@@ -187,6 +199,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 - 01032024 - Updated README
 - 01022024 - Fixed flatpak remove
 - 12312023 - Initial commit
+
 
 ### DISCLAIMER
 
