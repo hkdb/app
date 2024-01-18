@@ -135,8 +135,8 @@ The go, pip, and cargo support is not meant to be a replacement for development 
 
 ### INSTALL
 
-1. Make sure all the package managers you want app to manage are installed and configured properly
-2. Install git manually if it's not already installed
+1. Make sure all the package managers you want app to manage and are installed and configured properly
+2. Install `git` and `lsb_release` manually if it's not already installed
 3. cd into a directory of choice where you want to keep the app repo. If you are an end user and can't decide, I suggest `~/.config` (`mkdir ~/.config` if it doesn't already exist)
 4. `git clone https://github.com/hkdb/app.git`
 5. `cd app`
@@ -190,6 +190,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 01172024 - Updated Install instructions
 - 01172024 - Minor fixes & added go, pip, and cargo
 - 01102024 - Added brew, mac support, & fixed settings
 - 01042024 - Summary edit
