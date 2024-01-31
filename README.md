@@ -190,6 +190,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 01312024 - Fixed url check for short package names
 - 01172024 - Updated Install instructions
 - 01172024 - Minor fixes & added go, pip, and cargo
 - 01102024 - Added brew, mac support, & fixed settings

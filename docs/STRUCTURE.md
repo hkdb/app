@@ -19,6 +19,12 @@ The config directory app creates on your machine has the following structure to 
           |
           |_ flatpak.json
           |
+          |_ go.json
+          |
+          |_ pip.json
+          |
+          |_ cargo.json
+          |
           |_ pacman.json
           |
           |_ local
@@ -43,6 +49,7 @@ The config directory app creates on your machine has the following structure to 
           |   |_ pacman.json
           |   |_ yay.json
           |   |_ flatpak.json
+          |   |_ cargo.json
           |   |_ Channel
           |   |   |_snap
           |   |      |_ <package name>.json
@@ -61,6 +68,9 @@ The config directory app creates on your machine has the following structure to 
           |       |   |_ <repo name>.json
           |       |
           |       |_ snap
+          |       |   |_ <package name>.json 
+          |       |
+          |       |_ cargo
           |           |_ <package name>.json 
           |
           |

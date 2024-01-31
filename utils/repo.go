@@ -68,8 +68,14 @@ func IsScript(p string) bool {
 
 func IsUrl(p string) bool {
 
-	http := p[0:7]
-	https := p[0:8]
+  http_last := 7
+  https_last := 8
+  if len(p) <= 8 {
+    http_last = len(p)-1
+    https_last = len(p)-1
+  }
+  http := p[0:http_last]
+  https := p[0:https_last]
 
 	if http == "http://" || https == "https://" {
 		return true
