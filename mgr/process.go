@@ -492,19 +492,19 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			case "pacman":
 				arch.DistUpgrade()
 			case "yay":
-				arch.YayUpgrade()
+				arch.YayDistUpgrade()
 			case "flatpak":
-				flatpak.Upgrade()
+				flatpak.DistUpgrade()
 			case "snap":
-				snap.Upgrade()
+				snap.DistUpgrade()
 			case "brew":
-				brew.Upgrade()
+				brew.DistUpgrade()
 			case "go":
-				golang.Upgrade()
+				golang.DistUpgrade()
 			case "pip":
-				pip.Upgrade()
+				pip.DistUpgrade()
 			case "cargo":
-				cargo.Upgrade()
+				cargo.DistUpgrade()
 			default:
 				fmt.Println("Unsupported package manager...\n")
 				os.Exit(1)
@@ -518,14 +518,14 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 				debian.DistUpgrade()
 			case "dnf":
 				fmt.Println("\nUpgrading with DNF:\n")
-				redhat.Upgrade()
+				redhat.DistUpgrade()
 			case "pacman":
 				fmt.Println("\nUpgrading with PACMAN:\n")
-				arch.Upgrade()
+				arch.DistUpgrade()
 			}
 			if m == "pacman" && env.Yay != false {
 				fmt.Println("\nUpgrade with YAY:\n")
-				arch.YayUpgrade()
+				arch.YayDistUpgrade()
 			}
 			if env.Flatpak != false {
 				fmt.Println("\nUpgrading with FLATPAK:\n")
@@ -538,6 +538,24 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			if env.Brew != false {
 				fmt.Println("\nUpgrading with HOMEBREW:\n")
 				brew.Upgrade()
+			}
+			if env.Go != false {
+				fmt.Println("\nUpgrading GO binaries:\n")
+				golang.Upgrade()
+			} else {
+				fmt.Println("Go is disabled... Skipping...\n")
+			}
+			if env.Pip != false {
+				fmt.Println("\nUpgrading with PIP installed packages:\n")
+				pip.Upgrade()
+			} else {
+				fmt.Println("PIP is disabled... Skipping...\n")
+			}
+			if env.Cargo != false {
+				fmt.Println("\nUpgrading with CARGO:\n")
+				cargo.Upgrade()
+			} else {
+				fmt.Println("Cargo is disabled... Skipping...\n")
 			}
 		default:
 			utils.PrintErrorMsgExit("Not a recognized value for the dist-upgrade action...\n", "")
