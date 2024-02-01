@@ -26,7 +26,7 @@ func IsLocalInstall(filename string) (bool, string, string) {
 	switch env.Base {
 	case "debian":
 		if ext != "deb" {
-			PrintErrorMsgExit("Error:", "This is not a supported file type.")
+			return false, "", ""
 		}
 	case "redhat":
 		if ext != "rpm" {
