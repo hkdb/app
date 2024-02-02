@@ -10,9 +10,9 @@ import (
 )
 
 var m = flag.String("m", "", 
-	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman>\n   example: app install neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- appimage\n")
+	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman>\n   example: app install neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n")
 var r = flag.String("r", "", 
-	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- appimage\n\t- all\n")
+	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n\t- all\n")
 var y = flag.Bool("y", false, 
 	"Auto Yes - Skips the package manager confirmation (APT & DNF Only)\n   usage: app -y install neovim\n")
 var gpg = flag.String("gpg", "", 

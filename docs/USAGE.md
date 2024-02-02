@@ -61,6 +61,9 @@ OPTIONS:
     		- flatpak
     		- snap
             - brew (default if macOS)
+            - go
+            - pip
+            - cargo
     		- appimage
     	
   -r string
@@ -74,6 +77,9 @@ OPTIONS:
     		- flatpak
     		- snap
             - brew
+            - go
+            - pip
+            - cargo
     		- appimage
     		- all
   
