@@ -6,7 +6,7 @@ maintained by: @hkdb
 
 ### SUMMARY
 
-A Unified Package Management Experience for users who handle a lot of machines.
+A Unified Package Management Experience for users who either want a reproduceable workstation build or simply handle a lot of machines with ease.
 
 App is a cross-platform package management wrapper written in Go that remembers all the additional packages a user installs on a machine beyond the base installation so that all the same packages can be automatically reinstalled on another machine with one command. It also provides the same command line interface across different distros/OS's and package managers so you don't have to remember the various syntax across different OS's and package managers. Last but not least, it allows users to upgrade all software packages installed on a system with a user defined set of package managers (ex. apt, flatpak, and AppImage) via a single command.
 
@@ -31,14 +31,14 @@ Supported Package Managers:
 
 This fun project came to life because I have multiple machines and am constantly re-installing them. I also review and or get new laptops fairly often.
 
-Skip all the mumbo jumbo and see how to [INSTALL](docs/INSTALL.md) and [UPGRADE](docs/UPGRADE.md) app.
+Skip all the mumbo jumbo if you just want to see how to [INSTALL](docs/INSTALL.md) and [UPGRADE](docs/UPGRADE.md) app.
 
 
 ### BACKGROUND (Probably TL;DR for most)
 
 `If you found this repo via Medium, skip to the next section (HOW IT WORKS).`
 
-So I personally have a considerable amount of machines. My team and I also deal with a lot of machines at work. When I get a new machine or want to repurpose an existing machine, I prefer to do fresh installs rather than imaging hard drives because among other reasons, imaging carries all the junk/cache over beyond just configs/preferences and it's not only a pain to maintain but also undesirable to keep a big number of images around on storage. Plus, I mean, there's something to be said about a clean install if you know what I mean. 
+So I personally have a considerable amount of machines. My team and I also deal with a lot of machines at work. When I get a new machine or want to repurpose an existing machine, I prefer to do fresh installs rather than imaging hard drives because among other reasons, imaging carries all the junk/cache over beyond just configs/preferences and it's not only a pain to maintain but also undesirable to keep a big number of images around on storage. Furthermore, handling image change is very time consuming. Plus, I mean, there's something to be said about a clean install if you know what I mean. 
 
 Sure you can carry over just the home directory minus your .cache directory which mostly takes care of the junk and cache but how will you get all the same software installed that your home directory references? And yes, you can see what you manually installed with each package manager on your older computer running Debian based distros if you just do a little googling and then ninja your way through the output to derive long lines of packages to install manually on the new machine but God forbid you are on a rpm based system… I am not even aware of a way to see what was manually installed. I guess back to googling? What about Macs and Windows which I often use Homebrew and Scoop on?
 
@@ -46,7 +46,7 @@ Sometimes, I also need to use a different distro and more often than not, the di
 
 How about package management standardization? Unless you are a purist which I am not dismissing the fact that purists do exist, chances are, you use the native package manager where you can and Flatpak just because your favorite software's developer doesn't want to deal with cross-distro hell and maybe even *evil music*… snap for certain server side packages that work better or are just easier to setup with snap.
 
-Last but not least, it's only natural that I get slowed down during work because I accidentally typed "sudo apt install" on an Arch based distro and then having to Ctrl-C half way through it to finally type sudo pacman -S just so something trivial is installed. I wonder how many hours this type of incident collectively took in my 20+ years of IT. Sure it's just a second or 2 MAX each time but I am willing to bet that if I counted them every time, the number would end up significant.
+Last but not least, it's only natural that I get slowed down during work because I accidentally typed `sudo apt install` on an Arch based distro and then having to Ctrl-C half way through it to finally type `sudo pacman -S` just so something trivial is installed. I wonder how many hours this type of incident collectively took in my 20+ years of IT. Sure it's just a second or 2 MAX each time but I am willing to bet that if I counted them every time, the number would end up significant.
 
 ![wrong](docs/assets/wrong.png)
 
@@ -71,8 +71,6 @@ See [APP CONFIG DIRECTORY STRUCTURE](docs/STRUCTURE.md) to learn more about what
 See the [available options (flags)](docs/USAGE.md) of app.
 
 See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to use app.
-
-See what's inside the [config directory] (~/.config/app).
 
 
 ### IN ACTION
@@ -103,6 +101,12 @@ Currently in the roadmap:
 `Pre-requisites`:
 
 There's an install script that comes with this repo which is the preferred way to install app. It takes care of most of the immediate dependencies but I leave having each of your package managers proper setup/configuration to the end user before running app. For example, if you don't have the right packages installed to have add-apt-repository work properly on Debian or flatpak can't be used without sudo, then app will inevitably fail. I am however open to installing or auto-configuring more dependencies in the future if this ends up being used by others and that's something that everyone wants.
+
+See the below notes on package manager setup:
+- flatpak (COMING SOON)
+- go (COMING SOON)
+- pip (COMING SOON)
+- cargo (COMING SOON)
 
 If there are enabled package managers that you absolutely hate and want out of the auto restore/install all loop, you can disable them manually (ie. `app -m snap disable`) and app will remember this whereever you bring your `~/.config/app` directory. You can also re-enable them anytime by just running `app -m <package manager> enable`
 
@@ -167,6 +171,13 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.04 - Feb 1st, 2024
+
+- Allow for debian packages with a . in the name (ie. containerd.io or docker.io)
+- Added go/pip/cargo to dist-upgrade all for Debian based distros
+- Fixed UrlCheck to allow for installing cargo packages with short package names
+
+
 #### v0.03 - Jan 17th, 2024
 
 - Minor fixes
@@ -190,6 +201,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 02012024 - Updated README for v0.04 release
 - 02012024 - Fixed dist-upgrade
 - 02012024 - Allow for debian packages with .
 - 01312024 - Fixed url check for short package names
