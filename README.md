@@ -201,6 +201,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 02092024 - Fixed appimage .desktop bug
 - 02012024 - Updated help
 - 02012024 - Updated README for v0.04 release
 - 02012024 - Fixed dist-upgrade

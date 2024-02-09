@@ -291,6 +291,45 @@ func EditSettings(lType, value string) {
 
 }
 
+func ReadDotDesktop(file string) (*DotDesktop, error) {
+
+  dd := &DotDesktop{}
+	f, err := os.Open(file)
+	if err != nil {
+		return dd, err
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	
+	for scanner.Scan() {
+    line := scanner.Text()
+    entry := strings.Split(line, "=")
+    if len(entry) > 2 {
+      PrintErrorMsgExit("Read .desktop Error:", "Malformed .desktop file...")
+    }
+    if entry[0] == "Name" {
+      dd.Name = entry[1]
+      if dd.Icon != "" {
+        break
+      }
+    }
+    if entry[0] == "Icon" {
+      dd.Icon = entry[1]
+      if dd.Name != "" {
+        break
+      }
+    }
+	}
+
+	if err := scanner.Err(); err != nil {
+		return dd, err
+	}
+
+	return dd, nil
+
+}
+
 func ReadFileLine(file string, line int) (string, error) {
 	
 	line = line-1 

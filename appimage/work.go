@@ -9,8 +9,6 @@ import (
 	"os/exec"
 	"strings"
 	"fmt"
-
-	"github.com/joho/godotenv"
 )
 
 func installPkgs(input string, restore bool) string {
@@ -129,12 +127,17 @@ func installPkg(pkg string, restore bool) string {
 	utils.RemoveFileLine(tmpDesktop, 1)
 
 	// Load .desktop values
-	if gerr := godotenv.Load(tmpDesktop); gerr != nil {
+	dd, gerr := utils.ReadDotDesktop(tmpDesktop)
+  if gerr != nil {
 		utils.PrintErrorExit("Load .desktop Error:", gerr)
 	}
-	name := os.Getenv("Name")
+	name := dd.Name
+  if name == "" {
+    utils.PrintErrorMsgExit("Error:", "AppImage application name could not be read...")
+  }
+
 	name = strings.ReplaceAll(name, " ", "_")
-	iconName := os.Getenv("Icon")
+	iconName := dd.Icon
 	// Make dir for app
 	appDir := confdir + "/" + name
 	if nerr := os.MkdirAll(appDir, os.ModePerm); nerr != nil {
