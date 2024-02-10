@@ -171,12 +171,18 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.05 - Feb 10th, 2024
+
+- Fixed .desktop file handler to avoid unintended read errors for AppImage installation
+
+
 #### v0.04 - Feb 1st, 2024
 
 - Allow for debian packages with a . in the name (ie. containerd.io or docker.io)
 - Added go/pip/cargo to dist-upgrade all for Debian based distros
 - Fixed UrlCheck to allow for installing cargo packages with short package names
 - Updated `app help` to reflect go, pip, and cargo
+
 
 #### v0.03 - Jan 17th, 2024
 
@@ -201,6 +207,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 02102024 - Update README for v0.05 release
 - 02092024 - Fixed appimage .desktop bug
 - 02012024 - Updated help
 - 02012024 - Updated README for v0.04 release

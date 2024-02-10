@@ -163,7 +163,7 @@ func Upgrade() {
 	}
 	
 	upgrade := exec.Command(sudo[0], sudo[1], sudo[2], command)
-	utils.RunCmd(upgrade, "Upgrade Fuck! Error:")
+	utils.RunCmd(upgrade, "Upgrade Error:")
 
 }
 
