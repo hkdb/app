@@ -134,7 +134,7 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
-	err := syscall.Exec("/bin/bash", []string{"/bin/bash", "-c", "/usr/bin/dpkg -l " + pkg}, os.Environ())
+	err := syscall.Exec("/bin/bash", []string{"/bin/bash", "-c", "/usr/bin/dpkg -l |grep " + pkg}, os.Environ())
 	if err != nil {
 		utils.PrintErrorExit("List System Search Error:", err)
 	}

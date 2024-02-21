@@ -78,7 +78,7 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command(mgr, "list", "|", "grep", pkg)
+	listSearch := exec.Command("bash", "-c", mgr + " list |grep " + pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 

@@ -3,6 +3,7 @@ package utils
 import (
 	"os"
 	"os/exec"
+	"fmt"
 )
 
 func RunCmd(c *exec.Cmd, msg string) {
@@ -15,6 +16,8 @@ func RunCmd(c *exec.Cmd, msg string) {
 	if err := cmd.Run(); err != nil {
     PrintErrorExit(msg, err)
   }
+
+	fmt.Println()
 
 }
 

@@ -207,6 +207,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 02202024 - Fixed flatpak and apt list
 - 02102024 - Update README for v0.05 release
 - 02092024 - Fixed appimage .desktop bug
 - 02012024 - Updated help
