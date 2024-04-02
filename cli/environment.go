@@ -7,15 +7,15 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 	"runtime"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
 
-var deb_base = []string {"Ubuntu", "Pop", "Debian", "MX", "Raspbian", "Kali"}
-var rh_base = []string {"Fedora", "Rocky", "AlmaLinux", "CentOS", "RedHatEnterpriseServer", "Oracle", "ClearOS", "AmazonAMI"}
-var arch_base = []string {"Arch", "Garuda", "Manjaro", "Endeavour"}
+var deb_base = []string{"Ubuntu", "Pop", "Debian", "MX", "Raspbian", "Kali", "Linuxmint"}
+var rh_base = []string{"Fedora", "Rocky", "AlmaLinux", "CentOS", "RedHatEnterpriseServer", "Oracle", "ClearOS", "AmazonAMI"}
+var arch_base = []string{"Arch", "Garuda", "Manjaro", "Endeavour"}
 
 // Load envfile and get environment variables
 func GetEnv() {
@@ -55,7 +55,7 @@ func GetEnv() {
 			if err != nil {
 				fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
 			}
-			
+
 			if yay := os.Getenv("YAY"); yay == "n" {
 				env.Yay = false
 			}
@@ -72,7 +72,7 @@ func GetEnv() {
 				env.AppImage = false
 			}
 		} else {
-			if _, err := os.Stat(dir); os.IsNotExist(err) {	
+			if _, err := os.Stat(dir); os.IsNotExist(err) {
 				fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
 				err := os.MkdirAll(dir, 0700)
 				if err != nil {
@@ -80,9 +80,9 @@ func GetEnv() {
 					fmt.Println("Exiting...\n")
 					os.Exit(1)
 				}
-			} 
+			}
 
-			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n\nGOLANG = n\nPIP = n\nCARGO = n", dir + "/settings.conf"); werr != nil {
+			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n\nGOLANG = n\nPIP = n\nCARGO = n", dir+"/settings.conf"); werr != nil {
 				utils.PrintErrorExit("Write settings.conf Error:", werr)
 			}
 		}
@@ -95,7 +95,7 @@ func GetEnv() {
 
 		//fmt.Println("Distro:", distro)
 		env.Distro = distro
-		
+
 		// Check if it's a Debian based
 		for i := 0; i < len(deb_base); i++ {
 			if distro == deb_base[i] {
@@ -125,7 +125,7 @@ func GetEnv() {
 				break
 			}
 		}
-		
+
 		// Temporarily disabling package manager that don't exist
 		if env.Base == "arch" && env.Yay == true {
 			yay, _ := utils.CheckIfExists(env.YayCmd)
@@ -149,7 +149,7 @@ func GetEnv() {
 		}
 	case "darwin":
 		// Write settings just for consistency
-		if _, err := os.Stat(dir); os.IsNotExist(err) {	
+		if _, err := os.Stat(dir); os.IsNotExist(err) {
 			fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
 			err := os.MkdirAll(dir, 0700)
 			if err != nil {
@@ -157,37 +157,37 @@ func GetEnv() {
 				fmt.Println("Exiting...\n")
 				os.Exit(1)
 			}
-		} 
+		}
 
-		if werr := utils.WriteToFile("BREW = y", dir + "/settings.conf"); werr != nil {
+		if werr := utils.WriteToFile("BREW = y", dir+"/settings.conf"); werr != nil {
 			utils.PrintErrorExit("Write settings.conf Error:", werr)
 		}
 
 		env.Brew = true
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
-	}	
+	}
 
 	golang := os.Getenv("GOLANG")
 	if golang == "n" {
 		env.Go = false
 	}
 	if golang == "" {
-		utils.AppendToFile("GOLANG = n", env.DBDir + "/settings.conf")
+		utils.AppendToFile("GOLANG = n", env.DBDir+"/settings.conf")
 	}
 	pip := os.Getenv("PIP")
 	if pip == "n" {
 		env.Pip = false
 	}
 	if pip == "" {
-		utils.AppendToFile("PIP = n", env.DBDir + "/settings.conf")
+		utils.AppendToFile("PIP = n", env.DBDir+"/settings.conf")
 	}
 	cargo := os.Getenv("CARGO")
 	if cargo == "n" {
 		env.Cargo = false
 	}
 	if cargo == "" {
-		utils.AppendToFile("CARGO = n", env.DBDir + "/settings.conf")
+		utils.AppendToFile("CARGO = n", env.DBDir+"/settings.conf")
 	}
 
 	if env.Go == true {
@@ -212,4 +212,3 @@ func GetEnv() {
 	}
 
 }
-

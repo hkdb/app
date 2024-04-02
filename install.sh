@@ -73,6 +73,14 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   fi
 
   echo -e "\n"
+  if [[ "$DISTRO" == "Linuxmint" ]] || [[ "$DISTRO" == "Debian"]]; then
+    read -p  "Add software-properties-common? (Y/n) " SPC
+    if [[ "$SPC" != "N" ]] && [[ "$SPC" != "n" ]]; then
+			sudo apt install software-properties-common
+    fi
+  fi
+   
+  echo -e "\n"
   if [[ "$DISTRO" == "Debian" ]] || [[ "$DISTRO" == "Ubuntu" ]] || [[ "$DISTRO" == "Pop" ]]; then
     read -p  "Add longsleep-ubuntu-golang-backports? (Y/n) " BACKPORTS
     if [[ "$BACKPORTS" != "N" ]] && [[ "$BACKPORTS" != "n" ]]; then

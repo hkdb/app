@@ -82,7 +82,7 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
 
 - GNU/Linux (apt, dnf, pacman, flatpak, snap, brew, appimage)
   - Debian derivatives
-    - Debian, Ubuntu, Pop, MX, Kali, Raspbian   
+    - Debian, Ubuntu, Pop, MX, Kali, Raspbian, LinuxMint   
   - Redhat derivatives
     - Fedora, RHEL, Rocky, CentOS, Oracle, ClearOS, AmazonAMI
   - Arch derivatives
@@ -207,6 +207,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 04022024 - Added LinuxMint support
 - 02202024 - Fixed flatpak and apt list
 - 02102024 - Update README for v0.05 release
 - 02092024 - Fixed appimage .desktop bug
