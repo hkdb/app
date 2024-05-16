@@ -210,6 +210,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 05162024 - Added update for fedora, added update before upgrade all for fedora and freebsd, and tweaked install script
 - 05162024 - Fixed fedora install, clean-up settings handling, and added FreeBSD support
 - 04022024 - Added LinuxMint support
 - 02202024 - Fixed flatpak and apt list

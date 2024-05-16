@@ -120,7 +120,14 @@ func ListSystemSearch(pkg string) {
 
 func Update() {
 
-	fmt.Println("This is an apt only command. Just use app -a upgrade...")
+	action := " check-update"
+	command := cmd + action
+	if env.AutoYes == true {
+		command = cmd + " -y" + action
+	}
+
+	update := exec.Command(sudo[0], sudo[1], sudo[2], command)
+	utils.RunCmd(update, "Update Error:")
 
 }
 

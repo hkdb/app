@@ -53,11 +53,15 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   OSRNV=${OSR:5}
   DIST=${OSRNV:1:${#OSRNV}-2}
 
-  if [[ "$DIST" == "Fedora Linux" ]]; then
-    echo -e "\nInstalling lsb_release\n"
-    sudo dnf install lsb_release
+  if [[ ! -f /usr/bin/lsb_release ]]; then
+    if [[ "$DIST" == "Fedora Linux" ]]; then
+      echo -e "\nInstalling lsb_release\n"
+      sudo dnf install lsb_release
+    else
+      echo -e "\nlsb_release is not installed. Install it before you run this script again... Exiting..."
+      exit 1
+    fi
   fi
-
   echo -e "\nOS: Linux\n"
   DISTRO=$(lsb_release -i -s)
 

@@ -444,12 +444,14 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 				debian.Upgrade()
 			case "dnf":
 				fmt.Println("\nUpgrading with DNF:\n")
+				redhat.Update()
 				redhat.Upgrade()
 			case "pacman":
 				fmt.Println("\nUpgrading with PACMAN:\n")
 				arch.Upgrade()
 			case "pkg":
 				fmt.Println("\nUpgrading with PKG:\n")
+				freebsd.Update()
 				freebsd.Upgrade()
 			case "brew":
 				if env.OSType != "Mac" {
