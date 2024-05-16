@@ -17,18 +17,47 @@ fi
 echo -e "Check to make sure that $HOME/.local/bin is part of PATH...\n"
 
 PROFILE=$(cat ~/.profile |grep .local/bin)
-
-if [[ PROFILE == "" ]]; then
-  echo -e 'if [ -d "$HOME/.local/bin" ]; then\n\tPATH="$HOME/.local/bin:$PATH"\nfi' >> $HOME/.profile
+if [[ "$OSTYPE" == "freebsd"* ]]; then
+  PROFILE=$(cat ~/.zshrc |grep .local/bin)
 fi
 
-source $HOME/.profile
+if [[ "$OSTYPE" == "freebsd"* ]]; then
+  if [[ ! -f "$HOME/.zsh_profile" ]]; then
+    echo -e "\nCreating .zshrc_profile to have ~/.local/bin be part of PATH and inserting lines to .zshrc to source it...\n"
+    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $HOME/.zsh_profile
+    echo -e "\nsource ~/.zsh_profile" >> $HOME/.zshrc
+  fi
+else 
+  if [[ "$PROFILE" == "" ]]; then
+    echo -e "\nAdding lines in .profile to have ~/.local/bin be part of PATH...\n"
+    echo -e '\nif [ -d "$HOME/.local/bin" ]; then\n\tPATH="$HOME/.local/bin:$PATH"\nfi' >> $HOME/.profile
+  fi
+fi
+
+if [[ "$OSTYPE" == "freebsd"* ]]; then
+  echo -e "\nSourcing .zsh_profile to ensure that ~/.local/bin is in PATH...\n"
+  source $HOME/.zsh_profile
+else
+  echo -e "\nSourcing .profile to ensure that ~/.local/bin is in PATH...\n"
+  source $HOME/.profile
+fi
+echo -e "\n"
 
 DISTRO=""
 PKGMGR=""
 IFLAG=""
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  
+  OSR=$(cat /etc/os-release |grep ^NAME)
+  OSRNV=${OSR:5}
+  DIST=${OSRNV:1:${#OSRNV}-2}
+
+  if [[ "$DIST" == "Fedora Linux" ]]; then
+    echo -e "\nInstalling lsb_release\n"
+    sudo dnf install lsb_release
+  fi
+
   echo -e "\nOS: Linux\n"
   DISTRO=$(lsb_release -i -s)
 
@@ -73,7 +102,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   fi
 
   echo -e "\n"
-  if [[ "$DISTRO" == "Linuxmint" ]] || [[ "$DISTRO" == "Debian"]]; then
+  if [[ "$DISTRO" == "Linuxmint" ]] || [[ "$DISTRO" == "Debian" ]]; then
     read -p  "Add software-properties-common? (Y/n) " SPC
     if [[ "$SPC" != "N" ]] && [[ "$SPC" != "n" ]]; then
 			sudo apt install software-properties-common
@@ -105,14 +134,20 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   echo -e "\nOS: macos\n"
   PKGMGR="brew"
-  read -p "Install Homebrew? (Y/n)" HOMEBREW
+  read -p "Install Homebrew? (Y/n) " HOMEBREW
   if [[ "$HOMEBREW" != "N" ]] && [[ "$HOMEBREW" != "n" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
-  read -p "Install Go? Only say no if you already have it installed (Y/n)" GOLANG
+  read -p "Install Go? Only say no if you already have it installed (Y/n) " GOLANG
   if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
     echo -e "Installing Go...\n"
     brew install golang
+  fi
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+  read -p "Install Go? Only say no if you already have it installed (Y/n) " GOLANG
+  if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
+    echo -e "Installing Go...\n"
+    sudo pkg install golang
   fi
 fi
 
@@ -121,5 +156,8 @@ echo -e "Compiling app...\n"
 go build
 echo -e "Copying app to $HOME/.local/bin...\n"
 cp app $HOME/.local/bin/
-echo -e "COMPLETE\n"
+echo -e "\n********"
+echo -e "COMPLETE"
+echo -e "********\n"
 
+echo -e "You will need to logout and log back in to ensure that app is in PATH...\n"

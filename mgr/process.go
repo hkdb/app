@@ -6,6 +6,7 @@ import (
 	"github.com/hkdb/app/debian"
 	"github.com/hkdb/app/redhat"
 	"github.com/hkdb/app/arch"
+	"github.com/hkdb/app/freebsd"
 	"github.com/hkdb/app/flatpak"
 	"github.com/hkdb/app/snap"
 	brew "github.com/hkdb/app/macos"
@@ -117,6 +118,12 @@ func restoreAll() {
 		s := utils.Confirm()
 		if s == true {
 			brew.InstallAll()
+		}
+	case "FreeBSD":
+		fmt.Print("Restore all PKG apps? (Y/n) ")
+		s := utils.Confirm()
+		if s == true {
+			freebsd.InstallAll()
 		}
 	case "Windows":
 		fmt.Println("Not implemented yet... Coming Soon!")
@@ -235,6 +242,10 @@ func restoreOne(r string) {
 		if r != "brew" {
 			utils.PrintErrorMsgExit("Error:", "Package Manager not supported...")
 		}
+	case "FreeBSD":
+		if r != "pkg" {
+			utils.PrintErrorMsgExit("Error:", "Package Manager not supported...")
+		}
 	case "Windows":
 		utils.PrintErrorMsgExit("Error:", "Windows support is not implemented yet...")
 	default:
@@ -260,6 +271,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.Install(p)
 		case "yay":
 			arch.YayInstall(p)
+		case "pkg":
+			freebsd.Install(p)
 		case "flatpak":
 			flatpak.Install(p)
 		case "snap":
@@ -288,6 +301,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.Remove(p)
 		case "yay":
 			arch.YayRemove(p)
+		case "pkg":
+			freebsd.Remove(p)
 		case "flatpak":
 			flatpak.Remove(p)
 		case "snap":
@@ -316,6 +331,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.Purge(p)
 		case "yay":
 			arch.YayPurge(p)
+		case "pkg":
+			freebsd.Purge(p)
 		case "flatpak":
 			flatpak.Purge(p)
 		case "snap":
@@ -342,6 +359,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.Search(p)
 		case "yay":
 			arch.YaySearch(p)
+		case "pkg":
+			freebsd.Search(p)
 		case "flatpak":
 			flatpak.Search(p)
 		case "snap":
@@ -368,6 +387,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.Update()
 		case "yay":
 			arch.YayUpdate()
+		case "pkg":
+			freebsd.Update()
 		case "flatpak":
 			flatpak.Update()
 		case "snap":
@@ -396,6 +417,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 				arch.Upgrade()
 			case "yay":
 				arch.YayUpgrade()
+			case "pkg":
+				freebsd.Upgrade()
 			case "flatpak":
 				flatpak.Upgrade()
 			case "snap":
@@ -425,6 +448,9 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			case "pacman":
 				fmt.Println("\nUpgrading with PACMAN:\n")
 				arch.Upgrade()
+			case "pkg":
+				fmt.Println("\nUpgrading with PKG:\n")
+				freebsd.Upgrade()
 			case "brew":
 				if env.OSType != "Mac" {
 					utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
@@ -493,6 +519,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 				arch.DistUpgrade()
 			case "yay":
 				arch.YayDistUpgrade()
+			case "pkg":
+				freebsd.DistUpgrade()
 			case "flatpak":
 				flatpak.DistUpgrade()
 			case "snap":
@@ -522,6 +550,9 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			case "pacman":
 				fmt.Println("\nUpgrading with PACMAN:\n")
 				arch.DistUpgrade()
+			case "pkg":
+				fmt.Println("\nUpgrading with PKG:\n")
+				freebsd.DistUpgrade()
 			}
 			if m == "pacman" && env.Yay != false {
 				fmt.Println("\nUpgrade with YAY:\n")
@@ -570,6 +601,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.AutoRemove()
 		case "yay":
 			arch.YayAutoRemove()
+		case "pkg":
+			freebsd.AutoRemove()
 		case "flatpak":
 			flatpak.AutoRemove()
 		case "snap":
@@ -611,6 +644,12 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 				arch.YayListSystem()
 			} else {
 				arch.YayListSystemSearch(p)
+			}
+		case "pkg":
+			if p == "" {
+				freebsd.ListSystem()
+			} else {
+				freebsd.ListSystemSearch(p)
 			}
 		case "flatpak":
 			if p == "" {
@@ -654,7 +693,7 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 		}
 	case "history":
 		switch m {
-		case "apt", "dnf", "pacman", "yay", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
+		case "apt", "dnf", "pacman", "yay", "pkg", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
 			utils.History(m, p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
@@ -754,6 +793,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.AddRepo(p, g)
 		case "yay":
 			arch.YayAddRepo(p, g)
+		case "pkg":
+			freebsd.AddRepo(p, g)
 		case "flatpak":
 			flatpak.AddRepo(p, g)
 		default:
@@ -770,6 +811,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			arch.RemoveRepo(p)
 		case "yay":
 			arch.YayRemoveRepo(p)
+		case "pkg":
+			freebsd.RemoveRepo(p)
 		case "flatpak":
 			flatpak.RemoveRepo(p)
 		default:
@@ -837,9 +880,48 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 			}
 		}
 
+		if env.OSType == "FreeBSD" {
+			fmt.Print("go: ")
+			if env.Go == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("pip: ")
+			if env.Pip == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("cargo: ")
+			if env.Cargo == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+		}
+
 		if env.OSType == "Mac" {
 			fmt.Print("brew: ")
 			if env.Brew == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("go: ")
+			if env.Go == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("pip: ")
+			if env.Pip == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("cargo: ")
+			if env.Cargo == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)

@@ -17,6 +17,8 @@ The config directory app creates on your machine has the following structure to 
           |
           |_ dnf.json
           |
+          |_ pkg.json
+          |
           |_ flatpak.json
           |
           |_ go.json

@@ -40,6 +40,8 @@ func GetEnv() {
 		env.OSType = "Linux"
 	case "darwin":
 		env.OSType = "Mac"
+	case "freebsd":
+		env.OSType = "FreeBSD"
 	case "windows":
 		env.OSType = "Windows"
 	default:
@@ -47,44 +49,44 @@ func GetEnv() {
 		os.Exit(1)
 	}
 
+	// Getting settings from settings.conf if it exists
+	if _, conferr := os.Stat(dir + "/settings.conf"); conferr == nil {
+		err := godotenv.Load(dir + "/settings.conf")
+		if err != nil {
+			fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
+		}
+	} else {
+		if _, err := os.Stat(dir); os.IsNotExist(err) {
+			fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
+			err := os.MkdirAll(dir, 0700)
+			if err != nil {
+				fmt.Println("Error:", err)
+				fmt.Println("Exiting...\n")
+				os.Exit(1)
+			}
+		}
+
+		if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nAPPIMAGE = n", dir+"/settings.conf"); werr != nil {
+			utils.PrintErrorExit("Write settings.conf Error:", werr)
+		}
+	}
+
 	switch osType {
 	case "linux":
-		// Getting settings from settings.conf if it exists
-		if _, conferr := os.Stat(dir + "/settings.conf"); conferr == nil {
-			err := godotenv.Load(dir + "/settings.conf")
-			if err != nil {
-				fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
-			}
-
-			if yay := os.Getenv("YAY"); yay == "n" {
-				env.Yay = false
-			}
-			if flatpak := os.Getenv("FLATPAK"); flatpak == "n" {
-				env.Flatpak = false
-			}
-			if snap := os.Getenv("SNAP"); snap == "n" {
-				env.Snap = false
-			}
-			if brew := os.Getenv("BREW"); brew == "n" {
-				env.Brew = false
-			}
-			if appimage := os.Getenv("APPIMAGE"); appimage == "n" {
-				env.AppImage = false
-			}
-		} else {
-			if _, err := os.Stat(dir); os.IsNotExist(err) {
-				fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
-				err := os.MkdirAll(dir, 0700)
-				if err != nil {
-					fmt.Println("Error:", err)
-					fmt.Println("Exiting...\n")
-					os.Exit(1)
-				}
-			}
-
-			if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nBREW = n\nAPPIMAGE = n\nGOLANG = n\nPIP = n\nCARGO = n", dir+"/settings.conf"); werr != nil {
-				utils.PrintErrorExit("Write settings.conf Error:", werr)
-			}
+		if yay := os.Getenv("YAY"); yay == "n" {
+			env.Yay = false
+		}
+		if flatpak := os.Getenv("FLATPAK"); flatpak == "n" {
+			env.Flatpak = false
+		}
+		if snap := os.Getenv("SNAP"); snap == "n" {
+			env.Snap = false
+		}
+		if brew := os.Getenv("BREW"); brew == "n" {
+			env.Brew = false
+		}
+		if appimage := os.Getenv("APPIMAGE"); appimage == "n" {
+			env.AppImage = false
 		}
 
 		d, err := exec.Command("/usr/bin/lsb_release", "-i", "-s").Output()
@@ -148,45 +150,43 @@ func GetEnv() {
 			}
 		}
 	case "darwin":
-		// Write settings just for consistency
-		if _, err := os.Stat(dir); os.IsNotExist(err) {
-			fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
-			err := os.MkdirAll(dir, 0700)
-			if err != nil {
-				fmt.Println("Error:", err)
-				fmt.Println("Exiting...\n")
-				os.Exit(1)
-			}
-		}
 
 		if werr := utils.WriteToFile("BREW = y", dir+"/settings.conf"); werr != nil {
 			utils.PrintErrorExit("Write settings.conf Error:", werr)
 		}
 
 		env.Brew = true
+	case "freebsd":
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}
-
+	
+	brew := os.Getenv("BREW")
+	if brew == "n" {
+		env.Brew = false
+	}
+	if brew == "" || brew == " " {
+		utils.AppendToFile("BREW = n", env.DBDir+"/settings.conf")
+	}
 	golang := os.Getenv("GOLANG")
 	if golang == "n" {
 		env.Go = false
 	}
-	if golang == "" {
+	if golang == "" || golang == " " {
 		utils.AppendToFile("GOLANG = n", env.DBDir+"/settings.conf")
 	}
 	pip := os.Getenv("PIP")
 	if pip == "n" {
 		env.Pip = false
 	}
-	if pip == "" {
+	if pip == "" || pip == " " {
 		utils.AppendToFile("PIP = n", env.DBDir+"/settings.conf")
 	}
 	cargo := os.Getenv("CARGO")
 	if cargo == "n" {
 		env.Cargo = false
 	}
-	if cargo == "" {
+	if cargo == "" || cargo == " " {
 		utils.AppendToFile("CARGO = n", env.DBDir+"/settings.conf")
 	}
 

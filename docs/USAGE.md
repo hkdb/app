@@ -58,6 +58,7 @@ OPTIONS:
     		- dnf (default if redhat based)
     		- pacman (default if arch based)
     		- yay
+            - pkg
     		- flatpak
     		- snap
             - brew (default if macOS)
@@ -74,6 +75,7 @@ OPTIONS:
     		- dnf
     		- pacman
     		- yay
+            - pkg
     		- flatpak
     		- snap
             - brew

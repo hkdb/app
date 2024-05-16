@@ -12,7 +12,8 @@ App is a cross-platform package management wrapper written in Go that remembers 
 
 Supported OS:
 - Linux 
-- Mac (Homebrew) 
+- Mac (Homebrew)
+- FreeBSD
 - Windows [coming soon]
 
 Supported Package Managers:
@@ -20,6 +21,7 @@ Supported Package Managers:
 - dnf
 - pacman
 - yay
+- pkg
 - Flatpak
 - Snap
 - Homebrew
@@ -91,6 +93,7 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
 - Go
 - Python (pip)
 - Rust (cargo)
+- FreeBSD (pkg)
 
 Currently in the roadmap:
 
@@ -144,7 +147,7 @@ The go, pip, and cargo support is not meant to be a replacement for development 
 3. cd into a directory of choice where you want to keep the app repo. If you are an end user and can't decide, I suggest `~/.config` (`mkdir ~/.config` if it doesn't already exist)
 4. `git clone https://github.com/hkdb/app.git`
 5. `cd app`
-6. `./install.sh`
+6. `./install.sh` or if you are installing from BSD, run `bash install.sh`
 
 
 ### UPDATE/UPGRADE
@@ -154,13 +157,13 @@ Tracking versioned release:
 1. cd back into the repo whereever you put it. `~/.config/app` if you took my recommendation 
 2. `git pull`
 3. `git checkout <version tag>`
-3. `./update.sh`
+3. `./update.sh` or if you are running FreeBSD, run `bash update.sh`
 
 Tracking main branch:
 
 1. cd back into the repo whreever you put it. `~/.config/app` if you took my recommendation 
 2. `git pull`
-3. `./update.sh`
+3. `./update.sh` or if you are running FreeBSD, run `bash update.sh`
 
 ### SUPPORT US!
 
@@ -207,6 +210,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 05162024 - Fixed fedora install, clean-up settings handling, and added FreeBSD support
 - 04022024 - Added LinuxMint support
 - 02202024 - Fixed flatpak and apt list
 - 02102024 - Update README for v0.05 release
