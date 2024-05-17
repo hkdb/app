@@ -1,7 +1,7 @@
 # app - A Package Management Assistant with Super Powers 
 maintained by: @hkdb
 
-![ScreenShot](docs/assets/ss4.png)
+![ScreenShot](docs/assets/ss5.png)
 
 
 ### SUMMARY
@@ -174,6 +174,20 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.07
+
+- Added FreeBSD support
+- Added LinuxMint support
+- Fixed Fedora installation
+- Added update action for Redhat derivatives
+- Cleaned-up settings handling
+
+
+#### v0.06
+
+- Fixed flatpak and apt list to support keyword searches better.
+
+
 #### v0.05 - Feb 10th, 2024
 
 - Fixed .desktop file handler to avoid unintended read errors for AppImage installation
@@ -210,6 +224,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 05162024 - Prepared v0.07 release
 - 05162024 - Added update for fedora, added update before upgrade all for fedora and freebsd, and tweaked install script
 - 05162024 - Fixed fedora install, clean-up settings handling, and added FreeBSD support
 - 04022024 - Added LinuxMint support
