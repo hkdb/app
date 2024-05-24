@@ -37,7 +37,7 @@ func Install(pkg, tag string) {
 	if isUrl == true {
 		cmd = mgr + " install --tag " + tag + " --git " + pkg 
 	}
-	install := exec.Command("/bin/bash", "-c", cmd)
+	install := exec.Command(env.Bash, "-c", cmd)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + p + " to app history...\n")
@@ -100,7 +100,7 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command("/bin/bash", "-c", "ls -lah " + "/.cargo/bin |grep " + pkg)
+	listSearch := exec.Command(env.Bash, "-c", "ls -lah " + "/.cargo/bin |grep " + pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
@@ -112,7 +112,7 @@ func Update() {
 
 func Upgrade() {
 	
-	chkDep := exec.Command("/bin/bash", "-c", "cargo --list |grep install-update")
+	chkDep := exec.Command(env.Bash, "-c", "cargo --list |grep install-update")
 	err := utils.ChkIfCmdRuns(chkDep)
 	if err != nil {
 		fmt.Print("The \"install-update\" Cargo command isn't installed... Do you want to install it? (Y/n) ")
@@ -161,7 +161,7 @@ func InstallAll() {
 			if err != nil {
 				utils.PrintErrorExit("Cargo - Get Repo Data ERROR:", err)
 			}
-			install := exec.Command("/bin/bash", "-c", mgr + " install --git " + url + " --tag " + tag)
+			install := exec.Command(env.Bash, "-c", mgr + " install --git " + url + " --tag " + tag)
 			utils.RunCmd(install, "Installation Error:")
 		} else {
 			install := exec.Command(mgr, "install", p)

@@ -91,7 +91,7 @@ func Update() {
 
 func Upgrade() {
 
-	chkDep := exec.Command("/bin/bash", "-c", "go-global-update")
+	chkDep := exec.Command(env.Bash, "-c", "go-global-update")
 	err := utils.ChkIfCmdRuns(chkDep)
 	if err != nil {
 		fmt.Print("The \"go-global-update\" command isn't installed... Do you want to install it? (Y/n) ")

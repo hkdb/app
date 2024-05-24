@@ -156,7 +156,10 @@ func GetEnv() {
 		}
 
 		env.Brew = true
+		bsdPath()
 	case "freebsd":
+		bashPath()
+		bsdPath()
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}
@@ -210,5 +213,19 @@ func GetEnv() {
 			fmt.Println(utils.ColorYellow, "Temporarily disabling Cargo because it's not installed on your system. Suppress this message by disabling Cargo on app by running \"app -m cargo disable\"...\n", utils.ColorReset)
 		}
 	}
+
+}
+
+func bashPath() {
+
+	env.Bash = "/usr/local/bin/bash"
+
+}
+
+func bsdPath() {
+
+	env.GoCmd = "/usr/local/bin/go"
+	env.PipCmd = "/usr/local/bin/pip"
+	env.CargoCmd = "/usr/local/bin/pip"
 
 }

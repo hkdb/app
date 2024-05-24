@@ -1,6 +1,7 @@
 package pip
 
 import (
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
@@ -78,7 +79,7 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command("/bin/bash", "-c", mgr + " list |grep " + pkg)
+	listSearch := exec.Command(env.Bash, "-c", mgr + " list |grep " + pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
@@ -90,7 +91,7 @@ func Update() {
 
 func Upgrade() {
 
-	chkDep := exec.Command("/bin/bash", "-c", "pip-review")
+	chkDep := exec.Command(env.Bash, "-c", "pip-review")
 	err := utils.ChkIfCmdRuns(chkDep)
 	if err != nil {
 		fmt.Print("The pip-review command isn't installed... Do you want to install it? (Y/n) ")
