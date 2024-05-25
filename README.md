@@ -115,7 +115,7 @@ If there are enabled package managers that you absolutely hate and want out of t
 
 `Other distros`:
 
-Some distros are easily supported by just simply identifying them under each of the 3 base distros respectively so if there's a distro that it doesn't support already, feel free to submit an issue including the output of `lsb_release -a` to request for it to be added and I will try to find time to get it added on.
+Some distros are easily supported by just simply identifying them under each of the 3 base distros respectively so if there's a distro that it doesn't support already, feel free to submit an issue including the output of `cat /etc/*-release` to request for it to be added and I will try to find time to get it added on.
 
 Also, I primarily use Pop, Ubuntu, Debian, Fedora, Arch, and Garuda so other distros are a bit less tested. If you notice any issues on the other "supported" distros, please let me know by submitting an issue here.
 
@@ -143,7 +143,7 @@ The go, pip, and cargo support is not meant to be a replacement for development 
 ### INSTALL
 
 1. Make sure all the package managers you want app to manage and are installed and configured properly
-2. Install `git` and `lsb_release` manually if it's not already installed
+2. Install `git` manually if it's not already installed
 3. cd into a directory of choice where you want to keep the app repo. If you are an end user and can't decide, I suggest `~/.config` (`mkdir ~/.config` if it doesn't already exist)
 4. `git clone https://github.com/hkdb/app.git`
 5. `cd app`

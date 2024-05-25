@@ -107,7 +107,7 @@ func Update() {
 func Upgrade() {
 
 	switch env.Distro {
-	case "Garuda":
+	case "garuda":
 		upgrade := exec.Command("/usr/bin/garuda-update")
 		utils.RunCmd(upgrade, "Upgrade Error:")
 	default:
