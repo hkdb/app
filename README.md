@@ -224,6 +224,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 05262024 - Bumping dev version for @RichardFevrier's pull request
 - 05232024 - Fixed FreeBSD handling of go, pip, and cargo
 - 05162024 - Prepared v0.07 release
 - 05162024 - Added update for fedora, added update before upgrade all for fedora and freebsd, and tweaked install script
