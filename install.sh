@@ -53,25 +53,16 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   OSRNV=${OSR:5}
   DIST=${OSRNV:1:${#OSRNV}-2}
 
-  if [[ ! -f /usr/bin/lsb_release ]]; then
-    if [[ "$DIST" == "Fedora Linux" ]]; then
-      echo -e "\nInstalling lsb_release\n"
-      sudo dnf install lsb_release
-    else
-      echo -e "\nlsb_release is not installed. Install it before you run this script again... Exiting..."
-      exit 1
-    fi
-  fi
   echo -e "\nOS: Linux\n"
-  DISTRO=$(lsb_release -i -s)
+  DISTRO=$(cat /etc/*-release | grep "^ID=" | head -1 | cut -d '=' -f 2)
 
-  if [[ "$DISTRO" == "Debian" ]] || [[ "$DISTRO" == "Ubuntu" ]] || [[ "$DISTRO" == "Pop" ]] || [[ "$DISTRO" == "Linuxmint" ]]; then
+  if [[ "$DISTRO" == "debian" ]] || [[ "$DISTRO" == "ubuntu" ]] || [[ "$DISTRO" == "pop" ]] || [[ "$DISTRO" == "linuxmint" ]]; then
     PKGMGR="apt"
     IFLAG="install"
-  elif [[ "$DISTRO" == "Fedora" ]] || [[ "$DISTRO" == "Rocky" ]] || [[ "$DISTRO" == "AlmaLinux" ]] || [[ "$DISTRO" == "CentOS" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "Oracle" ]] || [[ "$DISTRO" == "ClearOS" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
+  elif [[ "$DISTRO" == "fedora" ]] || [[ "$DISTRO" == "rocky" ]] || [[ "$DISTRO" == "almalinux" ]] || [[ "$DISTRO" == "centos" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "ol" ]] || [[ "$DISTRO" == "clear-linux-os" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
     PKGMGR="dnf"
     IFLAG="install"
-  elif [[ "$DISTRO" == "Arch" ]] || [[ "$DISTRO" == "Garuda" ]] || [[ "$DISTRO" == "Manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
+  elif [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
     PKGMGR="pacman"
     IFLAG="-S"
   fi
@@ -79,7 +70,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   read -p "Would you like to install Flatpak? (Y/n) " FLATPAK
   if [[ $FLATPAK != "N" ]] && [[ $FLATPAK != "n" ]]; then
    sudo $PKGMGR $IFLAG flatpak
-   if [[ "$DISTRO" == "Arch" ]] || [[ "$DISTRO" == "Garuda" ]] || [[ "$DISTRO" == "Manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
+   if [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
     U=$USER
     sudo adduser $U _flatpak
     sudo flatpak repair
@@ -89,7 +80,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 
   read -p "Would you like to install Snap? (Y/n) " SNAP
   if [[ $SNAP != "N" ]] && [[ $SNAP != "n" ]]; then
-    if [[ "$DISTRO" == "Arch" ]] || [[ "$DISTRO" == "Garuda" ]] || [[ "$DISTRO" == "Manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
+    if [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
       OPATH=$(pwd)
       cd /tmp/
       git clone https://aur.archlinux.org/snapd.git
@@ -106,7 +97,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   fi
 
   echo -e "\n"
-  if [[ "$DISTRO" == "Linuxmint" ]] || [[ "$DISTRO" == "Debian" ]]; then
+  if [[ "$DISTRO" == "linuxmint" ]] || [[ "$DISTRO" == "debian" ]]; then
     read -p  "Add software-properties-common? (Y/n) " SPC
     if [[ "$SPC" != "N" ]] && [[ "$SPC" != "n" ]]; then
 			sudo apt install software-properties-common
@@ -114,7 +105,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   fi
    
   echo -e "\n"
-  if [[ "$DISTRO" == "Debian" ]] || [[ "$DISTRO" == "Ubuntu" ]] || [[ "$DISTRO" == "Pop" ]]; then
+  if [[ "$DISTRO" == "debian" ]] || [[ "$DISTRO" == "ubuntu" ]] || [[ "$DISTRO" == "pop" ]]; then
     read -p  "Add longsleep-ubuntu-golang-backports? (Y/n) " BACKPORTS
     if [[ "$BACKPORTS" != "N" ]] && [[ "$BACKPORTS" != "n" ]]; then
       # sudo echo -e "deb https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu/ jammy main\n# deb-src https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu/ jammy main" |sudo tee /etc/apt/sources.list.d/longsleep-ubuntu-golang-backports-jammy.list
@@ -126,7 +117,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
    
   read -p  "Install Go 1.21? Only say no if you already have it installed... (Y/n) " GOLANG
   if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
-		if [[ "$DISTRO" == "Fedora" ]] || [[ "$DISTRO" == "Rocky" ]] || [[ "$DISTRO" == "AlmaLinux" ]] || [[ "$DISTRO" == "CentOS" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "Oracle" ]] || [[ "$DISTRO" == "ClearOS" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
+		if [[ "$DISTRO" == "fedora" ]] || [[ "$DISTRO" == "rocky" ]] || [[ "$DISTRO" == "almalinux" ]] || [[ "$DISTRO" == "centos" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "ol" ]] || [[ "$DISTRO" == "clear-linux-os" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
 			wget -O /tmp/go1.21.5.linux-amd64.tar.gz https://go.dev/dl/go1.21.5.linux-amd64.tar.gz  
 			sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
 			export PATH=$PATH:/usr/local/go/bin

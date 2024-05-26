@@ -13,9 +13,9 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var deb_base = []string{"Ubuntu", "Pop", "Debian", "MX", "Raspbian", "Kali", "Linuxmint"}
-var rh_base = []string{"Fedora", "Rocky", "AlmaLinux", "CentOS", "RedHatEnterpriseServer", "Oracle", "ClearOS", "AmazonAMI"}
-var arch_base = []string{"Arch", "Garuda", "Manjaro", "Endeavour"}
+var deb_base = []string{"debian", "ubuntu"}
+var rh_base = []string{"redhat", "fedora", "clear"}
+var arch_base = []string{"arch"}
 
 // Load envfile and get environment variables
 func GetEnv() {
@@ -89,18 +89,27 @@ func GetEnv() {
 			env.AppImage = false
 		}
 
-		d, err := exec.Command("/usr/bin/lsb_release", "-i", "-s").Output()
+		id, err := exec.Command(env.Bash, "-c", "cat /etc/*-release | grep \"^ID=\" | head -1 | cut -d '=' -f 2").Output()
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Print(utils.ColorRed, "Unable to determine distribution... Exiting...\n\n", utils.ColorReset)
+			os.Exit(1)
 		}
-		distro := strings.TrimSuffix(string(d), "\n")
+		distro := string(id)
 
 		//fmt.Println("Distro:", distro)
 		env.Distro = distro
 
+		i, err := exec.Command(env.Bash, "-c", "cat /etc/*-release").Output()
+		if err != nil {
+			fmt.Print(utils.ColorRed, "Unable to determine base distribution... Exiting...\n\n", utils.ColorReset)
+			os.Exit(1)
+		}
+		//fmt.Println("Infos:", string(i))
+		infos := strings.ToLower(strings.ReplaceAll(string(i), " ", ""))
+
 		// Check if it's a Debian based
 		for i := 0; i < len(deb_base); i++ {
-			if distro == deb_base[i] {
+			if strings.Contains(infos, deb_base[i]) {
 				dBase = "debian"
 				//fmt.Println("Base:", dBase + "\n")
 				env.Base = dBase
@@ -110,7 +119,7 @@ func GetEnv() {
 
 		// Check if it's a RedHat based
 		for i := 0; i < len(rh_base); i++ {
-			if distro == rh_base[i] {
+			if strings.Contains(infos, rh_base[i]) {
 				dBase = "redhat"
 				//fmt.Println("Base:", dBase + "\n")
 				env.Base = dBase
@@ -120,7 +129,7 @@ func GetEnv() {
 
 		// Check if it's a Arch based
 		for i := 0; i < len(arch_base); i++ {
-			if distro == arch_base[i] {
+			if strings.Contains(infos, arch_base[i]) {
 				dBase = "arch"
 				//fmt.Println("Base:", dBase + "\n")
 				env.Base = dBase
@@ -163,7 +172,7 @@ func GetEnv() {
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}
-	
+
 	brew := os.Getenv("BREW")
 	if brew == "n" {
 		env.Brew = false
