@@ -5,11 +5,10 @@ import (
 	"path"
 )
 
-func GetFileFromUrl(url string) string {
+func GetFileFromUrl(url string) (string, string) {
 
-		r,_ := http.NewRequest("GET", url, nil)
-		file := path.Base(r.URL.Path)
+	r, _ := http.Get(url)
+	file := path.Base(r.Request.URL.Path)
 
-		return file
-
+	return r.Request.URL.String(), file
 }

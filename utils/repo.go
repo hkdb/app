@@ -119,7 +119,7 @@ func GetNameFromUrl(g string) (string, string) {
 	if gArg == false {
 		PrintErrorMsgExit("Input Error:", "The gpg key should be in the form of a url...")
 	}
-	gFile := GetFileFromUrl(g)
+	_, gFile := GetFileFromUrl(g)
 	gExt := GetFileExtension(gFile)
 
 	return gExt, gFile
@@ -143,7 +143,7 @@ func GetRepoName(p, pType, g string) string {
 		if ws == true {
 			PrintErrorMsgExit("Error:", "URLs should not contain spaces...")
 		}
-		file := GetFileFromUrl(p)
+		_, file := GetFileFromUrl(p)
 		return file
 	default:
 		PrintErrorMsgExit("Error:", "Source format error")

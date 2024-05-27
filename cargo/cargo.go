@@ -16,7 +16,7 @@ func Install(pkg, tag string) {
 	isUrl := utils.IsUrl(pkg)
 	p := pkg
 	if isUrl == true {
-		pRaw := utils.GetFileFromUrl(pkg)
+		_, pRaw := utils.GetFileFromUrl(pkg)
 		pExt := utils.GetFileExtension(pRaw)
 		p = pRaw
 		if pExt == ".git" {

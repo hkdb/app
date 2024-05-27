@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"log"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -41,9 +41,23 @@ _____  ______ ______
 	log.Println(string(ColorCyan), logo, string(ColorReset))
 	log.Println(string(ColorGreen), "ϟ app - a package management assistant with super powers", string(ColorReset), version1) // can add + " & " + version2
 	TimeStamp(true)
-
 	NewLine()
 
+	// Check for new updates
+	url, tag := GetFileFromUrl("https://github.com/hkdb/app/releases/latest")
+	// no real release have been yet released
+	if tag == "releases" {
+		return
+	}
+	// already on latest release
+	if tag == version1 {
+		return
+	}
+
+	TimeStamp(false)
+	log.Println(string(ColorGreen), "A new version is available to download here:", string(ColorReset), url)
+	TimeStamp(true)
+	NewLine()
 }
 
 // Print error and exit
@@ -83,4 +97,3 @@ func PrintErrorMsg(eType string, e string) {
 	NewLine()
 
 }
-
