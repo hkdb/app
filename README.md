@@ -174,6 +174,14 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.08
+
+- Fixed FreeBSD handling of go, pip, and cargo
+- Removed lsb_release dependancy - Special thanks to @RichardFevrier for this valuable pull request!
+- Added update to pacman and yay
+- Minor clean up of pacman and yay code
+
+
 #### v0.07
 
 - Added FreeBSD support
@@ -224,6 +232,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 05272024 - Preparing to release v0.08
 - 05262024 - Added update and cleaned up pacman and yay
 - 05262024 - Bumping dev version for @RichardFevrier's pull request
 - 05232024 - Fixed FreeBSD handling of go, pip, and cargo
