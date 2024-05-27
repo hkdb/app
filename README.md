@@ -232,6 +232,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 05272024 - Ammended version in main.go
 - 05272024 - Preparing to release v0.08
 - 05262024 - Added update and cleaned up pacman and yay
 - 05262024 - Bumping dev version for @RichardFevrier's pull request
