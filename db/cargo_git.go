@@ -24,12 +24,12 @@ func GitExists(pm, r string) (bool, error) {
 		}
 	}
 
-	return false, nil 
+	return false, nil
 
 }
 
 func RecordGit(pm, r string) error {
-	
+
 	current := ""
 
 	if _, err := os.Stat(env.DBDir + "/packages/repo/" + pm + ".json"); err == nil {
@@ -53,7 +53,7 @@ func RecordGit(pm, r string) error {
 	if werr != nil {
 		return werr
 	}
-	
+
 	return nil
 
 }
@@ -65,7 +65,7 @@ func RecordGitSetup(pm, name, u, t string) error {
 	if werr != nil {
 		return werr
 	}
-	
+
 	return nil
 
 }
@@ -84,7 +84,7 @@ func GetGitSetup(pm, name string) (string, string, error) {
 func RemoveGit(pm, p string) error {
 
 	rmRepos := strings.Split(p, " ")
-  
+
 	repos, err := ReadPkgSlice("packages", "repo", pm)
 	if err != nil {
 		return err
@@ -93,7 +93,7 @@ func RemoveGit(pm, p string) error {
 	// Remove matching elements from slice
 	for i := 0; i < len(rmRepos); i++ {
 		for x := 0; x < len(repos); x++ {
-      if rmRepos[i] == repos[x] {
+			if rmRepos[i] == repos[x] {
 				// Remove package git data
 				urlRec := env.DBDir + "/packages/repo/local/" + pm + "/" + p + ".json"
 				if _, err = os.Stat(urlRec); err == nil {
@@ -103,7 +103,7 @@ func RemoveGit(pm, p string) error {
 				}
 				repos = removeIndex(repos, x)
 			}
-		}	
+		}
 	}
 
 	// Join the new slice into string
@@ -138,7 +138,7 @@ func writeGitEntry(pm, n, u, t string) error {
 	// Write to DB
 	if err := pdb.Write(pm, n, repo); err != nil {
 		return err
-	}	
+	}
 
 	return nil
 
@@ -153,10 +153,9 @@ func readGitEntry(pm, name string) (Git, error) {
 		return repo, err
 	}
 	if err := pdb.Read(pm, name, &repo); err != nil {
-		return repo, err		
+		return repo, err
 	}
 
 	return repo, nil
 
 }
-

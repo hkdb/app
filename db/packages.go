@@ -4,14 +4,14 @@ import (
 	"github.com/hkdb/app/env"
 
 	"fmt"
-	"strings"
+	"io"
 	"os"
-  "io"
+	"strings"
 
-	"golang.org/x/exp/slices"
 	scribble "github.com/nanobox-io/golang-scribble"
+	"golang.org/x/exp/slices"
 )
-	
+
 func IsInstalled(root, col, pm, p string) (bool, error) {
 
 	iPkgs := strings.Split(p, " ")
@@ -27,14 +27,14 @@ func IsInstalled(root, col, pm, p string) (bool, error) {
 		}
 	}
 
-	return false, nil 
+	return false, nil
 
 }
 
 // Add newly isntalled packages to the end of the string of packages
 func RecordPkg(root, col, pm, p string) error {
-	
-  current := ""
+
+	current := ""
 
 	if _, err := os.Stat(env.DBDir + "/" + col + "/" + pm + ".json"); err == nil {
 		// Read current package string from package manager
@@ -50,8 +50,7 @@ func RecordPkg(root, col, pm, p string) error {
 		}
 	}
 
-	
-	// Assemble new string	
+	// Assemble new string
 	pkgs := current + " " + p
 
 	// Write new entry
@@ -59,15 +58,15 @@ func RecordPkg(root, col, pm, p string) error {
 	if werr != nil {
 		return werr
 	}
-	
+
 	return nil
 
 }
 
 func RemovePkg(root, col, pm, p string) error {
-	
+
 	rmPkgs := strings.Split(p, " ")
-  
+
 	pkgs, err := ReadPkgSlice(root, col, pm)
 	if err != nil {
 		return err
@@ -76,10 +75,10 @@ func RemovePkg(root, col, pm, p string) error {
 	// Remove matching elements from slice
 	for i := 0; i < len(rmPkgs); i++ {
 		for x := 0; x < len(pkgs); x++ {
-      if rmPkgs[i] == pkgs[x] {
+			if rmPkgs[i] == pkgs[x] {
 				pkgs = removeIndex(pkgs, x)
 			}
-		}	
+		}
 	}
 
 	// Join the new slice into string
@@ -94,11 +93,11 @@ func RemovePkg(root, col, pm, p string) error {
 	// Write new entry
 	writePkgsEntry(root, col, pm, newPkgs)
 
-  // Check to see if there are associated local packages and if so, delete
-  rlerr := removeLocalPkgs(root, col, pm, rmPkgs)	
-  if rlerr != nil {
-    return rlerr
-  }
+	// Check to see if there are associated local packages and if so, delete
+	rlerr := removeLocalPkgs(root, col, pm, rmPkgs)
+	if rlerr != nil {
+		return rlerr
+	}
 
 	return nil
 
@@ -113,14 +112,14 @@ func removeLocalPkgs(root string, col string, pm string, rmPkgs []string) error 
 		file = "deb"
 	case "dnf":
 		file = "rpm"
-  default:
-    return nil
+	default:
+		return nil
 	}
 
 	// ie. ~/.config/app/packages/deb.json
-  if _, oerr := os.Stat(env.DBDir + "/packages/" + file + ".json"); oerr != nil {
-    return nil
-  } 
+	if _, oerr := os.Stat(env.DBDir + "/packages/" + file + ".json"); oerr != nil {
+		return nil
+	}
 
 	if file != "" {
 		lpkgs, lerr := ReadPkgSlice("", col, file)
@@ -132,39 +131,39 @@ func removeLocalPkgs(root string, col string, pm string, rmPkgs []string) error 
 		for j := 0; j < len(rmPkgs); j++ {
 			for y := 0; y < len(lpkgs); y++ {
 				if rmPkgs[j] == lpkgs[y] {
-          fmt.Println(" Removing " + rmPkgs[j] + " from " + file + " file history...\n")
-					// Remove package from local 
-          lpkgs = removeIndex(lpkgs, y)
-          
-          rmFileRecord, rerr := ReadPkgs("packages/local", file, rmPkgs[j])
-          if rerr == nil {
-	          rmFile := strings.TrimSpace(rmFileRecord)
+					fmt.Println(" Removing " + rmPkgs[j] + " from " + file + " file history...\n")
+					// Remove package from local
+					lpkgs = removeIndex(lpkgs, y)
 
-            // Remove package file
-            fmt.Println(" Removing:", rmFile + "\n")
-            reerr := os.Remove(env.DBDir + "/packages/local/" + file + "/" + rmFile)
-            if reerr != nil {
-              return reerr
-            }
-            // Remove package.json
-            derr := os.Remove(env.DBDir + "/packages/local/" + file + "/" + rmPkgs[j] + ".json")
-            if derr != nil {
-              return derr
-            }
-          }
+					rmFileRecord, rerr := ReadPkgs("packages/local", file, rmPkgs[j])
+					if rerr == nil {
+						rmFile := strings.TrimSpace(rmFileRecord)
+
+						// Remove package file
+						fmt.Println(" Removing:", rmFile+"\n")
+						reerr := os.Remove(env.DBDir + "/packages/local/" + file + "/" + rmFile)
+						if reerr != nil {
+							return reerr
+						}
+						// Remove package.json
+						derr := os.Remove(env.DBDir + "/packages/local/" + file + "/" + rmPkgs[j] + ".json")
+						if derr != nil {
+							return derr
+						}
+					}
 				}
-			}	
+			}
 		}
 
-    // Clean up empty folders in local
-    ldir := env.DBDir + "/packages/local/" + file
-    empty, _ := dirIsEmpty(ldir)
-    if empty == true {
-      rmerr := os.Remove(ldir)
-      if rmerr != nil {
-        return rmerr
-      }
-    }
+		// Clean up empty folders in local
+		ldir := env.DBDir + "/packages/local/" + file
+		empty, _ := dirIsEmpty(ldir)
+		if empty == true {
+			rmerr := os.Remove(ldir)
+			if rmerr != nil {
+				return rmerr
+			}
+		}
 
 		// Join the new local slice into string
 		newLPkgs := strings.Join(lpkgs, " ")
@@ -180,7 +179,7 @@ func removeLocalPkgs(root string, col string, pm string, rmPkgs []string) error 
 
 	}
 
-  return nil
+	return nil
 
 }
 
@@ -192,7 +191,7 @@ func ReadPkgs(root, col, pm string) (string, error) {
 	}
 	pkgs := Packages{}
 	if err := pdb.Read(col, pm, &pkgs); err != nil {
-		return "", err		
+		return "", err
 	}
 
 	return pkgs.Packages, nil
@@ -200,7 +199,7 @@ func ReadPkgs(root, col, pm string) (string, error) {
 }
 
 func ReadPkgSlice(root, col, pm string) ([]string, error) {
-	
+
 	pkgs, err := ReadPkgs(root, col, pm)
 	if err != nil {
 		errStr := err.Error()
@@ -218,7 +217,7 @@ func ReadPkgSlice(root, col, pm string) ([]string, error) {
 }
 
 func delPkg(root, col, pm string) error {
-	
+
 	pdb, err := initDB(root)
 	if err != nil {
 		return err
@@ -236,7 +235,7 @@ func delPkgsEntry(root, col, pm string) error {
 	if err != nil {
 		return err
 	}
-	if err := pdb.Delete(col , pm); err != nil {
+	if err := pdb.Delete(col, pm); err != nil {
 		return err
 	}
 
@@ -254,12 +253,12 @@ func writePkgsEntry(root, col, pm, p string) error {
 
 	// Concat new string
 	pkgs := Packages{}
-	pkgs.Packages = p 
+	pkgs.Packages = p
 
 	// Write to DB
 	if err := pdb.Write(col, pm, pkgs); err != nil {
 		return err
-	}	
+	}
 
 	return nil
 
@@ -267,7 +266,7 @@ func writePkgsEntry(root, col, pm, p string) error {
 
 func initDB(root string) (*scribble.Driver, error) {
 
-	pdb, err := scribble.New(env.DBDir + "/" + root, nil)
+	pdb, err := scribble.New(env.DBDir+"/"+root, nil)
 	if err != nil {
 		return pdb, err
 	}
@@ -283,15 +282,15 @@ func removeIndex(s []string, index int) []string {
 }
 
 func dirIsEmpty(name string) (bool, error) {
-  f, err := os.Open(name)
-  if err != nil {
-    return false, err
-  }
-  defer f.Close()
+	f, err := os.Open(name)
+	if err != nil {
+		return false, err
+	}
+	defer f.Close()
 
-  _, err = f.Readdirnames(1) // Or f.Readdir(1)
-  if err == io.EOF {
-    return true, nil
-  }
-  return false, err
+	_, err = f.Readdirnames(1) // Or f.Readdir(1)
+	if err == io.EOF {
+		return true, nil
+	}
+	return false, err
 }

@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"log"
 	"fmt"
+	"log"
 	"os"
 )
 
@@ -83,4 +83,3 @@ func PrintErrorMsg(eType string, e string) {
 	NewLine()
 
 }
-

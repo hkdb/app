@@ -1,14 +1,14 @@
 package redhat
 
 import (
+	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
-	"github.com/hkdb/app/db"
-	
+
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-	"fmt"
 )
 
 func AddRepo(s, g string) {
@@ -39,9 +39,9 @@ func AddRepo(s, g string) {
 			utils.PrintErrorMsgExit("Input Error:", "No gpg url was specified...")
 		}
 		_, sFile := utils.GetNameFromUrl(s)
-		gpg := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/rpm --import " + g)
+		gpg := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/rpm --import "+g)
 		utils.RunCmd(gpg, "Import PGP Key Error:")
-		cmd := exec.Command(sudo[0], sudo[1], sudo [2], "dnf config-manager --add-repo " + s)
+		cmd := exec.Command(sudo[0], sudo[1], sudo[2], "dnf config-manager --add-repo "+s)
 		utils.RunCmd(cmd, "Add Repo Error:")
 		name = sFile
 		db.RecordSetup("dnf", name, s, g)
@@ -58,7 +58,7 @@ func AddRepo(s, g string) {
 		runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
 		utils.RunCmd(runScript, "Script Error:")
 		utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/dnf")
-		utils.Copy(sFull, env.DBDir + "/packages/repo/local/dnf/" + s)
+		utils.Copy(sFull, env.DBDir+"/packages/repo/local/dnf/"+s)
 		name = utils.GetFileName(s)
 	default:
 		utils.PrintErrorMsgExit("Repo Source Error:", "This is not a supported type of repo source...")
@@ -88,7 +88,7 @@ func RemoveRepo(s string) {
 	sources := strings.Split(s, " ")
 	for i := 0; i < len(sources); i++ {
 		fmt.Println("Removing /etc/yum.repos.d/" + sources[i] + " with sudo:")
-		rmRepo := exec.Command("/usr/bin/sudo", "/bin/bash", "-c", "rm /etc/yum.repos.d/" + sources[i] )
+		rmRepo := exec.Command("/usr/bin/sudo", "/bin/bash", "-c", "rm /etc/yum.repos.d/"+sources[i])
 		utils.RunCmd(rmRepo, "Repo Remove Error:")
 	}
 
@@ -102,4 +102,3 @@ func RemoveRepo(s string) {
 	fmt.Println(s + " has been removed...\n")
 
 }
-

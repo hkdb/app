@@ -1,12 +1,12 @@
 package cargo
 
 import (
-	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
 
-	"os/exec"
 	"fmt"
+	"os/exec"
 )
 
 var mgr = "cargo"
@@ -28,14 +28,14 @@ func Install(pkg, tag string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(p + " is already installed...", "")
+		utils.PrintErrorMsgExit(p+" is already installed...", "")
 	}
 
 	cmd := mgr + " install " + pkg
 	if isUrl == true {
-		cmd = mgr + " install --tag " + tag + " --git " + pkg 
+		cmd = mgr + " install --tag " + tag + " --git " + pkg
 	}
 	install := exec.Command(env.Bash, "-c", cmd)
 	utils.RunCmd(install, "Installation Error:")
@@ -63,9 +63,9 @@ func Remove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
 	remove := exec.Command(mgr, "uninstall", pkg)
@@ -93,14 +93,14 @@ func AutoRemove() {
 
 func ListSystem() {
 
-	list := exec.Command("ls", "-lah", env.HomeDir + "/.cargo/bin")
+	list := exec.Command("ls", "-lah", env.HomeDir+"/.cargo/bin")
 	utils.RunCmd(list, "List Package Error:")
 
 }
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command(env.Bash, "-c", "ls -lah " + "/.cargo/bin |grep " + pkg)
+	listSearch := exec.Command(env.Bash, "-c", "ls -lah "+"/.cargo/bin |grep "+pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
@@ -111,7 +111,7 @@ func Update() {
 }
 
 func Upgrade() {
-	
+
 	chkDep := exec.Command(env.Bash, "-c", "cargo --list |grep install-update")
 	err := utils.ChkIfCmdRuns(chkDep)
 	if err != nil {
@@ -142,7 +142,7 @@ func Search(pkg string) {
 }
 
 func InstallAll() {
-	
+
 	// cargo
 	fmt.Println("Cargo:\n")
 	pkgs, fperr := db.ReadPkgSlice("", "packages", mgr)
@@ -161,7 +161,7 @@ func InstallAll() {
 			if err != nil {
 				utils.PrintErrorExit("Cargo - Get Repo Data ERROR:", err)
 			}
-			install := exec.Command(env.Bash, "-c", mgr + " install --git " + url + " --tag " + tag)
+			install := exec.Command(env.Bash, "-c", mgr+" install --git "+url+" --tag "+tag)
 			utils.RunCmd(install, "Installation Error:")
 		} else {
 			install := exec.Command(mgr, "install", p)
@@ -172,4 +172,3 @@ func InstallAll() {
 	fmt.Println("Cargo Install All Completed...\n")
 
 }
-

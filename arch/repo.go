@@ -1,13 +1,13 @@
 package arch
 
 import (
+	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
-	"github.com/hkdb/app/db"
-	
+
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
 )
 
 func AddRepo(s, g string) {
@@ -42,7 +42,7 @@ func AddRepo(s, g string) {
 	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
 	utils.RunCmd(runScript, "Script Error:")
 	utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/pacman")
-	utils.Copy(sFull, env.DBDir + "/packages/repo/local/pacman/" + s)
+	utils.Copy(sFull, env.DBDir+"/packages/repo/local/pacman/"+s)
 	name := utils.GetFileName(s)
 
 	fmt.Println("\n" + name + " has been added...\n")
@@ -95,4 +95,3 @@ func RemoveRepo(s string) {
 	fmt.Println(repo + " has been removed...\n")
 
 }
-

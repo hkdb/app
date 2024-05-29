@@ -1,31 +1,32 @@
 package restore
 
 import (
-	"github.com/hkdb/app/env"
-	"github.com/hkdb/app/utils"
+	"github.com/hkdb/app/arch"
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/debian"
-	"github.com/hkdb/app/redhat"
-	"github.com/hkdb/app/arch"
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/flatpak"
+	"github.com/hkdb/app/redhat"
+	"github.com/hkdb/app/utils"
 
 	"fmt"
 	"os"
 )
+
 func RestoreAllRepos(pm string) {
-	
+
 	pmrDir := env.DBDir + "/packages/repo/" + pm + ".json"
 	if _, err := os.Stat(pmrDir); os.IsNotExist(err) {
-			fmt.Println("There are no repos added by app... Moving on...")
-			return
+		fmt.Println("There are no repos added by app... Moving on...")
+		return
 	}
 
 	repos, err := db.ReadPkgSlice("packages", "repo", pm)
 	if err != nil {
 		utils.PrintErrorExit("Read Repo List Error:", err)
 	}
-	
-	for i := 0; i < len(repos); i++ {	
+
+	for i := 0; i < len(repos); i++ {
 		name := repos[i]
 		rType := utils.GetRepoRestoreType(pm, repos[i])
 		switch pm {
@@ -34,7 +35,7 @@ func RestoreAllRepos(pm string) {
 			case "ppa":
 				debian.AddRepo(name, "")
 			case "sh":
-				debian.AddRepo(env.DBDir + "/packages/repos/local/" + pm + "/" + name + ".sh", "")
+				debian.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
 			case "json":
 				utils.PrintErrorMsgExit("Url/Gpg repo records are not supported for Debian based distros...", "")
 			default:
@@ -43,7 +44,7 @@ func RestoreAllRepos(pm string) {
 		case "dnf":
 			switch rType {
 			case "sh":
-				redhat.AddRepo(env.DBDir + "/packages/repos/local/" + pm + "/" + name + ".sh", "")
+				redhat.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
 			case "json":
 				r, g, err := db.GetSetup(pm, repos[i])
 				if err != nil {
@@ -56,7 +57,7 @@ func RestoreAllRepos(pm string) {
 		case "pacman":
 			switch rType {
 			case "sh":
-				arch.AddRepo(env.DBDir + "/packages/repos/local/" + pm + "/" + name + ".sh", "")
+				arch.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
 			}
@@ -79,4 +80,3 @@ func RestoreAllRepos(pm string) {
 	}
 
 }
-

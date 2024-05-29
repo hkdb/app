@@ -1,21 +1,21 @@
 package mgr
 
 import (
-	"github.com/hkdb/app/env"
-	"github.com/hkdb/app/utils"
-	"github.com/hkdb/app/debian"
-	"github.com/hkdb/app/redhat"
-	"github.com/hkdb/app/arch"
-	"github.com/hkdb/app/freebsd"
-	"github.com/hkdb/app/flatpak"
-	"github.com/hkdb/app/snap"
-	brew "github.com/hkdb/app/macos"
-	"github.com/hkdb/app/golang"
-	"github.com/hkdb/app/pip"
-	"github.com/hkdb/app/cargo"
 	"github.com/hkdb/app/appimage"
+	"github.com/hkdb/app/arch"
+	"github.com/hkdb/app/cargo"
+	"github.com/hkdb/app/debian"
+	"github.com/hkdb/app/env"
+	"github.com/hkdb/app/flatpak"
+	"github.com/hkdb/app/freebsd"
+	"github.com/hkdb/app/golang"
+	brew "github.com/hkdb/app/macos"
+	"github.com/hkdb/app/pip"
+	"github.com/hkdb/app/redhat"
 	"github.com/hkdb/app/restore"
-	
+	"github.com/hkdb/app/snap"
+	"github.com/hkdb/app/utils"
+
 	"fmt"
 	"os"
 )
@@ -41,7 +41,7 @@ func Process(flag env.Flags) {
 		if a != "enable" && a != "disable" {
 			enabled := isEnabled(m)
 			if enabled == false {
-				utils.PrintErrorMsgExit(m + " has been disabled. You must first enable it before using it in app...\n", "")
+				utils.PrintErrorMsgExit(m+" has been disabled. You must first enable it before using it in app...\n", "")
 			}
 		}
 		execute(m, a, p, g, c, classic, tag)
@@ -70,7 +70,7 @@ func restoreAll() {
 				restore.RestoreAllRepos("pacman")
 				arch.InstallAll()
 				//fmt.Println("Arch Install All")
-			}	
+			}
 		}
 		if env.Base == "arch" && env.Yay == true {
 			fmt.Print("Restore all yay apps? (Y/n) ")
@@ -130,7 +130,7 @@ func restoreAll() {
 	default:
 		utils.PrintErrorMsgExit("OS not supported...", "")
 	}
-	
+
 	if env.Go == true {
 		fmt.Print("Restore all Go apps? (Y/n) ")
 		s := utils.Confirm()
@@ -189,7 +189,7 @@ func restoreOne(r string) {
 			}
 		case "yay":
 			if env.Yay == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run", "app -m "+r+" enable\n")
 			}
 			npm := utils.GetNativePkgMgr()
 			if npm == "pacman" {
@@ -199,38 +199,38 @@ func restoreOne(r string) {
 			}
 		case "flatpak":
 			if env.Flatpak == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run", "app -m "+r+" enable\n")
 			}
 			restore.RestoreAllRepos("flatpak")
 			flatpak.InstallAll()
 		case "snap":
 			if env.Snap == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
 			snap.InstallAll()
 		case "appimage":
 			if env.AppImage == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
 			appimage.InstallAll()
 		case "brew":
 			if env.Brew == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
 			brew.InstallAll()
 		case "go":
 			if env.Go == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
 			brew.InstallAll()
 		case "pip":
 			if env.Pip == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
 			pip.InstallAll()
 		case "cargo":
 			if env.Cargo == false {
-				utils.PrintErrorMsgExit(r + " is disabled... To enable it, run ", "app -m " + r + " enable\n")
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
 			cargo.InstallAll()
 		case "scoop":
@@ -255,7 +255,7 @@ func restoreOne(r string) {
 }
 
 func execute(m, a, p, g, c string, classic bool, tag string) {
-	
+
 	if env.OSType == "Mac" && m != "brew" {
 		utils.PrintErrorMsgExit("Error:", "macOS currently only supports Homebrew...")
 	}
@@ -276,7 +276,7 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 		case "flatpak":
 			flatpak.Install(p)
 		case "snap":
-			snap.Install(p, c, classic)			
+			snap.Install(p, c, classic)
 		case "brew":
 			brew.Install(p)
 		case "go":
@@ -286,7 +286,7 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 		case "cargo":
 			cargo.Install(p, tag)
 		case "appimage":
-			appimage.Install(p)			
+			appimage.Install(p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -316,7 +316,7 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 		case "cargo":
 			cargo.Remove(p)
 		case "appimage":
-			appimage.Remove(p)			
+			appimage.Remove(p)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -628,7 +628,7 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 				debian.ListSystem()
 			} else {
 				debian.ListSystemSearch(p)
-			}	
+			}
 		case "dnf":
 			if p == "" {
 				redhat.ListSystem()

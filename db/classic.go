@@ -13,7 +13,7 @@ func RecordClassic(pm, pkg string, classic bool) error {
 	if werr != nil {
 		return werr
 	}
-	
+
 	return nil
 
 }
@@ -57,7 +57,7 @@ func writeClassicEntry(pm, n string, classic bool) error {
 	// Write to DB
 	if err := pdb.Write(pm, n, c); err != nil {
 		return err
-	}	
+	}
 
 	return nil
 
@@ -72,10 +72,9 @@ func readClassicEntry(pm, name string) (Classics, error) {
 		return classic, err
 	}
 	if err := pdb.Read(pm, name, &classic); err != nil {
-		return classic, err		
+		return classic, err
 	}
 
 	return classic, nil
 
 }
-

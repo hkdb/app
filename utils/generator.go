@@ -2,8 +2,8 @@ package utils
 
 import (
 	"crypto/rand"
-	"io"
 	"encoding/base64"
+	"io"
 )
 
 // Function to generate a random string
@@ -14,4 +14,3 @@ func RandString(nByte int) (string, error) {
 	}
 	return base64.RawURLEncoding.EncodeToString(b), nil
 }
-

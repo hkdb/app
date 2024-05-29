@@ -2,13 +2,13 @@ package debian
 
 import (
 	"github.com/hkdb/app/db"
-	"github.com/hkdb/app/utils"
 	"github.com/hkdb/app/env"
+	"github.com/hkdb/app/utils"
 
-	"syscall"
-	"os"
-  "os/exec"
 	"fmt"
+	"os"
+	"os/exec"
+	"syscall"
 )
 
 var sudo = [3]string{"/usr/bin/sudo", "/bin/sh", "-c"}
@@ -21,9 +21,9 @@ func Install(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
+		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
 	pname := pkg
@@ -39,7 +39,7 @@ func Install(pkg string) {
 		command = cmd + " -y" + action
 	}
 
-	install := exec.Command(sudo[0], sudo[1], sudo[2], command + pkg)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], command+pkg)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
@@ -57,18 +57,18 @@ func Remove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
-	
+
 	action := " remove "
 	command := cmd + action
 	if env.AutoYes == true {
 		command = cmd + " -y" + action
 	}
 
-	remove := exec.Command(sudo[0], sudo[1], sudo[2], command + pkg)
+	remove := exec.Command(sudo[0], sudo[1], sudo[2], command+pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -81,14 +81,14 @@ func Remove(pkg string) {
 
 func Purge(pkg string) {
 
-  // Check if package is already installed
+	// Check if package is already installed
 	inst, ierr := db.IsInstalled("", "packages", "apt", pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
 	action := " purge "
@@ -97,7 +97,7 @@ func Purge(pkg string) {
 		command = cmd + " -y" + action
 	}
 
-	purge := exec.Command(sudo[0], sudo[1], sudo[2], command + pkg)
+	purge := exec.Command(sudo[0], sudo[1], sudo[2], command+pkg)
 	utils.RunCmd(purge, "Purge Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -124,7 +124,7 @@ func AutoRemove() {
 }
 
 func ListSystem() {
-	
+
 	err := syscall.Exec("/usr/bin/dpkg", []string{"/usr/bin/dpkg", "-l"}, os.Environ())
 	if err != nil {
 		utils.PrintErrorExit("List System Error:", err)
@@ -161,7 +161,7 @@ func Upgrade() {
 	if env.AutoYes == true {
 		command = cmd + " -y" + action
 	}
-	
+
 	upgrade := exec.Command(sudo[0], sudo[1], sudo[2], command)
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
@@ -190,7 +190,7 @@ func Search(pkg string) {
 }
 
 func InstallAll() {
-	
+
 	// apt
 	fmt.Println("APT:\n")
 	pkgs, aperr := db.ReadPkgs("", "packages", "apt")
@@ -203,7 +203,7 @@ func InstallAll() {
 		command = cmd + " -y" + action
 	}
 
-	install := exec.Command(sudo[0], sudo[1], sudo[2], command + pkgs)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], command+pkgs)
 	utils.RunCmd(install, "Installation Error:")
 
 }

@@ -1,17 +1,17 @@
 package utils
 
 import (
-	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
+	"github.com/hkdb/app/env"
 
 	"fmt"
-	"strings"
 	"os"
+	"strings"
 )
 
 func ListRepo(pm, r string) {
-	
-	repos, err := db.ReadPkgSlice("packages","repo", pm)
+
+	repos, err := db.ReadPkgSlice("packages", "repo", pm)
 	if err != nil {
 		PrintErrorExit("Read Repo List Error:", err)
 	}
@@ -42,7 +42,7 @@ func ListRepo(pm, r string) {
 
 	fmt.Println("\n")
 
-} 
+}
 
 func IsPPA(p string) bool {
 
@@ -68,14 +68,14 @@ func IsScript(p string) bool {
 
 func IsUrl(p string) bool {
 
-  http_last := 7
-  https_last := 8
-  if len(p) <= 8 {
-    http_last = len(p)-1
-    https_last = len(p)-1
-  }
-  http := p[0:http_last]
-  https := p[0:https_last]
+	http_last := 7
+	https_last := 8
+	if len(p) <= 8 {
+		http_last = len(p) - 1
+		https_last = len(p) - 1
+	}
+	http := p[0:http_last]
+	https := p[0:https_last]
 
 	if http == "http://" || https == "https://" {
 		return true
@@ -86,10 +86,10 @@ func IsUrl(p string) bool {
 }
 
 func GetRepoType(s string) string {
-	
+
 	// Check if it's PPA
 	isPPA := IsPPA(s)
-	
+
 	if isPPA == true {
 		return "ppa"
 	}
@@ -148,31 +148,31 @@ func GetRepoName(p, pType, g string) string {
 	default:
 		PrintErrorMsgExit("Error:", "Source format error")
 	}
-	
+
 	return ""
 
 }
 
 func GetRepoRestoreType(pm, repo string) string {
 
-		rTag := IsPPA(repo)
-		if rTag == true {
-			return "ppa"
+	rTag := IsPPA(repo)
+	if rTag == true {
+		return "ppa"
+	}
+
+	rType := ""
+	prFile := env.DBDir + "/packages/repo/local/" + pm + "/" + repo + ".json"
+	if _, err := os.Stat(prFile); os.IsExist(err) {
+		rType = "json"
+	}
+	psFile := env.DBDir + "/packages/repo/local/" + pm + "/" + repo + ".sh"
+	if _, err := os.Stat(psFile); os.IsExist(err) {
+		if rType == "json" {
+			PrintErrorMsgExit("Record Error:", "Something is wrong with your app records. There should not be both a .json and .sh file referencing "+repo+"...")
 		}
-		
-		rType := ""
-		prFile := env.DBDir + "/packages/repo/local/" + pm + "/" + repo + ".json"
-		if _, err := os.Stat(prFile); os.IsExist(err) {
-			rType = "json"
-		}
-		psFile := env.DBDir + "/packages/repo/local/" + pm + "/" + repo + ".sh"
-		if _, err := os.Stat(psFile); os.IsExist(err) {
-			if rType == "json" {
-				PrintErrorMsgExit("Record Error:", "Something is wrong with your app records. There should not be both a .json and .sh file referencing " + repo + "...")
-			}
-			rType = "sh"
-		}
-		
-		return rType
+		rType = "sh"
+	}
+
+	return rType
 
 }

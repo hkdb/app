@@ -44,10 +44,8 @@ func containsString(slice []string, element string) bool {
 }
 
 func HasWhiteSpace(input string) bool {
-	
+
 	ws := regexp.MustCompile(`\s`).MatchString(input)
 	return ws
 
 }
-
-
