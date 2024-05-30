@@ -53,6 +53,9 @@ func RecordPkg(root, col, pm, p string) error {
 	
 	// Assemble new string	
 	pkgs := current + " " + p
+	sPkgs := strings.Split(strings.TrimSpace(pkgs), " ")
+	slices.Sort(sPkgs)
+	pkgs = strings.Join(sPkgs, " ")
 
 	// Write new entry
 	werr := writePkgsEntry(root, col, pm, pkgs)
