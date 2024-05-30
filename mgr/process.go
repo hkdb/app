@@ -703,8 +703,8 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 		}
 	case "enable":
 
-		fmt.Println(m)
-		switch m {
+		fmt.Println(p)
+		switch p {
 		case "yay":
 			env.Yay = true
 			utils.EditSettings("YAY = ", "y")

@@ -75,7 +75,7 @@ func ParseFlags() env.Flags {
 			}
 		}
 		if a == "enable" || a == "disable" {
-			if *m == "apt" || *m == "dnf" || *m == "pacman" || *m == "pkg" {
+			if p == "apt" || p == "dnf" || p == "pacman" || p == "pkg" {
 				utils.PrintErrorMsgExit("Native package managers cannot be enabled/disabled...\n", "")
 			}
 		}
