@@ -1,6 +1,8 @@
 package macos
 
 import (
+	"strings"
+
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
@@ -118,7 +120,8 @@ func InstallAll() {
 		utils.PrintErrorExit("Homebrew - Read ERROR:", fperr)
 		os.Exit(1)
 	}
-	installAll := exec.Command(mgr, "install", pkgs)
+	args := append([]string{"install"}, strings.Split(pkgs, " ")...)
+	installAll := exec.Command(mgr, args...)
 	utils.RunCmd(installAll, "Installation Error:")
 
 }
