@@ -73,19 +73,19 @@ func GetEnv() {
 
 	switch osType {
 	case "linux":
-		if yay := os.Getenv("YAY"); yay == "n" {
+		if yay := os.Getenv("YAY"); yay != "y" {
 			env.Yay = false
 		}
-		if flatpak := os.Getenv("FLATPAK"); flatpak == "n" {
+		if flatpak := os.Getenv("FLATPAK"); flatpak != "y" {
 			env.Flatpak = false
 		}
-		if snap := os.Getenv("SNAP"); snap == "n" {
+		if snap := os.Getenv("SNAP"); snap != "y" {
 			env.Snap = false
 		}
-		if brew := os.Getenv("BREW"); brew == "n" {
+		if brew := os.Getenv("BREW"); brew != "y" {
 			env.Brew = false
 		}
-		if appimage := os.Getenv("APPIMAGE"); appimage == "n" {
+		if appimage := os.Getenv("APPIMAGE"); appimage != "n" {
 			env.AppImage = false
 		}
 
@@ -174,28 +174,28 @@ func GetEnv() {
 	}
 
 	brew := os.Getenv("BREW")
-	if brew == "n" {
+	if brew != "y" {
 		env.Brew = false
 	}
 	if brew == "" || brew == " " {
 		utils.AppendToFile("BREW = n", env.DBDir+"/settings.conf")
 	}
 	golang := os.Getenv("GOLANG")
-	if golang == "n" {
+	if golang != "y" {
 		env.Go = false
 	}
 	if golang == "" || golang == " " {
 		utils.AppendToFile("GOLANG = n", env.DBDir+"/settings.conf")
 	}
 	pip := os.Getenv("PIP")
-	if pip == "n" {
+	if pip != "y" {
 		env.Pip = false
 	}
 	if pip == "" || pip == " " {
 		utils.AppendToFile("PIP = n", env.DBDir+"/settings.conf")
 	}
 	cargo := os.Getenv("CARGO")
-	if cargo == "n" {
+	if cargo != "y" {
 		env.Cargo = false
 	}
 	if cargo == "" || cargo == " " {

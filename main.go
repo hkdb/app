@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	utils.LogLaunchBanner("v0.08")
+	utils.LogLaunchBanner("v0.08.01")
 
 	// Detect environment
 	cli.GetEnv()
