@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 var mgr = "flatpak"
@@ -118,7 +119,8 @@ func InstallAll() {
 		utils.PrintErrorExit("Flatpak - Read ERROR:", fperr)
 		os.Exit(1)
 	}
-	installAll := exec.Command(mgr, "install", pkgs)
+	args := append([]string{"install"}, strings.Split(pkgs, " ")...)
+	installAll := exec.Command(mgr, args...)
 	utils.RunCmd(installAll, "Installation Error:")
 
 }
