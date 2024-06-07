@@ -4,14 +4,14 @@ import (
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/env"
 
-	"os"
-	"os/exec"
-	"strings"
+	"bufio"
 	"errors"
 	"io"
 	"io/ioutil"
+	"os"
+	"os/exec"
 	"path/filepath"
-	"bufio"
+	"strings"
 )
 
 func IsLocalInstall(filename string) (bool, string, string) {
@@ -19,8 +19,8 @@ func IsLocalInstall(filename string) (bool, string, string) {
 	// Get the extension of the file
 	ext := GetFileExtension(filename)
 	if ext == "NONE" {
-      return false, "", ""  //if no extension is present print failure
-  }
+		return false, "", "" //if no extension is present print failure
+	}
 
 	// Check extension against current environment
 	switch env.Base {
@@ -37,25 +37,25 @@ func IsLocalInstall(filename string) (bool, string, string) {
 	}
 
 	// Get working path
-	path := GetWorkPath() 
-  // fmt.Println("Working Path:", path)
+	path := GetWorkPath()
+	// fmt.Println("Working Path:", path)
 
 	// Check if config dir for local package exists. If it doesn't, mkdir
 	dir := env.DBDir + "/packages/local/" + ext
 	if _, derr := os.Stat(dir); os.IsNotExist(derr) {
-    merr := os.MkdirAll(dir, os.ModePerm)
+		merr := os.MkdirAll(dir, os.ModePerm)
 		if merr != nil {
 			PrintErrorExit("Error:", merr)
 		}
 	}
 
-  // fmt.Println("DB Dir:", dir)
+	// fmt.Println("DB Dir:", dir)
 
 	// Set source package file
 	srcpkg := path + "/" + filename
-  destpkg := dir + "/" + filename
+	destpkg := dir + "/" + filename
 
-  //fmt.Println("Copying package from " + srcpkg + " to " + destpkg + "...")
+	//fmt.Println("Copying package from " + srcpkg + " to " + destpkg + "...")
 
 	// Copy local package to config dir
 	cerr := Copy(srcpkg, destpkg)
@@ -81,14 +81,14 @@ func IsLocalInstall(filename string) (bool, string, string) {
 
 	pname := strings.TrimSuffix(string(pNameCmd), "\n")
 
-  // fmt.Println("Package Name:", pname)
+	// fmt.Println("Package Name:", pname)
 
 	// Mark package as local
-	rerr := db.RecordPkg("", "packages" , ext, pname)
+	rerr := db.RecordPkg("", "packages", ext, pname)
 	if rerr != nil {
 		PrintErrorExit("Record Local Package Error: ", rerr)
 	}
-	
+
 	// Record package and file name association
 	rferr := db.RecordPkg("packages/local", ext, pname, filename)
 	if rferr != nil {
@@ -96,11 +96,11 @@ func IsLocalInstall(filename string) (bool, string, string) {
 	}
 
 	return true, pname, srcpkg
-	
+
 }
 
 func Copy(src, dst string) error {
-	
+
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
 		return err
@@ -130,7 +130,7 @@ func Copy(src, dst string) error {
 func CreateDirIfNotExist(dir string) {
 
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
-    err = os.MkdirAll(dir, os.ModePerm)
+		err = os.MkdirAll(dir, os.ModePerm)
 		if err != nil {
 			PrintErrorExit("Error:", err)
 		}
@@ -139,7 +139,7 @@ func CreateDirIfNotExist(dir string) {
 }
 
 func DeleteDirIfEmpty(dir string) {
-	
+
 	// Clean-up dir
 	if empty, _ := DirIsEmpty(dir); empty == true {
 		if err := os.Remove(dir); err != nil {
@@ -150,18 +150,18 @@ func DeleteDirIfEmpty(dir string) {
 }
 
 func DirIsEmpty(dir string) (bool, error) {
-  
-	f, err := os.Open(dir)
-  if err != nil {
-    return false, err
-  }
-  defer f.Close()
 
-  _, err = f.Readdirnames(1) // Or f.Readdir(1)
-  if err == io.EOF {
-    return true, nil
-  }
-  return false, err
+	f, err := os.Open(dir)
+	if err != nil {
+		return false, err
+	}
+	defer f.Close()
+
+	_, err = f.Readdirnames(1) // Or f.Readdir(1)
+	if err == io.EOF {
+		return true, nil
+	}
+	return false, err
 
 }
 
@@ -172,7 +172,7 @@ func GetWorkPath() string {
 	if err != nil {
 		PrintErrorExit("Path Read Error:", err)
 	}
-	
+
 	return path
 
 }
@@ -182,20 +182,19 @@ func GetFileExtension(filename string) string {
 	// Get the extension of the file
 	extIndex := strings.LastIndex(filename, ".")
 	if extIndex == -1 {
-      return "NONE" 
-  }
+		return "NONE"
+	}
 
 	ext := filename[extIndex+1:]
-	
+
 	return ext
 
 }
 
-
 func GetFileName(filename string) string {
 
 	var ext = filepath.Ext(filename)
-	var name = filename[0:len(filename)-len(ext)]
+	var name = filename[0 : len(filename)-len(ext)]
 
 	return name
 
@@ -270,7 +269,7 @@ func WriteDotDesktop(pkg, icon, file, dest, share string) {
 
 func EditSettings(lType, value string) {
 
-	input, err := ioutil.ReadFile(env.DBDir + "/settings.conf" )
+	input, err := ioutil.ReadFile(env.DBDir + "/settings.conf")
 	if err != nil {
 		PrintErrorExit("Read settings Error:", err)
 	}
@@ -284,7 +283,7 @@ func EditSettings(lType, value string) {
 	}
 
 	output := strings.Join(lines, "\n")
-	err = ioutil.WriteFile(env.DBDir + "/settings.conf", []byte(output), 0644)
+	err = ioutil.WriteFile(env.DBDir+"/settings.conf", []byte(output), 0644)
 	if err != nil {
 		PrintErrorExit("Write settings Error:", err)
 	}
@@ -293,7 +292,7 @@ func EditSettings(lType, value string) {
 
 func ReadDotDesktop(file string) (*DotDesktop, error) {
 
-  dd := &DotDesktop{}
+	dd := &DotDesktop{}
 	f, err := os.Open(file)
 	if err != nil {
 		return dd, err
@@ -301,25 +300,25 @@ func ReadDotDesktop(file string) (*DotDesktop, error) {
 	defer f.Close()
 
 	scanner := bufio.NewScanner(f)
-	
+
 	for scanner.Scan() {
-    line := scanner.Text()
-    entry := strings.Split(line, "=")
-    if len(entry) > 2 {
-      PrintErrorMsgExit("Read .desktop Error:", "Malformed .desktop file...")
-    }
-    if entry[0] == "Name" {
-      dd.Name = entry[1]
-      if dd.Icon != "" {
-        break
-      }
-    }
-    if entry[0] == "Icon" {
-      dd.Icon = entry[1]
-      if dd.Name != "" {
-        break
-      }
-    }
+		line := scanner.Text()
+		entry := strings.Split(line, "=")
+		if len(entry) > 2 {
+			PrintErrorMsgExit("Read .desktop Error:", "Malformed .desktop file...")
+		}
+		if entry[0] == "Name" {
+			dd.Name = entry[1]
+			if dd.Icon != "" {
+				break
+			}
+		}
+		if entry[0] == "Icon" {
+			dd.Icon = entry[1]
+			if dd.Name != "" {
+				break
+			}
+		}
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -331,8 +330,8 @@ func ReadDotDesktop(file string) (*DotDesktop, error) {
 }
 
 func ReadFileLine(file string, line int) (string, error) {
-	
-	line = line-1 
+
+	line = line - 1
 
 	f, err := os.Open(file)
 	if err != nil {
@@ -389,7 +388,6 @@ func RemoveDirRecursive(dir string) {
 	}
 
 }
-
 
 func RemoveFile(file string) {
 

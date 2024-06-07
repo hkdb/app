@@ -6,9 +6,9 @@ import (
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
 )
 
 var mgr = "brew"
@@ -20,9 +20,9 @@ func Install(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
+		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
 	install := exec.Command(mgr, "install", pkg)
@@ -43,9 +43,9 @@ func Remove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
 	remove := exec.Command(mgr, "uninstall", pkg)
@@ -112,7 +112,7 @@ func Search(pkg string) {
 }
 
 func InstallAll() {
-	
+
 	// brew
 	fmt.Println("Brew:\n")
 	pkgs, fperr := db.ReadPkgs("", "packages", "brew")
@@ -125,4 +125,3 @@ func InstallAll() {
 	utils.RunCmd(installAll, "Installation Error:")
 
 }
-

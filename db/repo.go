@@ -24,12 +24,12 @@ func RepoExists(pm, r string) (bool, error) {
 		}
 	}
 
-	return false, nil 
+	return false, nil
 
 }
 
 func RecordRepo(pm, r string) error {
-	
+
 	current := ""
 
 	if _, err := os.Stat(env.DBDir + "/packages/repo/" + pm + ".json"); err == nil {
@@ -53,7 +53,7 @@ func RecordRepo(pm, r string) error {
 	if werr != nil {
 		return werr
 	}
-	
+
 	return nil
 
 }
@@ -65,7 +65,7 @@ func RecordSetup(pm, name, r, g string) error {
 	if werr != nil {
 		return werr
 	}
-	
+
 	return nil
 
 }
@@ -84,7 +84,7 @@ func GetSetup(pm, name string) (string, string, error) {
 func RemoveRepo(pm, rType, r string) error {
 
 	rmRepos := strings.Split(r, " ")
-  
+
 	repos, err := ReadPkgSlice("packages", "repo", pm)
 	if err != nil {
 		return err
@@ -93,7 +93,7 @@ func RemoveRepo(pm, rType, r string) error {
 	// Remove matching elements from slice
 	for i := 0; i < len(rmRepos); i++ {
 		for x := 0; x < len(repos); x++ {
-      if rmRepos[i] == repos[x] {
+			if rmRepos[i] == repos[x] {
 				if rType != "ppa" {
 					// Remove script
 					urlRec := env.DBDir + "/packages/repo/local/" + pm + "/" + r + ".json"
@@ -111,7 +111,7 @@ func RemoveRepo(pm, rType, r string) error {
 				}
 				repos = removeIndex(repos, x)
 			}
-		}	
+		}
 	}
 
 	// Join the new slice into string
@@ -146,7 +146,7 @@ func writeRepoEntry(pm, n, r, g string) error {
 	// Write to DB
 	if err := pdb.Write(pm, n, repo); err != nil {
 		return err
-	}	
+	}
 
 	return nil
 
@@ -161,10 +161,9 @@ func readRepoEntry(pm, name string) (Repos, error) {
 		return repo, err
 	}
 	if err := pdb.Read(pm, name, &repo); err != nil {
-		return repo, err		
+		return repo, err
 	}
 
 	return repo, nil
 
 }
-

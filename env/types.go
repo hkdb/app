@@ -1,15 +1,15 @@
 package env
 
 type Flags struct {
-	A string // Action
-	P string // Package or Other types of value for Action
-	M	string // Package Manager
-	R string // Restore
-	Y bool	 // Auto-Yes for certain package managers
-	G string // URL to GPG key for dnf/yum/rpm based distros when adding repo 
-	C string // Channel for specifying channel when install snaps
-	Classic bool // Classic confinement for snaps
-	Tag string // Tag (version) for installing git url with cargo 
+	A       string // Action
+	P       string // Package or Other types of value for Action
+	M       string // Package Manager
+	R       string // Restore
+	Y       bool   // Auto-Yes for certain package managers
+	G       string // URL to GPG key for dnf/yum/rpm based distros when adding repo
+	C       string // Channel for specifying channel when install snaps
+	Classic bool   // Classic confinement for snaps
+	Tag     string // Tag (version) for installing git url with cargo
 }
 
 var OSType string

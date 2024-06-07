@@ -1,14 +1,14 @@
 package debian
 
 import (
+	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
-	"github.com/hkdb/app/db"
-	
+
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-	"fmt"
 )
 
 func AddRepo(s, g string) {
@@ -35,7 +35,7 @@ func AddRepo(s, g string) {
 
 	switch sType {
 	case "ppa":
-		cmd := exec.Command(sudo[0], sudo[1], sudo [2], "add-apt-repository " + s)
+		cmd := exec.Command(sudo[0], sudo[1], sudo[2], "add-apt-repository "+s)
 		utils.RunCmd(cmd, "Add Repo Error:")
 		name = s
 	case "sh":
@@ -56,7 +56,7 @@ func AddRepo(s, g string) {
 		runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
 		utils.RunCmd(runScript, "Script Error:")
 		utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/apt")
-		utils.Copy(sFull, env.DBDir + "/packages/repo/local/apt/" + s)
+		utils.Copy(sFull, env.DBDir+"/packages/repo/local/apt/"+s)
 		name = utils.GetFileName(s)
 
 		fmt.Println("\nRepo added... Let's run update...\n")
@@ -89,13 +89,13 @@ func RemoveRepo(s string) {
 
 	switch sType {
 	case "ppa":
-		cmd := exec.Command(sudo[0], sudo[1], sudo [2], "add-apt-repository --remove " + s)
+		cmd := exec.Command(sudo[0], sudo[1], sudo[2], "add-apt-repository --remove "+s)
 		utils.RunCmd(cmd, "Remove Repo Error:")
 	default:
 		sources := strings.Split(s, " ")
 		for i := 0; i < len(sources); i++ {
 			fmt.Println("Removing /etc/apt/sources.list.d/" + sources[i] + ".list with sudo:")
-			rmRepo := exec.Command("/usr/bin/sudo", "/bin/bash", "-c", "rm /etc/apt/sources.list.d/" + sources[i] + ".list" )
+			rmRepo := exec.Command("/usr/bin/sudo", "/bin/bash", "-c", "rm /etc/apt/sources.list.d/"+sources[i]+".list")
 			utils.RunCmd(rmRepo, "Repo Remove Error:")
 		}
 	}
@@ -110,4 +110,3 @@ func RemoveRepo(s string) {
 	fmt.Println(s + " has been removed...\n")
 
 }
-

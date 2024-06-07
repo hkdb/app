@@ -1,6 +1,6 @@
 package utils
 
 type DotDesktop struct {
-  Name string
-  Icon string
+	Name string
+	Icon string
 }

@@ -1,13 +1,13 @@
 package golang
 
 import (
-	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
 
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
 )
 
 var mgr = "go"
@@ -19,9 +19,9 @@ func Install(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
+		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
 	install := exec.Command(mgr, "install", pkg)
@@ -42,12 +42,12 @@ func Remove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
-	remove := exec.Command("rm", env.HomeDir + "/go/bin/" + pkg)
+	remove := exec.Command("rm", env.HomeDir+"/go/bin/"+pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -72,14 +72,14 @@ func AutoRemove() {
 
 func ListSystem() {
 
-	list := exec.Command("ls", "-lah", env.HomeDir + "/go/bin")
+	list := exec.Command("ls", "-lah", env.HomeDir+"/go/bin")
 	utils.RunCmd(list, "List Package Error:")
 
 }
 
 func ListSystemSearch(pkg string) {
 
-	listSearch := exec.Command("ls", "-lah", env.HomeDir + "/go/bin", "|", "grep", pkg)
+	listSearch := exec.Command("ls", "-lah", env.HomeDir+"/go/bin", "|", "grep", pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
@@ -120,7 +120,7 @@ func Search(pkg string) {
 }
 
 func InstallAll() {
-	
+
 	// go
 	fmt.Println("go:\n")
 	pkgs, fperr := db.ReadPkgs("", "packages", "go")
@@ -132,4 +132,3 @@ func InstallAll() {
 	utils.RunCmd(installAll, "Installation Error:")
 
 }
-

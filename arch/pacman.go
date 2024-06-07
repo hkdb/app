@@ -1,14 +1,14 @@
 package arch
 
 import (
-	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
 
-	"syscall"
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
+	"syscall"
 )
 
 var sudo = [3]string{"/usr/bin/sudo", "/bin/sh", "-c"}
@@ -21,12 +21,12 @@ func Install(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
+		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
-	install := exec.Command(sudo[0], sudo[1], sudo[2], cmd + " -S " + pkg)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], cmd+" -S "+pkg)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
@@ -44,12 +44,12 @@ func Remove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
-	remove := exec.Command(sudo[0], sudo[1], sudo[2], cmd + " -R " + pkg)
+	remove := exec.Command(sudo[0], sudo[1], sudo[2], cmd+" -R "+pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -68,23 +68,23 @@ func Purge(pkg string) {
 
 func AutoRemove() {
 
-	out, err := exec.Command("/bin/bash", "-c", cmd + " -Qtdq").Output()
+	out, err := exec.Command("/bin/bash", "-c", cmd+" -Qtdq").Output()
 	rmList := string(out)
-	if err != nil  && rmList != "" {
+	if err != nil && rmList != "" {
 		utils.PrintErrorExit("Read Auto Remove Package List Error:", err)
 	}
-	
+
 	if rmList == "" {
 		fmt.Println("No packages need to be automatically removed...\n")
 		os.Exit(1)
 	}
-	aRemove := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/pacman -Rns " + rmList)
+	aRemove := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/pacman -Rns "+rmList)
 	utils.RunCmd(aRemove, "Auto Remove Error:")
 
 }
 
 func ListSystem() {
-	
+
 	err := syscall.Exec("/usr/bin/pacman", []string{cmd, "-Q"}, os.Environ())
 	if err != nil {
 		utils.PrintErrorExit("List System Error:", err)
@@ -94,7 +94,7 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
-	listSys := exec.Command("/bin/sh", "-c", cmd + " -Q |grep " + pkg)
+	listSys := exec.Command("/bin/sh", "-c", cmd+" -Q |grep "+pkg)
 	utils.RunCmd(listSys, "List System Packages Error:")
 
 }
@@ -116,7 +116,7 @@ func Upgrade() {
 		upgrade := exec.Command("/usr/bin/garuda-update")
 		utils.RunCmd(upgrade, "Upgrade Error:")
 	default:
-		upgrade := exec.Command(sudo[0], sudo[1], sudo[2], cmd + " -Syyu")
+		upgrade := exec.Command(sudo[0], sudo[1], sudo[2], cmd+" -Syyu")
 		utils.RunCmd(upgrade, "Upgrade Error:")
 	}
 
@@ -138,7 +138,7 @@ func Search(pkg string) {
 }
 
 func InstallAll() {
-	
+
 	// pacman
 	fmt.Println("PACMAN:\n")
 	pkgs, aperr := db.ReadPkgs("", "packages", "pacman")
@@ -147,7 +147,7 @@ func InstallAll() {
 	}
 
 	command := cmd + " -S "
-	install := exec.Command(sudo[0], sudo[1], sudo[2], command + pkgs)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], command+pkgs)
 	utils.RunCmd(install, "Installation Error:")
 
 }

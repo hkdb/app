@@ -1,14 +1,14 @@
 package snap
 
 import (
-	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
 
-	"syscall"
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
+	"syscall"
 )
 
 var sudo = [3]string{"/usr/bin/sudo", "/bin/sh", "-c"}
@@ -21,25 +21,25 @@ func Install(pkg, c string, classic bool) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " has already been installed...", "")
+		utils.PrintErrorMsgExit(pkg+" has already been installed...", "")
 	}
 
 	cmd := "install "
 	end := ""
 	if c != "" {
 		switch c {
-			case "edge", "stable", "candidate", "beta":
-				cmd = cmd + "--channel=" + c + " "
-			default:
-				utils.PrintErrorMsgExit("Input Error:", "Not a valid channel for snap...")
+		case "edge", "stable", "candidate", "beta":
+			cmd = cmd + "--channel=" + c + " "
+		default:
+			utils.PrintErrorMsgExit("Input Error:", "Not a valid channel for snap...")
 		}
 	}
 	if classic == true {
 		end = " --classic"
 	}
-	install := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/snap " + cmd + pkg + end)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/snap "+cmd+pkg+end)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
@@ -67,12 +67,12 @@ func Remove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
-	remove := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/snap remove " + pkg)
+	remove := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/snap remove "+pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -109,7 +109,7 @@ func AutoRemove() {
 }
 
 func ListSystem() {
-	
+
 	err := syscall.Exec(mgr, []string{mgr, "list"}, os.Environ())
 	if err != nil {
 		utils.PrintErrorExit("List System Error:", err)
@@ -158,8 +158,8 @@ func Search(pkg string) {
 }
 
 func InstallAll() {
-	
-	// snap	
+
+	// snap
 	action := " install "
 
 	fmt.Println("Snap:\n")
@@ -169,9 +169,9 @@ func InstallAll() {
 		pkgs, sperr := db.ReadPkgs("", "packages", "snap")
 		if sperr != nil {
 			utils.PrintErrorExit("Snap - Read ERROR:", sperr)
-		} 
+		}
 		classic := ""
-		isClassic, icerr := db.GetClassic("snap", pkgs) 
+		isClassic, icerr := db.GetClassic("snap", pkgs)
 		if icerr != nil {
 			utils.PrintErrorExit("Snap - Confinement Preference Read Error:", icerr)
 		}
@@ -179,7 +179,7 @@ func InstallAll() {
 		if isClassic == true {
 			classic = " --classic"
 		}
-		install := exec.Command(sudo[0], sudo[1], sudo[2], command + " " + pkgs + classic)
+		install := exec.Command(sudo[0], sudo[1], sudo[2], command+" "+pkgs+classic)
 		utils.RunCmd(install, "Installation Error:")
 	} else {
 		pkgs, sperr := db.ReadPkgSlice("", "packages", "snap")
@@ -196,7 +196,7 @@ func InstallAll() {
 				}
 				command = command + " --channel=" + ch
 			}
-			
+
 			classic := ""
 			isClassic, err := db.GetClassic("snap", pkgs[i])
 			if err != nil {
@@ -206,11 +206,10 @@ func InstallAll() {
 			if isClassic == true {
 				classic = " --classic"
 			}
-		
-			install := exec.Command(sudo[0], sudo[1], sudo[2], command + " " + pkgs[i] + classic)
+
+			install := exec.Command(sudo[0], sudo[1], sudo[2], command+" "+pkgs[i]+classic)
 			utils.RunCmd(install, "Installation Error:")
 		}
 	}
 
 }
-

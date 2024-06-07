@@ -2,14 +2,14 @@ package utils
 
 import (
 	"github.com/hkdb/app/db"
-	
+
 	"fmt"
 	"strings"
 )
 
 func History(pm, p string) {
 
-	pkgs, err := db.ReadPkgSlice("","packages", pm)
+	pkgs, err := db.ReadPkgSlice("", "packages", pm)
 	if err != nil {
 		PrintErrorExit("Read History Error:", err)
 	}

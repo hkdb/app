@@ -11,7 +11,7 @@ func ChannelPreferred(pm, p string) bool {
 	if _, err := os.Stat(env.DBDir + "/packages/repo/channel/" + pm + "/" + p + ".json"); err == nil {
 		return true
 	}
-	return false 
+	return false
 
 }
 
@@ -22,7 +22,7 @@ func RecordChan(pm, name, c string) error {
 	if werr != nil {
 		return werr
 	}
-	
+
 	return nil
 
 }
@@ -44,7 +44,7 @@ func RemoveChan(pm, name string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 
 }
@@ -64,7 +64,7 @@ func writeChanEntry(pm, n, c string) error {
 	// Write to DB
 	if err := pdb.Write(pm, n, ch); err != nil {
 		return err
-	}	
+	}
 
 	return nil
 
@@ -79,7 +79,7 @@ func readChanEntry(pm, name string) (Channels, error) {
 		return ch, err
 	}
 	if err := pdb.Read(pm, name, &ch); err != nil {
-		return ch, err		
+		return ch, err
 	}
 
 	return ch, nil

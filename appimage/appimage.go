@@ -1,12 +1,12 @@
 package appimage
 
 import (
-	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
 
-	"os"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -17,9 +17,9 @@ func Install(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
+		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
 	name := installPkgs(pkg, false)
@@ -39,9 +39,9 @@ func Remove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
 	removePkg(pkg)
@@ -74,18 +74,18 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
-	fmt.Println("This action does not apply to AppImage...") 
-	
+	fmt.Println("This action does not apply to AppImage...")
+
 }
 
 func Update() {
 
-	fmt.Println("This action does not apply to AppImage...") 
+	fmt.Println("This action does not apply to AppImage...")
 
 }
 
 func Upgrade(pkg string) {
-	
+
 	fmt.Println("This action does not apply to AppImage... To upgrade an AppImage, simply remove the old and install the new...")
 
 }
@@ -98,7 +98,7 @@ func DistUpgrade() {
 
 func Search(pkg string) {
 
-	fmt.Println("This action does not apply to AppImage...") 
+	fmt.Println("This action does not apply to AppImage...")
 
 }
 
@@ -125,7 +125,7 @@ func History() {
 }
 
 func InstallAll() {
-	
+
 	// appimage
 	fmt.Println("AppImage:\n")
 	pkgs, fperr := db.ReadPkgSlice("", "packages", "appimage")
@@ -133,7 +133,7 @@ func InstallAll() {
 		utils.PrintErrorExit("AppImage - Read ERROR:", fperr)
 		os.Exit(1)
 	}
-	
+
 	for i := 1; i < len(pkgs); i++ {
 		fmt.Println(pkgs[i])
 		cpFile, err := db.ReadPkgs("packages/local", "appimage", pkgs[i])
@@ -153,4 +153,3 @@ func InstallAll() {
 	fmt.Println("\nAppImage Restore Completed...\n")
 
 }
-

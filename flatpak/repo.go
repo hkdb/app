@@ -1,13 +1,13 @@
 package flatpak
 
 import (
+	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
-	"github.com/hkdb/app/db"
-	
+
+	"fmt"
 	"os/exec"
 	"strings"
-	"fmt"
 )
 
 func AddRepo(s, g string) {
@@ -77,4 +77,3 @@ func RemoveRepo(s string) {
 	fmt.Println(s + " has been removed...\n")
 
 }
-

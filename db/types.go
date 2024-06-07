@@ -1,12 +1,12 @@
 package db
 
 type Packages struct {
-	Packages    string `json:"packages"`
+	Packages string `json:"packages"`
 }
 
 type Repos struct {
-	Repo	string `json:"repo"`
-	Gpg		string `json:"gpg"`
+	Repo string `json:"repo"`
+	Gpg  string `json:"gpg"`
 }
 
 type Classics struct {

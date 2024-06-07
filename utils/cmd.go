@@ -1,9 +1,9 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
 )
 
 func RunCmd(c *exec.Cmd, msg string) {
@@ -14,15 +14,15 @@ func RunCmd(c *exec.Cmd, msg string) {
 	cmd.Stderr = os.Stderr
 	cmd.Env = os.Environ()
 	if err := cmd.Run(); err != nil {
-    PrintErrorExit(msg, err)
-  }
+		PrintErrorExit(msg, err)
+	}
 
 	fmt.Println()
 
 }
 
 func RunCmdQuiet(c *exec.Cmd, msg string) {
-	
+
 	cmd := c
 	if err := cmd.Run(); err != nil {
 		PrintErrorExit(msg, err)

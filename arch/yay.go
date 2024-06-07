@@ -4,10 +4,10 @@ import (
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
-	"syscall"
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
+	"syscall"
 )
 
 var cmd_yay = "/usr/bin/yay"
@@ -19,9 +19,9 @@ func YayInstall(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == true {
-		utils.PrintErrorMsgExit(pkg + " is already installed...", "")
+		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
 	install := exec.Command(cmd_yay, "-S", pkg)
@@ -42,15 +42,15 @@ func YayRemove(pkg string) {
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
-	
+
 	if inst == false {
-		utils.PrintErrorMsgExit(pkg + " was not installed by app...", "")
+		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
 	remove := exec.Command(cmd_yay, "-R", pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
-	fmt.Println("\n Removing " + pkg + " from app history...\n")	
+	fmt.Println("\n Removing " + pkg + " from app history...\n")
 	derr := db.RemovePkg("", "packages", "yay", pkg)
 	if derr != nil {
 		utils.PrintErrorExit("Delete Error: ", derr)
@@ -66,12 +66,12 @@ func YayPurge(pkg string) {
 
 func YayAutoRemove() {
 
-	out, err := exec.Command("/bin/bash", "-c", cmd_yay + " -Qtdq").Output()
+	out, err := exec.Command("/bin/bash", "-c", cmd_yay+" -Qtdq").Output()
 	rmList := string(out)
-	if err != nil  && rmList != "" {
+	if err != nil && rmList != "" {
 		utils.PrintErrorExit("Read Auto Remove Package List Error:", err)
 	}
-	
+
 	if rmList == "" {
 		fmt.Println("No packages need to be automatically removed...\n")
 		os.Exit(1)
@@ -82,7 +82,7 @@ func YayAutoRemove() {
 }
 
 func YayListSystem() {
-	
+
 	err := syscall.Exec(cmd_yay, []string{cmd_yay, "-Q"}, os.Environ())
 	if err != nil {
 		utils.PrintErrorExit("List System Error:", err)
@@ -92,7 +92,7 @@ func YayListSystem() {
 
 func YayListSystemSearch(pkg string) {
 
-	listSys := exec.Command("/bin/sh", "-c", cmd_yay + " -Q |grep " + pkg)
+	listSys := exec.Command("/bin/sh", "-c", cmd_yay+" -Q |grep "+pkg)
 	utils.RunCmd(listSys, "List Yay Packages Error:")
 
 }
@@ -127,7 +127,7 @@ func YaySearch(pkg string) {
 }
 
 func YayInstallAll() {
-	
+
 	// yay
 	fmt.Println("YAY:\n")
 	pkgs, aperr := db.ReadPkgs("", "packages", "yay")
