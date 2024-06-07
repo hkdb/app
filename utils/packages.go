@@ -5,13 +5,18 @@ import (
 
 	"fmt"
 	"strings"
+	"slices"
 )
 
-func History(pm, p string) {
+func History(pm, p string, sorted bool) {
 
 	pkgs, err := db.ReadPkgSlice("", "packages", pm)
 	if err != nil {
 		PrintErrorExit("Read History Error:", err)
+	}
+
+	if sorted {
+		slices.Sort(pkgs)
 	}
 
 	if p != "" {

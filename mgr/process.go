@@ -30,6 +30,7 @@ func Process(flag env.Flags) {
 	c := flag.C
 	classic := flag.Classic
 	tag := flag.Tag
+	sort := flag.Sort
 
 	if r != "" {
 		if r == "all" {
@@ -44,7 +45,7 @@ func Process(flag env.Flags) {
 				utils.PrintErrorMsgExit(m+" has been disabled. You must first enable it before using it in app...\n", "")
 			}
 		}
-		execute(m, a, p, g, c, classic, tag)
+		execute(m, a, p, g, c, classic, tag, sort)
 	}
 
 }
@@ -254,7 +255,7 @@ func restoreOne(r string) {
 
 }
 
-func execute(m, a, p, g, c string, classic bool, tag string) {
+func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 
 	if env.OSType == "Mac" && m != "brew" {
 		utils.PrintErrorMsgExit("Error:", "macOS currently only supports Homebrew...")
@@ -696,7 +697,7 @@ func execute(m, a, p, g, c string, classic bool, tag string) {
 	case "history":
 		switch m {
 		case "apt", "dnf", "pacman", "yay", "pkg", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
-			utils.History(m, p)
+			utils.History(m, p, sort)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)

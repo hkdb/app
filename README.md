@@ -232,6 +232,7 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 ### CHANGE
 
+- 06062024 - Added raw flag for history sort handling
 - 06062024 - Manual resolve conflict
 - 06062024 - Fixed default enable values
 - 05272024 - Amended, not ammended :P

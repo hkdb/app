@@ -10,6 +10,7 @@ type Flags struct {
 	C       string // Channel for specifying channel when install snaps
 	Classic bool   // Classic confinement for snaps
 	Tag     string // Tag (version) for installing git url with cargo
+	Sort		bool
 }
 
 var OSType string

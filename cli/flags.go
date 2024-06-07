@@ -23,6 +23,9 @@ var classic = flag.Bool("classic", false,
 	"Classic Confinement for Snaps (SNAP Only)\n   usage: app -m snap -classic install flow\n")
 var tag = flag.String("tag", "",
 	"Tag (version) for cargo\n   usage: app -m cargo -tag <version> install <git url>\n   example: app -m cargo -tag 0.2.0 install https://github.com/donovanglover/hyprnome\n")
+var raw = flag.Bool("raw", false,
+	"Raw history output instead of alphabetically sorted output...\n   usage: app -raw history\n   example: app -raw history")
+
 
 func ParseFlags() env.Flags {
 
@@ -155,6 +158,14 @@ func ParseFlags() env.Flags {
 		}
 	}
 
+	sort := true
+	if *raw == true {
+		sort = false
+	}
+	if sort != true && a != "history" {
+		utils.PrintErrorMsgExit("Error: This flag is only available for the history action...", "")
+	}
+
 	f := env.Flags{}
 	f.A = a
 	f.P = p
@@ -164,6 +175,7 @@ func ParseFlags() env.Flags {
 	f.C = *c
 	f.Classic = *classic
 	f.Tag = *tag
+	f.Sort = sort
 	return f
 
 }
