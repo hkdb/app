@@ -24,7 +24,7 @@ var classic = flag.Bool("classic", false,
 var tag = flag.String("tag", "",
 	"Tag (version) for cargo\n   usage: app -m cargo -tag <version> install <git url>\n   example: app -m cargo -tag 0.2.0 install https://github.com/donovanglover/hyprnome\n")
 var raw = flag.Bool("raw", false,
-	"Raw history output instead of alphabetically sorted output...\n   usage: app -raw history\n   example: app -raw history")
+	"Raw history output instead of alphabetically sorted output\n   usage: app -raw history\n   example: app -raw history\n")
 
 
 func ParseFlags() env.Flags {

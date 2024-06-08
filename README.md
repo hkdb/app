@@ -174,6 +174,17 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.09
+
+- Fixed brew and flatpak restore - Thanks to @RichardFevrier
+- Fixed default enabled values to avoid errors on first launch - Thanks to @RichardFevrier
+- Output history in alphabetical order by default and allow users to use the -raw flag to output history in the order packages were installed
+- Fixed -y behavior for flatpak
+
+- Development Feature: Added pre-commit linter - Thanks to @RicherFevrier
+- Development Feature: Auto-compile binaries on release in preparation for better distribution/installation solution - Thanks to @RicherFevrier
+
+
 #### v0.08
 
 - Fixed FreeBSD handling of go, pip, and cargo
@@ -229,40 +240,6 @@ echo "BREW = n" >> ~/.config/app/settings.conf
 
 - First Alpha Release
 
-
-### CHANGE
-
-- 06062024 - Added raw flag for history sort handling
-- 06062024 - Manual resolve conflict
-- 06062024 - Fixed default enable values
-- 05272024 - Amended, not ammended :P
-- 05272024 - Ammended version in main.go
-- 05272024 - Preparing to release v0.08
-- 05262024 - Added update and cleaned up pacman and yay
-- 05262024 - Bumping dev version for @RichardFevrier's pull request
-- 05232024 - Fixed FreeBSD handling of go, pip, and cargo
-- 05162024 - Prepared v0.07 release
-- 05162024 - Added update for fedora, added update before upgrade all for fedora and freebsd, and tweaked install script
-- 05162024 - Fixed fedora install, clean-up settings handling, and added FreeBSD support
-- 04022024 - Added LinuxMint support
-- 02202024 - Fixed flatpak and apt list
-- 02102024 - Update README for v0.05 release
-- 02092024 - Fixed appimage .desktop bug
-- 02012024 - Updated help
-- 02012024 - Updated README for v0.04 release
-- 02012024 - Fixed dist-upgrade
-- 02012024 - Allow for debian packages with .
-- 01312024 - Fixed url check for short package names
-- 01172024 - Updated Install instructions
-- 01172024 - Minor fixes & added go, pip, and cargo
-- 01102024 - Added brew, mac support, & fixed settings
-- 01042024 - Summary edit
-- 01042024 - Updated summary of README
-- 01042024 - Updated background of README
-- 01032024 - Added upgrade examples in README
-- 01032024 - Updated README
-- 01022024 - Fixed flatpak remove
-- 12312023 - Initial commit
 
 
 ### DISCLAIMER

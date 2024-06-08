@@ -84,6 +84,11 @@ OPTIONS:
             - cargo
     		- appimage
     		- all
+
+  -raw
+    	Raw history output instead of alphabetically sorted output...
+    	   usage: app -raw history
+    	   example: app -raw history
   
   -tag string
     	Tag (version) for cargo

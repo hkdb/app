@@ -164,6 +164,14 @@ app -m pip upgrade
 app -m cargo upgrade
 ```
 
+If you are using app to automate update/upgrade, you can use the -y flag as long as you are not using pip. For example, if you are using apt and flatpak:
+
+```
+app -y upgrade all
+```
+However, be aware of the risks of just blindly upgrading systems.
+
+
 If you use 3rd party repos for apt, dnf, or flatpak, no worries. They will be automatically restored from the restore command prior to package installation if you add them the following way:
 
 #### EXAMPLE 1 ~ Official Graphics Driver PPA for Ubuntu
