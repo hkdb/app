@@ -1,6 +1,7 @@
 package flatpak
 
 import (
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
 
@@ -85,15 +86,25 @@ func ListSystemSearch(pkg string) {
 
 func Update() {
 
-	update := exec.Command(mgr, "update")
-	utils.RunCmd(update, "Update Error:")
+	if env.AutoYes == true {
+		upgrade := exec.Command(mgr, "-y", "update")
+		utils.RunCmd(upgrade, "Update Error:")
+	} else {
+		upgrade := exec.Command(mgr, "update")
+		utils.RunCmd(upgrade, "Update Error:")
+	}
 
 }
 
 func Upgrade() {
 
-	upgrade := exec.Command(mgr, "update")
-	utils.RunCmd(upgrade, "Upgrade Error:")
+	if env.AutoYes == true {
+		upgrade := exec.Command(mgr, "-y", "update")
+		utils.RunCmd(upgrade, "Upgrade Error:")
+	} else {
+		upgrade := exec.Command(mgr, "update")
+		utils.RunCmd(upgrade, "Upgrade Error:")
+	}
 
 }
 
