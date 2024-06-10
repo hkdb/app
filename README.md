@@ -106,10 +106,10 @@ Currently in the roadmap:
 There's an install script that comes with this repo which is the preferred way to install app. It takes care of most of the immediate dependencies but I leave having each of your package managers proper setup/configuration to the end user before running app. For example, if you don't have the right packages installed to have add-apt-repository work properly on Debian or flatpak can't be used without sudo, then app will inevitably fail. I am however open to installing or auto-configuring more dependencies in the future if this ends up being used by others and that's something that everyone wants.
 
 See the below notes on package manager setup:
-- flatpak (COMING SOON)
-- go (COMING SOON)
-- pip (COMING SOON)
-- cargo (COMING SOON)
+- [flatpak](docs/FLATPAK>MD)
+- [go](docs/GO.md)
+- [pip](docs/PIP.md)
+- [cargo](docs/CARGO.md)
 
 If there are enabled package managers that you absolutely hate and want out of the auto restore/install all loop, you can disable them manually (ie. `app -m snap disable`) and app will remember this whereever you bring your `~/.config/app` directory. You can also re-enable them anytime by just running `app -m <package manager> enable`
 
