@@ -66,7 +66,7 @@ func Purge(pkg string) {
 
 func AutoRemove() {
 
-	fmt.Println("This is an apt only command. It does not apply to pip...")
+	fmt.Println("This action does not apply to Pip...")
 
 }
 

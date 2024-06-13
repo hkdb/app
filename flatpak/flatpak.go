@@ -1,8 +1,8 @@
 package flatpak
 
 import (
-	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/db"
+	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/utils"
 
 	"fmt"
@@ -67,7 +67,8 @@ func Purge(pkg string) {
 
 func AutoRemove() {
 
-	fmt.Println("This is an apt only command. It does not apply to Flatpak...")
+	aRemove := exec.Command(mgr, "remove", "--unused")
+	utils.RunCmd(aRemove, "Auto Remove Error:")
 
 }
 
