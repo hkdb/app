@@ -1,7 +1,7 @@
 # app - A Package Management Assistant with Super Powers 
 maintained by: @hkdb
 
-![ScreenShot](docs/assets/ss5.png)
+![ScreenShot](docs/assets/ss6.png)
 
 
 ### SUMMARY

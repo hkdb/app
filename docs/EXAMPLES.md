@@ -239,6 +239,44 @@ with the following command:
 app -gpg https://brave-browser-rpm-release.s3.brave.com/brave-core.asc add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo 
 ```
 
+#### Suse Based:
+
+
+You can do the same as above by making a script based on the instructions of the Brave browser website:
+
+![repo-brave-suse.png](assets/repo-brave-suse.png)
+
+Create script:
+
+```
+#!/bin/bash
+
+
+sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+
+sudo zypper addrepo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+
+```
+
+Add repo from within the directory where the script resides:
+
+```
+app add-repo brave-browser.repo.sh
+```
+
+OR
+
+Use flags according to instructions provided by the Brave website:
+
+![repo-brave-suse-2.png](assets/repo-brave-suse-2.png)
+
+with the following command:
+
+```
+app -gpg https://brave-browser-rpm-release.s3.brave.com/brave-core.asc add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo 
+```
+
+
 #### EXAMPE 3 - Flatpak:
 
 This one is by far the easiest. You just need the url. For example, if you wanted to add the Gnome nightly repo, run the following command:
