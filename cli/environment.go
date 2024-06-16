@@ -15,6 +15,7 @@ import (
 
 var deb_base = []string{"debian", "ubuntu"}
 var rh_base = []string{"redhat", "fedora", "clear"}
+var suse_base = []string{"opensuse", "opensuse-leap", "suse"}
 var arch_base = []string{"arch"}
 
 // Load envfile and get environment variables
@@ -85,7 +86,7 @@ func GetEnv() {
 		if brew := os.Getenv("BREW"); brew != "y" {
 			env.Brew = false
 		}
-		if appimage := os.Getenv("APPIMAGE"); appimage != "n" {
+		if appimage := os.Getenv("APPIMAGE"); appimage != "y" {
 			env.AppImage = false
 		}
 
@@ -131,6 +132,16 @@ func GetEnv() {
 		for i := 0; i < len(arch_base); i++ {
 			if strings.Contains(infos, arch_base[i]) {
 				dBase = "arch"
+				//fmt.Println("Base:", dBase + "\n")
+				env.Base = dBase
+				break
+			}
+		}
+
+		// Check if it's a Suse based
+		for i := 0; i < len(suse_base); i++ {
+			if strings.Contains(infos, suse_base[i]) {
+				dBase = "suse"
 				//fmt.Println("Base:", dBase + "\n")
 				env.Base = dBase
 				break

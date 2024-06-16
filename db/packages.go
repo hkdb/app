@@ -110,7 +110,7 @@ func removeLocalPkgs(root string, col string, pm string, rmPkgs []string) error 
 	switch pm {
 	case "apt":
 		file = "deb"
-	case "dnf":
+	case "dnf", "zypper":
 		file = "rpm"
 	default:
 		return nil

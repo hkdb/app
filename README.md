@@ -22,6 +22,7 @@ Supported Package Managers:
 - pacman
 - yay
 - pkg
+- zypper (NOT TESTED YET)
 - Flatpak
 - Snap
 - Homebrew
@@ -67,6 +68,9 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
     - Fedora, RHEL, Rocky, CentOS, Oracle, ClearOS, AmazonAMI
   - Arch derivatives
     - Arch, Manjaro, Garuda, Endeavour
+  - Suse derivatives (NOT TESTED YET)
+    - OpenSUSE
+    - SLES
 - macOS (brew)
 - Go
 - Python (pip)
@@ -75,7 +79,6 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
 
 Currently in the roadmap:
 
-- Suse Based Linux
 - Windows (scoop)
 - Windows (chocolatey)
 
@@ -151,6 +154,14 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 
 ### VERSIONS
+
+#### v0.10
+
+- Added autoremove to Flatpak - Thanks to @RichardFevrier
+- Fixed AppImage default enable/disable value
+- Added check to ensure native package manager specified is running on the right distro
+- Added SUSE derivatives support
+
 
 #### v0.09
 

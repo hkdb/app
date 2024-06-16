@@ -12,6 +12,7 @@ import (
 	brew "github.com/hkdb/app/macos"
 	"github.com/hkdb/app/pip"
 	"github.com/hkdb/app/redhat"
+	"github.com/hkdb/app/suse"
 	"github.com/hkdb/app/restore"
 	"github.com/hkdb/app/snap"
 	"github.com/hkdb/app/utils"
@@ -71,6 +72,9 @@ func restoreAll() {
 				restore.RestoreAllRepos("pacman")
 				arch.InstallAll()
 				//fmt.Println("Arch Install All")
+			case "suse":
+				restore.RestoreAllRepos("suse")
+				arch.InstallAll()
 			}
 		}
 		if env.Base == "arch" && env.Yay == true {
@@ -198,6 +202,14 @@ func restoreOne(r string) {
 			} else {
 				utils.PrintErrorMsgExit("Error:", "You are trying to restore with yay on a non-Arch system...\n")
 			}
+		case "zypper":
+			npm := utils.GetNativePkgMgr()
+			if npm == "zypper" {
+				restore.RestoreAllRepos("zypper")
+				redhat.InstallAll()
+			} else {
+				utils.PrintErrorMsgExit("Error:", "You are trying to restore with dnf on a non-zypper system...\n")
+			}
 		case "flatpak":
 			if env.Flatpak == false {
 				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run", "app -m "+r+" enable\n")
@@ -274,6 +286,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YayInstall(p)
 		case "pkg":
 			freebsd.Install(p)
+		case "zypper":
+			suse.Install(p)
 		case "flatpak":
 			flatpak.Install(p)
 		case "snap":
@@ -304,6 +318,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YayRemove(p)
 		case "pkg":
 			freebsd.Remove(p)
+		case "zypper":
+			suse.Remove(p)
 		case "flatpak":
 			flatpak.Remove(p)
 		case "snap":
@@ -334,6 +350,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YayPurge(p)
 		case "pkg":
 			freebsd.Purge(p)
+		case "zypper":
+			suse.Purge(p)
 		case "flatpak":
 			flatpak.Purge(p)
 		case "snap":
@@ -362,6 +380,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YaySearch(p)
 		case "pkg":
 			freebsd.Search(p)
+		case "zypper":
+			suse.Search(p)
 		case "flatpak":
 			flatpak.Search(p)
 		case "snap":
@@ -390,6 +410,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YayUpdate()
 		case "pkg":
 			freebsd.Update()
+		case "zypper":
+			suse.Update()
 		case "flatpak":
 			flatpak.Update()
 		case "snap":
@@ -420,6 +442,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				arch.YayUpgrade()
 			case "pkg":
 				freebsd.Upgrade()
+			case "zypper":
+				suse.Upgrade()
 			case "flatpak":
 				flatpak.Upgrade()
 			case "snap":
@@ -454,6 +478,10 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				fmt.Println("\nUpgrading with PKG:\n")
 				freebsd.Update()
 				freebsd.Upgrade()
+			case "zypper":
+				fmt.Println("\nUpgrading with ZYPPER:\n")
+				suse.Update()
+				suse.Upgrade()
 			case "brew":
 				if env.OSType != "Mac" {
 					utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
@@ -524,6 +552,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				arch.YayDistUpgrade()
 			case "pkg":
 				freebsd.DistUpgrade()
+			case "zypper":
+				suse.DistUpgrade()
 			case "flatpak":
 				flatpak.DistUpgrade()
 			case "snap":
@@ -556,6 +586,9 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			case "pkg":
 				fmt.Println("\nUpgrading with PKG:\n")
 				freebsd.DistUpgrade()
+			case "zypper":
+				fmt.Println("\nUpgrading with ZYPPER:\n")
+				suse.DistUpgrade()
 			}
 			if m == "pacman" && env.Yay != false {
 				fmt.Println("\nUpgrade with YAY:\n")
@@ -606,6 +639,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YayAutoRemove()
 		case "pkg":
 			freebsd.AutoRemove()
+		case "zypper":
+			suse.AutoRemove()
 		case "flatpak":
 			flatpak.AutoRemove()
 		case "snap":
@@ -654,6 +689,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			} else {
 				freebsd.ListSystemSearch(p)
 			}
+		case "zypper":
+			if p == "" {
+				suse.ListSystem()
+			} else {
+				suse.ListSystemSearch(p)
+			}
 		case "flatpak":
 			if p == "" {
 				flatpak.ListSystem()
@@ -696,7 +737,7 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		}
 	case "history":
 		switch m {
-		case "apt", "dnf", "pacman", "yay", "pkg", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
+		case "apt", "dnf", "pacman", "yay", "pkg", "zypper", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
 			utils.History(m, p, sort)
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
@@ -798,6 +839,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YayAddRepo(p, g)
 		case "pkg":
 			freebsd.AddRepo(p, g)
+		case "zypper":
+			suse.AddRepo(p, g)
 		case "flatpak":
 			flatpak.AddRepo(p, g)
 		default:
@@ -816,6 +859,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.YayRemoveRepo(p)
 		case "pkg":
 			freebsd.RemoveRepo(p)
+		case "zypper":
+			suse.RemoveRepo(p)
 		case "flatpak":
 			flatpak.RemoveRepo(p)
 		default:
@@ -824,7 +869,7 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		}
 	case "ls-repo":
 		switch m {
-		case "apt", "dnf", "pacman", "yay", "flatpak", "snap":
+		case "apt", "dnf", "pacman", "yay", "zypper", "flatpak", "snap":
 			utils.ListRepo(m, p)
 		default:
 			fmt.Println("Unsupported pacakge manager...\n")

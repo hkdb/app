@@ -10,9 +10,9 @@ import (
 )
 
 var m = flag.String("m", "",
-	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman/pkg>\n   example: app install neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- pkg\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n")
+	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman/pkg>\n   example: app install neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- pkg\n\t- zypper\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n")
 var r = flag.String("r", "",
-	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- pkg\n\t- yay\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n\t- all\n")
+	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- pkg\n\t- zypper\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n\t- all\n")
 var y = flag.Bool("y", false,
 	"Auto Yes - Skips the package manager confirmation (APT & DNF Only)\n   usage: app -y install neovim\n")
 var gpg = flag.String("gpg", "",
@@ -77,7 +77,7 @@ func ParseFlags() env.Flags {
 			}
 		}
 		if a == "enable" || a == "disable" {
-			if *m == "apt" || *m == "dnf" || *m == "pacman" || *m == "pkg" {
+			if *m == "apt" || *m == "dnf" || *m == "pacman" || *m == "pkg" || *m == "zypper" {
 				utils.PrintErrorMsgExit("Native package managers cannot be enabled/disabled...\n", "")
 			}
 		}
@@ -114,8 +114,39 @@ func ParseFlags() env.Flags {
 		}
 	}
 
+	// Check if it's the right native package manager
+	if *m == "apt" {
+		if env.Base != "debian" {
+			utils.PrintErrorMsgExit("Error: wrong native package manager specified...\n", "")
+		}
+	}
+
+	if *m == "dnf" {
+		if env.Base != "redhat" {
+			utils.PrintErrorMsgExit("Error: wrong native package manager specified...\n", "")
+		}
+	}
+
+	if *m == "pacman" {
+		if env.Base != "arch" {
+			utils.PrintErrorMsgExit("Error: wrong native package manager specified...\n", "")
+		}
+	}
+
+	if *m == "zypper" {
+		if env.Base != "suse" {
+			utils.PrintErrorMsgExit("Error: wrong native package manager specified...\n", "")
+		}
+	}
+
+	if *m == "pkg" {
+		if env.Base != "freebsd" {
+			utils.PrintErrorMsgExit("Error: wrong native package manager specified...\n", "")
+		}
+	}
+
 	if *y == true {
-		if *m != "apt" && *m != "dnf" {
+		if *m != "apt" && *m != "dnf" && *m != "zypper" {
 			if a != "install" && a != "remove" && a != "purge" && a != "upgrade" && a != "dist-upgrade" {
 				utils.PrintErrorMsgExit("Error: -y can only be used to install, remove, purge or upgrade...", "")
 			}
@@ -125,8 +156,8 @@ func ParseFlags() env.Flags {
 	}
 
 	if *gpg != "" {
-		if env.Base != "redhat" {
-			utils.PrintErrorMsgExit("Error: -gpg should only be used with adding repos for Redhat based systems...", "")
+		if env.Base != "redhat" && env.Base != "suse" {
+			utils.PrintErrorMsgExit("Error: -gpg should only be used with adding repos for Redhat & Suse based systems...", "")
 		}
 		isUrl := utils.IsUrl(*gpg)
 		if isUrl == false {
@@ -204,6 +235,8 @@ func defaultPkgMgr() string {
 			return "apt"
 		case "redhat":
 			return "dnf"
+		case "suse":
+			return "zypper"
 		case "arch":
 			return "pacman"
 		default:

@@ -7,6 +7,7 @@ import (
 	"github.com/hkdb/app/env"
 	"github.com/hkdb/app/flatpak"
 	"github.com/hkdb/app/redhat"
+	"github.com/hkdb/app/suse"
 	"github.com/hkdb/app/utils"
 
 	"fmt"
@@ -53,6 +54,19 @@ func RestoreAllRepos(pm string) {
 				redhat.AddRepo(r, g)
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Redhat based distros...")
+			}
+		case "zypper":
+			switch rType {
+			case "sh":
+				suse.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
+			case "json":
+				r, g, err := db.GetSetup(pm, repos[i])
+				if err != nil {
+					utils.PrintErrorExit("Read Repo Error:", err)
+				}
+				suse.AddRepo(r, g)
+			default:
+				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Suse based distros...")
 			}
 		case "pacman":
 			switch rType {

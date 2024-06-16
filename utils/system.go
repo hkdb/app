@@ -15,6 +15,8 @@ func GetNativePkgMgr() string {
 			return "dnf"
 		case "arch":
 			return "pacman"
+		case "suse":
+			return "zypper"
 		default:
 			PrintErrorMsgExit("Error: Distro not supported...", "")
 		}

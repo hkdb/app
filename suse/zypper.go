@@ -1,4 +1,4 @@
-package redhat
+package suse
 
 import (
 	"github.com/hkdb/app/db"
@@ -12,12 +12,12 @@ import (
 )
 
 var sudo = [3]string{"/usr/bin/sudo", "/bin/sh", "-c"}
-var cmd = "/usr/bin/dnf"
+var cmd = "/usr/bin/zypper"
 
 func Install(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "dnf", pkg)
+	inst, ierr := db.IsInstalled("", "packages", "zypper", pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -43,7 +43,7 @@ func Install(pkg string) {
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
-	rerr := db.RecordPkg("", "packages", "dnf", pname)
+	rerr := db.RecordPkg("", "packages", "zypper", pname)
 	if rerr != nil {
 		utils.PrintErrorExit("Record Error:", rerr)
 	}
@@ -53,7 +53,7 @@ func Install(pkg string) {
 func Remove(pkg string) {
 
 	// Check if package is already installed
-	inst, ierr := db.IsInstalled("", "packages", "dnf", pkg)
+	inst, ierr := db.IsInstalled("", "packages", "zypper", pkg)
 	if ierr != nil {
 		utils.PrintErrorExit("Install Check Error:", ierr)
 	}
@@ -72,7 +72,7 @@ func Remove(pkg string) {
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
-	derr := db.RemovePkg("", "packages", "dnf", pkg)
+	derr := db.RemovePkg("", "packages", "zypper", pkg)
 	if derr != nil {
 		utils.PrintErrorExit("Delete Error:", derr)
 	}
@@ -87,7 +87,7 @@ func Purge(pkg string) {
 
 func AutoRemove() {
 
-	action := " autoremove"
+	action := " rm -u"
 	command := cmd + action
 	if env.AutoYes == true {
 		command = cmd + " -y" + action
@@ -120,7 +120,7 @@ func ListSystemSearch(pkg string) {
 
 func Update() {
 
-	action := " check-update"
+	action := " refresh"
 	command := cmd + action
 	if env.AutoYes == true {
 		command = cmd + " -y" + action
@@ -133,7 +133,7 @@ func Update() {
 
 func Upgrade() {
 
-	action := " upgrade"
+	action := " update"
 	command := cmd + action
 	if env.AutoYes == true {
 		command = cmd + " -y" + action
@@ -162,10 +162,10 @@ func Search(pkg string) {
 func InstallAll() {
 
 	// apt
-	fmt.Println("DNF:\n")
-	pkgs, aperr := db.ReadPkgs("", "packages", "dnf")
+	fmt.Println("ZYPPER:\n")
+	pkgs, aperr := db.ReadPkgs("", "packages", "zypper")
 	if aperr != nil {
-		utils.PrintErrorExit("DNF - Read ERROR:", aperr)
+		utils.PrintErrorExit("ZYPPER - Read ERROR:", aperr)
 	}
 	action := " install "
 	command := cmd + action

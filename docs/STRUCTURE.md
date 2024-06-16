@@ -19,6 +19,8 @@ The config directory app creates on your machine has the following structure to 
           |
           |_ pkg.json
           |
+          |_ zypper.json
+          |
           |_ flatpak.json
           |
           |_ go.json
@@ -49,6 +51,7 @@ The config directory app creates on your machine has the following structure to 
           |   |_ apt.json
           |   |_ dnf.json
           |   |_ pacman.json
+          |   |_ zypper.json
           |   |_ yay.json
           |   |_ flatpak.json
           |   |_ cargo.json
@@ -64,6 +67,9 @@ The config directory app creates on your machine has the following structure to 
           |       |   |_ <repo name>.sh/json
           |       |       
           |       |_ pacman
+          |       |   |_ <repo name>.sh
+          |       |
+          |       |_ zypper
           |       |   |_ <repo name>.sh
           |       |
           |       |_ flatpak

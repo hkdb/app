@@ -59,6 +59,7 @@ OPTIONS:
     		- pacman (default if arch based)
     		- yay
             - pkg
+            - zypper
     		- flatpak
     		- snap
             - brew (default if macOS)
@@ -76,6 +77,7 @@ OPTIONS:
     		- pacman
     		- yay
             - pkg
+            - zypper
     		- flatpak
     		- snap
             - brew
