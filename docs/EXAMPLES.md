@@ -316,7 +316,7 @@ app rm-repo brave-browser-release # for APT
 
 # OR
 
-app rm-repo brave-browser.repo # for DNF
+app rm-repo brave-browser.repo # for DNF and ZYPPER
 ```
 Let's remove the Gnome nightly repo from Flatpak:
 
