@@ -290,7 +290,7 @@ app -m flatpak add-repo https://sdk.gnome.org/gnome-nightly.flatpakrep
 To see what repos you have added before, just run the following command:
 
 ```
-app ls-repo # for APT or DNF
+app ls-repo # for APT, DNF, and ZYPPER
 
 # OR
 
