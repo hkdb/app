@@ -85,21 +85,23 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
   fi
 
-  read -p "Would you like to install Snap? (Y/n) " SNAP
-  if [[ $SNAP != "N" ]] && [[ $SNAP != "n" ]]; then
-    if [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
-      OPATH=$(pwd)
-      cd /tmp/
-      git clone https://aur.archlinux.org/snapd.git
-      cd snapd
-      makepkg -si
-      sudo systemctl enable --now snapd.socket
-      sudo ln -s /var/lib/snapd/snap /snap
-      echo "export PATH=\$PATH:\/snap/bin/" | sudo tee -a /etc/profile
-      source /etc/profile
-      cd $OPATH
-    else
-      sudo $PKGMGR $IFLAG snapcraft
+  if [[ "$DISTRO" != "opensuse-leap" ]]; then
+    read -p "Would you like to install Snap? (Y/n) " SNAP
+    if [[ $SNAP != "N" ]] && [[ $SNAP != "n" ]]; then
+      if [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
+        OPATH=$(pwd)
+        cd /tmp/
+        git clone https://aur.archlinux.org/snapd.git
+        cd snapd
+        makepkg -si
+        sudo systemctl enable --now snapd.socket
+        sudo ln -s /var/lib/snapd/snap /snap
+        echo "export PATH=\$PATH:\/snap/bin/" | sudo tee -a /etc/profile
+        source /etc/profile
+        cd $OPATH
+      else
+        sudo $PKGMGR $IFLAG snapcraft
+      fi
     fi
   fi
 
