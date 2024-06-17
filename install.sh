@@ -47,7 +47,7 @@ DISTRO=""
 PKGMGR="" == ""
 IFLAG=""
 
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
   
   OSR=$(cat /etc/os-release |grep ^NAME)
   OSRNV=${OSR:5}
