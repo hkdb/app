@@ -44,7 +44,7 @@ fi
 echo -e "\n"
 
 DISTRO=""
-PKGMGR="" == ""
+PKGMGR=""
 IFLAG=""
 
 if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
@@ -57,7 +57,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
   DISTRO=$(cat /etc/*-release | grep "^ID=" | head -1 | cut -d '=' -f 2)
 
   if [[ "$DISTRO" == "\"opensuse\"" ]] || [[ "$DISTRO" == "\"opensuse-leap\"" ]] || [[ "$DISTRO" == "\"suse\"" ]]; then
-    DISTRO == "opensuse-leap"
+    DISTRO="opensuse-leap"
   fi
 
   if [[ "$DISTRO" == "debian" ]] || [[ "$DISTRO" == "ubuntu" ]] || [[ "$DISTRO" == "pop" ]] || [[ "$DISTRO" == "linuxmint" ]]; then
