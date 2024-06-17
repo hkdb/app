@@ -22,7 +22,7 @@ Supported Package Managers:
 - pacman
 - yay
 - pkg
-- zypper (NOT TESTED YET)
+- zypper
 - Flatpak
 - Snap
 - Homebrew
@@ -68,8 +68,8 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
     - Fedora, RHEL, Rocky, CentOS, Oracle, ClearOS, AmazonAMI
   - Arch derivatives
     - Arch, Manjaro, Garuda, Endeavour
-  - Suse derivatives (NOT TESTED YET)
-    - OpenSUSE
+  - Suse derivatives
+    - OpenSUSE Leap
     - SLES
 - macOS (brew)
 - Go
