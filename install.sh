@@ -65,6 +65,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   elif [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
     PKGMGR="pacman"
     IFLAG="-S"
+  elif [[ "$DISTRO" == "opensuse" ]] || [[ "$DISTRO" == "opensuse-leap" ]] || [[ "$DISTRO" == "suse" ]]; then
+    PKGMGR="zypper"
+    IFLAG="install"
   fi
 
   read -p "Would you like to install Flatpak? (Y/n) " FLATPAK
@@ -115,13 +118,15 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     fi
   fi
    
-  read -p  "Install Go 1.21? Only say no if you already have it installed... (Y/n) " GOLANG
+  read -p  "Install Go? Only say no if you already have it installed... (Y/n) " GOLANG
   if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
 		if [[ "$DISTRO" == "fedora" ]] || [[ "$DISTRO" == "rocky" ]] || [[ "$DISTRO" == "almalinux" ]] || [[ "$DISTRO" == "centos" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "ol" ]] || [[ "$DISTRO" == "clear-linux-os" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
-			wget -O /tmp/go1.21.5.linux-amd64.tar.gz https://go.dev/dl/go1.21.5.linux-amd64.tar.gz  
-			sudo tar -C /usr/local -xzf /tmp/go1.21.5.linux-amd64.tar.gz
+			wget -O /tmp/go1.22.4.linux-amd64.tar.gz https://go.dev/dl/go1.22.4.linux-amd64.tar.gz  
+			sudo tar -C /usr/local -xzf /tmp/go1.22.4.linux-amd64.tar.gz
 			export PATH=$PATH:/usr/local/go/bin
 			echo -e "if [[ -d /usr/local/go/bin ]]; then\n\tPATH=$PATH:/usr/local/go/bin\nfi" >> $HOME/.bashrc
+    elif [[ "$DISTRO" == "opensuse" ]] || [[ "$DISTRO" == "opensuse-leap" ]] || [[ "$DISTRO" == "suse" ]]; then
+      sudo $PKGMGR $IFLAG go1.22
 		else
     	sudo $PKGMGR $IFLAG golang
 		fi
