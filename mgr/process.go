@@ -424,6 +424,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			pip.Update()
 		case "cargo":
 			cargo.Update()
+		case "app":
+			utils.UpdateApp()
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)

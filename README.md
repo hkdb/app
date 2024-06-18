@@ -59,6 +59,49 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
 [![asciicast](https://asciinema.org/a/YmpvOaXS2dviXXOIPM7EppyKf.svg)](https://asciinema.org/a/YmpvOaXS2dviXXOIPM7EppyKf)
 
 
+### INSTALL
+
+Run the below command in the terminal:
+
+```
+bash <(curl -sL https://hkdb.github.io/app/getapp.sh)
+```
+
+You can also install app by compiling yourself:
+
+1. Make sure all the package managers you want app to manage and are installed and configured properly
+2. Install `git` manually if it's not already installed
+3. cd into a directory of choice where you want to keep the app repo. If you are an end user and can't decide, I suggest `~/.config` (`mkdir ~/.config` if it doesn't already exist)
+4. git clone https://github.com/hkdb/app.git`
+5. `cd app`
+6. Optionally `git checkout <version>`
+7. `./install.sh` # Note, for FreeBSD, bash must first be installed.
+
+
+### UPDATE/UPGRADE
+
+Run the below command in the terminal:
+
+```
+app -m app update
+```
+
+You can also update app by compiling it yourself:
+
+Tracking versioned release:
+
+1. cd back into the repo whereever you put it. `~/.config/app` if you took my recommendation 
+2. `git pull`
+3. `git checkout <version tag>`
+3. `./update.sh` # FreeBSD requires bash to be installed
+
+Tracking main branch:
+
+1. cd back into the repo whreever you put it. `~/.config/app` if you took my recommendation 
+2. `git pull`
+3. `./update.sh` # FreeBSD requires bash to be installed
+
+
 ### SUPPORT & ROADMAP
 
 - GNU/Linux (apt, dnf, pacman, flatpak, snap, brew, appimage)
@@ -84,7 +127,9 @@ Currently in the roadmap:
 
 `Pre-requisites`:
 
-There's an install script that comes with this repo which is the preferred way to install app. It takes care of most of the immediate dependencies but I leave having each of your package managers proper setup/configuration to the end user before running app. For example, if you don't have the right packages installed to have add-apt-repository work properly on Debian or flatpak can't be used without sudo, then app will inevitably fail. I am however open to installing or auto-configuring more dependencies in the future if this ends up being used by others and that's something that everyone wants.
+Curl and Unzip must be installed
+
+There's an install script that comes with this repo which is the preferred way to install app. However, I leave having each of your package managers proper setup/configuration to the end user before running app. For example, if you don't have the right packages installed to have add-apt-repository work properly on Debian or flatpak can't be used without sudo, then app will inevitably fail.
 
 See the below notes on package manager setup:
 - [flatpak](docs/FLATPAK.md)
@@ -116,35 +161,14 @@ app does not handle local packages for Arch based distros as most of the time, u
 
 As far as I know, there's no way to easily add third party repos especially since the whole backend is closed source.
 
+`Caveat`: AppImage
+
+If your AppImage app updates itself, you may need to manually edit your .desktop file in `$HOME/.local/share/applications/` to point to the correct AppImage file in `$HOME/.config/app/packages/local/appimage/` since the new file has a new version on the file name.
+
 `go/pip/cargo`:
 
 The go, pip, and cargo support is not meant to be a replacement for development purposes but rather for users that use software that are distributed via go, pip, and cargo. 
 
-
-### INSTALL
-
-1. Make sure all the package managers you want app to manage and are installed and configured properly
-2. Install `git` manually if it's not already installed
-3. cd into a directory of choice where you want to keep the app repo. If you are an end user and can't decide, I suggest `~/.config` (`mkdir ~/.config` if it doesn't already exist)
-4. `git clone https://github.com/hkdb/app.git`
-5. `cd app`
-6. `./install.sh` or if you are installing from BSD, run `bash install.sh`
-
-
-### UPDATE/UPGRADE
-
-Tracking versioned release:
-
-1. cd back into the repo whereever you put it. `~/.config/app` if you took my recommendation 
-2. `git pull`
-3. `git checkout <version tag>`
-3. `./update.sh` # FreeBSD requires bash to be installed
-
-Tracking main branch:
-
-1. cd back into the repo whreever you put it. `~/.config/app` if you took my recommendation 
-2. `git pull`
-3. `./update.sh` # FreeBSD requires bash to be installed
 
 ### SUPPORT US!
 

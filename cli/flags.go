@@ -10,7 +10,7 @@ import (
 )
 
 var m = flag.String("m", "",
-	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman/pkg>\n   example: app install neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- pkg\n\t- zypper\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n")
+	"Package Manager\n   usage: app -m <package manager> install neovim\n   default: auto-detect of native pkg manager <apt/dnf/pacman/pkg>\n   example: app install neovim\n   options:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- pkg\n\t- zypper\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n\t- app (ONLY FOR UPDATING app ITSELF)\n")
 var r = flag.String("r", "",
 	"Restore / Install all on new system\n   usage: app -r <type>\n   option:\n\t- apt\n\t- dnf\n\t- pacman\n\t- yay\n\t- pkg\n\t- zypper\n\t- flatpak\n\t- snap\n\t- brew\n\t- go\n\t- pip\n\t- cargo\n\t- appimage\n\t- all\n")
 var y = flag.Bool("y", false,
@@ -37,6 +37,11 @@ func ParseFlags() env.Flags {
 
 	if flag.Arg(2) != "" || flag.Arg(3) != "" {
 		utils.PrintErrorMsgExit("Input Error:", "If you are trying to specify multiple packages, wrap the pacakges with single quotes....")
+	}
+
+	// For app update
+	if *m == "app" && a != "update" {
+		utils.PrintErrorMsgExit("Input Error:", "app can only be specified to update itself...")
 	}
 
 	// If -r flag is empty, then it's not a restore and therefore, we are either
@@ -96,7 +101,7 @@ func ParseFlags() env.Flags {
 		}
 		if p != "" {
 			fmt.Println(utils.ColorRed,
-				"-p (package(s)) must not be specified when you are restoring the system with -r... Try",
+				"package(s) must not be specified when you are restoring the system with -r... Try",
 				utils.ColorYellow, "./app -h", utils.ColorRed, "to learn more...\n", utils.ColorReset)
 			os.Exit(1)
 		}

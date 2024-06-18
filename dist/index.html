@@ -1,0 +1,124 @@
+<html>
+  <head>
+    <title>app - The Cross-Platform Package Management Assistant with Super Powers!</title>
+    <link rel="icon" type="image/icon" href="./icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+    <script>
+      // Get the <pre> element
+      const preTag = document.getElementById("icmd");
+
+      // Create a copy button element
+      const copyButton = document.createElement("span");
+      copyButton.innerText = "Copy";
+      copyButton.classList.add("copy-button");
+
+      // Append the copy button to the <pre> tag
+      preTag.appendChild(copyButton);
+
+      // Add click event listener to the copy button
+      copyButton.addEventListener("click", () => {
+        // Hide the copy button temporarily
+        copyButton.style.display = "none";
+
+        // Create a range and select the text inside the <pre> tag
+        const range = document.createRange();
+        range.selectNode(preTag);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+
+        try {
+          // Copy the selected text to the clipboard
+          document.execCommand("copy");
+
+          // Alert the user that the text has been copied
+          copyButton.innerText = "Copied!";
+          setTimeout(function(){
+            copyButton.innerText = "Copy";
+          }, 2000);
+        } catch (err) {
+          console.error("Unable to copy text:", err);
+        } finally {
+          // Show the copy button again
+          copyButton.style.display = "inline";
+
+          // Deselect the text
+          window.getSelection().removeAllRanges();
+        }
+      });
+    </script>
+  </head>
+  <style>
+    html, body {
+      margin: 0px;
+      padding: 0px;
+      background-color: #262833;
+      color: #f5f5f5;
+      height: 100%;
+      width: 100vw;
+    }
+    div {
+      margin: 0;
+      text-align: center;
+    }
+    p {
+      font-family: 'Nunito', sans-serif;
+      font-size: 14pt;
+    }
+    .banner {
+      margin: 0;
+      margin-top: 15%;
+      max-width: 90vw;
+    }
+    .codeblock{
+      position: relative;
+      text-align: center; 
+      align-content: center;
+    }
+    .logo {
+      margin: 0;
+      width: 50px;
+    }
+    pre {
+      display: inline-block;
+      background: #4d4d4d;
+      color: #f5f5f5;
+      padding: 20px;
+      font-size: 15px;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      border: 1px solid #e6e7e9;
+      border-radius: 15px;
+      max-width: 800px;
+      text-align: center;
+    }
+    .copy-button {
+      position: absolute;
+      top: 2px;
+      right: 10px;
+      cursor: pointer;
+      color: #fff;
+      background: gray;
+      border-radius: 0.5em;
+      padding: 2px 7px;
+    }
+
+    .copy-button:hover {
+      color: #000;
+    }
+  </style>
+  <body>
+    <div>
+      <img class="banner" src="banner.jpg">
+    </div>
+    <div class="codeblock">
+      <p>copy and paste the below command into your terminal to install:</p>
+      <pre id="icmd">bash <(curl -sL https://hkdb.github.io/app/getapp.sh)</pre>
+    </div>
+    <div>
+      <p>learn more about app at:</p>
+      <a target="_blank" href="https://github.com/hkdb/app"><img class="logo" src="github.png"></a>
+    </div>
+  </body>
+</html>

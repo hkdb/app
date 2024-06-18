@@ -67,6 +67,7 @@ OPTIONS:
             - pip
             - cargo
     		- appimage
+            - app (ONLY FOR UPDATING app ITSELF)
     	
   -r string
     	Restore / Install all on new system
