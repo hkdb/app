@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-#################
-# app installer #
-#################
+###############
+# app updater #
+###############
 
 VER="v0.10"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
 
-echo -e "\n📦️ Installing:"
+echo -e "\n📦️ Updating:"
 
 echo -e "${CYAN}
 _____  ______ ______  
@@ -59,75 +59,10 @@ if [[ ! -f "/usr/bin/curl" ]] && [[ ! -f "/usr/local/bin/curl" ]]; then
   exit 1
 fi
 
-echo -e "✅️ Detecting shell...\n"
-
-SHELLTYPE=$(basename ${SHELL})
-
-echo -e "🐚️ shell: $SHELLTYPE"
-
-SHELLRC="none"
-SHELLPROFILE="$HOME/.config/app/.app_profile"
-
-if [[ $SHELLTYPE == "sh" ]]; then
-  SHELLRC="$HOME/.shrc"
-fi
-
-if [[ $SHELLTYPE == "csh" ]]; then
-  SHELLRC="$HOME/.cshrc"
-fi
-
-if [[ $SHELLTYPE == "ksh" ]]; then
-  SHELLRC="$HOME/.kshrc"
-fi
-
-if [[ $SHELLTYPE == "tcsh" ]]; then
-  SHELLRC="$HOME/.tcshrc"
-fi
-
-if [[ $SHELLTYPE == "bash" ]]; then
-  SHELLRC="$HOME/.bashrc"
-fi
-
-if [[ $SHELLTYPE == "zsh" ]]; then
-  SHELLRC="$HOME/.zshrc"
-fi
-
-if [[ $SHELLTYPE == "fish" ]]; then
-  SHELLRC="$HOME/.config/fish/config.fish"
-fi
-
-if [[ $SHELLRC == "none" ]]; then
-  echo -e "\n❌️ Unrecognized shell... app only supports sh, csh, ksh, tcsh, bash, zsh, and fish... exiting...\n"
-  exit 1
-fi
-
-echo -e "🐚️ config: $SHELLRC\n"
-
-echo -e "✅️ Create app config dir if not already created...\n"
-if [[ ! -d "$HOME/.config/app" ]]; then
-  mkdir -p $HOME/.config/app
-  if [[ $? -ne 0 ]] ; then
-      echo -e "\n❌️ Failed to create $HOME/.config/app... Exiting...\n"
-      exit 1
-  fi
-fi
-
 echo -e "✅️ Making sure there's a $HOME/.local/bin...\n"
 if [[ ! -d "$HOME/.local/bin" ]]; then
-  mkdir -p $HOME/.local/bin
-  if [[ $? -ne 0 ]] ; then
-      echo -e "\n❌️ Failed to create $HOME/.local/bin... Exiting...\n"
-      exit 1
-  fi
-fi
-
-echo -e "✅️ Making sure $HOME/.local/bin is in PATH...\n"
-if [[ -f $SHELLPROFILE ]]; then
-  PCHECK=$(grep ".local/bin" $SHELLPROFILE)
-  if [[ "$PCHECK" == "" ]]; then
-    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
-    echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
-  fi
+  echo -e "\n❌️ $HOME/.local/bin does not exist... Exiting...\n"
+  exit 1
 fi
 
 echo -e "⏳️ Downloading app binary...\n"
@@ -137,7 +72,7 @@ if [[ $? -ne 0 ]] ; then
     exit 1
 fi
 
-echo -e "\n💫️ Installing binary...\n"
+echo -e "\n💫️ Installing $VER binary...\n"
 unzip -d $HOME/.local/bin/ $HOME/.local/bin/app-$USEROS-$CPUARCH-$VER.zip
 mv $HOME/.local/bin/app-$USEROS-$CPUARCH $HOME/.local/bin/app
 
@@ -147,6 +82,3 @@ echo -e "\n🧹️ Clean-up...\n"
 echo -e "\n${GREEN}**************"
 echo -e " 💯️ COMPLETED"
 echo -e "**************${NC}\n"
-
-echo -e "⚠️  You may need to close and reopen your existing terminal windows for app to work as expected...\n"
-

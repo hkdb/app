@@ -138,13 +138,13 @@ Tracking versioned release:
 1. cd back into the repo whereever you put it. `~/.config/app` if you took my recommendation 
 2. `git pull`
 3. `git checkout <version tag>`
-3. `./update.sh` or if you are running FreeBSD, run `bash update.sh`
+3. `./update.sh` # FreeBSD requires bash to be installed
 
 Tracking main branch:
 
 1. cd back into the repo whreever you put it. `~/.config/app` if you took my recommendation 
 2. `git pull`
-3. `./update.sh` or if you are running FreeBSD, run `bash update.sh`
+3. `./update.sh` # FreeBSD requires bash to be installed
 
 ### SUPPORT US!
 
@@ -154,6 +154,12 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 
 ### VERSIONS
+
+#### v0.11
+
+- Changed bash scripts headers to allow for ./ execution on FreeBSD
+- Added Update script for easy installation with less dependencies
+- Implemented self-update `app -m app update` 
 
 #### v0.10
 

@@ -5,4 +5,4 @@
 3. cd into a directory of choice where you want to keep the app repo. If you are an end user and can't decide, I suggest `~/.config` (`mkdir ~/.config` if it doesn't already exist)
 4. `git clone https://github.com/hkdb/app.git`
 5. `cd app`
-6. `./install.sh` or if you are running FreeBSD, run `bash install.sh`
+6. `./install.sh` # FreeBSD requires bash to be installed
