@@ -182,6 +182,8 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 #### v0.13
 
 - Fixed FreeBSD native package manager check logic
+- Fixed updateapp.sh for Mac and FreeBSD
+
 
 #### v0.12
 
@@ -191,6 +193,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 - Added latest version check to `app -m app update` so that it doesn't update when not needed 
 - Added copy button and latest release version to site
 
+
 #### v0.11
 
 - Changed bash scripts headers to allow for ./ execution on FreeBSD
@@ -198,6 +201,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 - Implemented self-update `app -m app update`
 
 - Launched https://hkdb.github.io/app
+
 
 #### v0.10
 
