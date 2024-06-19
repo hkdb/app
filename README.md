@@ -179,6 +179,10 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.13
+
+- Fixed FreeBSD native package manager check logic
+
 #### v0.12
 
 - Fixed .app_profile logic in getapp.sh

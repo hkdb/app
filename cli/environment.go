@@ -43,6 +43,7 @@ func GetEnv() {
 		env.OSType = "Mac"
 	case "freebsd":
 		env.OSType = "FreeBSD"
+		env.Base = "freebsd"
 	case "windows":
 		env.OSType = "Windows"
 	default:
