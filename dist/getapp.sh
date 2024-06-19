@@ -28,7 +28,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
 elif [[ "$OSTYPE" == "freebsd"* ]]; then
   USEROS="freebsd"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  USEROS="macos"
+  USEROS="darwin"
 else
   echo -e "❌️ Operating System not supported... Exiting...\n"
   exit 1
@@ -134,7 +134,7 @@ else
 fi
 
 echo -e "⏳️ Downloading app binary...\n"
-curl -L -o $HOME/.local/bin/app-linux-$CPUARCH-$VER.zip https://github.com/hkdb/app/releases/download/$VER/app-linux-$CPUARCH.zip
+curl -L -o $HOME/.local/bin/app-$USEROS-$CPUARCH-$VER.zip https://github.com/hkdb/app/releases/download/$VER/app-$USEROS-$CPUARCH.zip
 if [[ $? -ne 0 ]] ; then
     echo -e "\n❌️ Failed to download app binary... Exiting...\n"
     exit 1
