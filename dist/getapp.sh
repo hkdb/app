@@ -4,7 +4,7 @@
 # app installer #
 #################
 
-VER="v0.11"
+VER="v0.12"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
@@ -128,6 +128,9 @@ if [[ -f $SHELLPROFILE ]]; then
     echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
     echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
   fi
+elif
+    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
+    echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
 fi
 
 echo -e "⏳️ Downloading app binary...\n"

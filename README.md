@@ -179,11 +179,21 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.12
+
+- Fixed .app_profile logic in getapp.sh
+- Aligned UX between binary (getapp.sh/updateapp.sh) and compile (install.sh and update.sh) installation
+- Removed redundant header from `app -m app update`
+- Added latest version check to `app -m app update` so that it doesn't update when not needed 
+- Added copy button and latest release version to site
+
 #### v0.11
 
 - Changed bash scripts headers to allow for ./ execution on FreeBSD
 - Added Update script for easy installation with less dependencies
-- Implemented self-update `app -m app update` 
+- Implemented self-update `app -m app update`
+
+- Launched https://hkdb.github.io/app
 
 #### v0.10
 

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/hkdb/app/env"
 	"fmt"
 	"log"
 	"os"
@@ -28,7 +29,9 @@ func NewLine() {
 }
 
 // Display header banner
-func LogLaunchBanner(version1 string) {
+func LogLaunchBanner(version string) {
+
+	env.Version = version
 
 	TimeStamp(false)
 	logo := `
@@ -39,7 +42,7 @@ _____  ______ ______
      \/|__|   |__|    
 `
 	log.Println(string(ColorCyan), logo, string(ColorReset))
-	log.Println(string(ColorGreen), "ϟ app - a package management assistant with super powers", string(ColorReset), version1) // can add + " & " + version2
+	log.Println(string(ColorGreen), "ϟ app - a package management assistant with super powers", string(ColorReset), version)
 	TimeStamp(true)
 
 	NewLine()

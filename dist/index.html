@@ -5,49 +5,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
-    <script>
-      // Get the <pre> element
-      const preTag = document.getElementById("icmd");
-
-      // Create a copy button element
-      const copyButton = document.createElement("span");
-      copyButton.innerText = "Copy";
-      copyButton.classList.add("copy-button");
-
-      // Append the copy button to the <pre> tag
-      preTag.appendChild(copyButton);
-
-      // Add click event listener to the copy button
-      copyButton.addEventListener("click", () => {
-        // Hide the copy button temporarily
-        copyButton.style.display = "none";
-
-        // Create a range and select the text inside the <pre> tag
-        const range = document.createRange();
-        range.selectNode(preTag);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-
-        try {
-          // Copy the selected text to the clipboard
-          document.execCommand("copy");
-
-          // Alert the user that the text has been copied
-          copyButton.innerText = "Copied!";
-          setTimeout(function(){
-            copyButton.innerText = "Copy";
-          }, 2000);
-        } catch (err) {
-          console.error("Unable to copy text:", err);
-        } finally {
-          // Show the copy button again
-          copyButton.style.display = "inline";
-
-          // Deselect the text
-          window.getSelection().removeAllRanges();
-        }
-      });
-    </script>
   </head>
   <style>
     html, body {
@@ -70,6 +27,9 @@
       margin: 0;
       margin-top: 15%;
       max-width: 90vw;
+    }
+    .version {
+      font-size: 8pt;
     }
     .codeblock{
       position: relative;
@@ -94,18 +54,20 @@
       text-align: center;
     }
     .copy-button {
-      position: absolute;
-      top: 2px;
+      position: relative;
+      top: 0px;
+      left: 10px;
       right: 10px;
+      padding: 10px;
       cursor: pointer;
-      color: #fff;
-      background: gray;
+      color: #4d4d4d;
+      background: #333333;
       border-radius: 0.5em;
       padding: 2px 7px;
     }
 
     .copy-button:hover {
-      color: #000;
+      color: #cccccc;
     }
   </style>
   <body>
@@ -120,5 +82,51 @@
       <p>learn more about app at:</p>
       <a target="_blank" href="https://github.com/hkdb/app"><img class="logo" src="github.png"></a>
     </div>
+    <div>
+      <p class="version">Latest: v0.12 (ALPHA)</p>
+    </div>
+    <script>
+      // Get the <pre> element
+      const preTag = document.getElementById("icmd");
+
+      // Create a copy button element
+      const copyButton = document.createElement("span");
+      copyButton.innerText = "copy";
+      copyButton.classList.add("copy-button");
+
+      // Append the copy button to the <pre> tag
+      preTag.appendChild(copyButton);
+
+      // Add click event listener to the copy button
+      copyButton.addEventListener("click", () => {
+        // Hide the copy button temporarily
+        copyButton.style.display = "none";
+
+        // Create a range and select the text inside the <pre> tag
+        const range = document.createRange();
+        range.selectNode(preTag);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+
+        try {
+          // Copy the selected text to the clipboard
+          document.execCommand("copy");
+
+          // Alert the user that the text has been copied
+          copyButton.innerText = "copied!";
+          setTimeout(function(){
+            copyButton.innerText = "copy";
+          }, 2000);
+        } catch (err) {
+          console.error("Unable to copy text:", err);
+        } finally {
+          // Show the copy button again
+          copyButton.style.display = "inline";
+
+          // Deselect the text
+          window.getSelection().removeAllRanges();
+        }
+      });
+    </script>
   </body>
 </html>

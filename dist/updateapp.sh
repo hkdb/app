@@ -4,22 +4,12 @@
 # app updater #
 ###############
 
-VER="v0.11"
+VER="v0.12"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
 
-echo -e "\n📦️ Updating:"
-
-echo -e "${CYAN}
-_____  ______ ______  
-\__  \ \____ \\____  \ 
- / __ \|  |_> >  |_> >
-(____  /   __/|   __/ 
-     \/|__|   |__|    
-${NC}"
-
-echo -e "🚀️ ${GREEN}The Cross-Platform Package Management Assistant with Super Powers${NC}\n"
+echo -e "\n📦️ Updating...\n"
 
 USEROS=""
 echo -e "🐧️ Detecting OS...\n"

@@ -13,6 +13,7 @@ type Flags struct {
 	Sort		bool
 }
 
+var Version string
 var OSType string
 var Distro string
 var Base string

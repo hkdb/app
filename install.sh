@@ -1,54 +1,148 @@
 #!/usr/bin/env bash
 
-echo -e "\nInstalling app...\n\n"
+#################
+# app installer #
+#    COMPILE    #
+#################
 
-echo -e "Make sure there's a $HOME/.local...\n"
+VER="v0.12"
+CYAN='\033[0;36m'
+GREEN='\033[1;32m'
+NC='\033[0m' 
 
-if [[ ! -d $HOME/.local ]]; then
-  mkdir -p $HOME/.local/bin
-fi
+echo -e "\n📦️ Installing:"
 
-echo -e "Make sure there's a $HOME/.local/bin...\n"
+echo -e "${CYAN}
+_____  ______ ______  
+\__  \ \____ \\____  \ 
+ / __ \|  |_> >  |_> >
+(____  /   __/|   __/ 
+     \/|__|   |__|    
+${NC}"
 
-if [[ ! -d $HOME/.local/bin ]]; then
-  mkdir -p $HOME/.local/bin
-fi
+echo -e "🚀️ ${GREEN}The Cross-Platform Package Management Assistant with Super Powers${NC}\n"
 
-echo -e "Check to make sure that $HOME/.local/bin is part of PATH...\n"
-
-PROFILE=$(cat ~/.profile |grep .local/bin)
-if [[ "$OSTYPE" == "freebsd"* ]]; then
-  PROFILE=$(cat ~/.zshrc |grep .local/bin)
-fi
-
-if [[ "$OSTYPE" == "freebsd"* ]]; then
-  if [[ ! -f "$HOME/.zsh_profile" ]]; then
-    echo -e "\nCreating .zshrc_profile to have ~/.local/bin be part of PATH and inserting lines to .zshrc to source it...\n"
-    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $HOME/.zsh_profile
-    echo -e "\nsource ~/.zsh_profile" >> $HOME/.zshrc
-  fi
-else 
-  if [[ "$PROFILE" == "" ]]; then
-    echo -e "\nAdding lines in .profile to have ~/.local/bin be part of PATH...\n"
-    echo -e '\nif [ -d "$HOME/.local/bin" ]; then\n\tPATH="$HOME/.local/bin:$PATH"\nfi' >> $HOME/.profile
-  fi
-fi
-
-if [[ "$OSTYPE" == "freebsd"* ]]; then
-  echo -e "\nSourcing .zsh_profile to ensure that ~/.local/bin is in PATH...\n"
-  source $HOME/.zsh_profile
+USEROS=""
+echo -e "🐧️ Detecting OS...\n"
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  USEROS="linux"
+elif [[ "$OSTYPE" == "freebsd"* ]]; then
+  USEROS="freebsd"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  USEROS="macos"
 else
-  echo -e "\nSourcing .profile to ensure that ~/.local/bin is in PATH...\n"
-  source $HOME/.profile
+  echo -e "❌️ Operating System not supported... Exiting...\n"
+  exit 1
 fi
-echo -e "\n"
+
+echo -e "💻️ Detecting CPU arch...\n"
+
+CPUARCH=""
+UNAMEM=$(uname -m)
+echo -e "🏰️: $UNAMEM\n"
+
+if [[ "$UNAMEM" == "x86_64" ]] || [[ "$UNAMEM" == "amd64" ]]; then
+  CPUARCH="amd64"
+elif [[ "$UNAMEM" == "arm" ]]; then
+  CPUARCH="arm64"
+else
+  echo -e "❌️ CPU Architecture not supported... Exiting...\n"
+  exit 1
+fi
+
+echo -e "✅️ Dependencies check...\n"
+if [[ ! -f "/usr/bin/unzip" ]] && [[ ! -f "/usr/local/bin/unzip" ]]; then
+  echo -e "\n❌️ unzip is not installed on this system. Install it and run the install command again...\n"
+  exit 1
+fi
+if [[ ! -f "/usr/bin/curl" ]] && [[ ! -f "/usr/local/bin/curl" ]]; then
+  echo -e "\n❌️ curl is not installed on this system. Install it and run the install command again...\n"
+  exit 1
+fi
+
+echo -e "✅️ Detecting shell...\n"
+
+SHELLTYPE=$(basename ${SHELL})
+
+echo -e "🐚️ shell: $SHELLTYPE"
+
+SHELLRC="none"
+SHELLPROFILE="$HOME/.config/app/.app_profile"
+
+if [[ $SHELLTYPE == "sh" ]]; then
+  SHELLRC="$HOME/.shrc"
+fi
+
+if [[ $SHELLTYPE == "csh" ]]; then
+  SHELLRC="$HOME/.cshrc"
+fi
+
+if [[ $SHELLTYPE == "ksh" ]]; then
+  SHELLRC="$HOME/.kshrc"
+fi
+
+if [[ $SHELLTYPE == "tcsh" ]]; then
+  SHELLRC="$HOME/.tcshrc"
+fi
+
+if [[ $SHELLTYPE == "bash" ]]; then
+  SHELLRC="$HOME/.bashrc"
+fi
+
+if [[ $SHELLTYPE == "zsh" ]]; then
+  SHELLRC="$HOME/.zshrc"
+fi
+
+if [[ $SHELLTYPE == "fish" ]]; then
+  SHELLRC="$HOME/.config/fish/config.fish"
+fi
+
+if [[ $SHELLRC == "none" ]]; then
+  echo -e "\n❌️ Unrecognized shell... app only supports sh, csh, ksh, tcsh, bash, zsh, and fish... exiting...\n"
+  exit 1
+fi
+
+echo -e "🐚️ config: $SHELLRC\n"
+
+echo -e "✅️ Create app config dir if not already created...\n"
+if [[ ! -d "$HOME/.config/app" ]]; then
+  mkdir -p $HOME/.config/app
+  if [[ $? -ne 0 ]] ; then
+      echo -e "\n❌️ Failed to create $HOME/.config/app... Exiting...\n"
+      exit 1
+  fi
+fi
+
+echo -e "✅️ Making sure there's a $HOME/.local/bin...\n"
+if [[ ! -d "$HOME/.local/bin" ]]; then
+  mkdir -p $HOME/.local/bin
+  if [[ $? -ne 0 ]] ; then
+      echo -e "\n❌️ Failed to create $HOME/.local/bin... Exiting...\n"
+      exit 1
+  fi
+fi
+
+echo -e "✅️ Making sure $HOME/.local/bin is in PATH...\n"
+if [[ -f $SHELLPROFILE ]]; then
+  PCHECK=$(grep ".local/bin" $SHELLPROFILE)
+  if [[ "$PCHECK" == "" ]]; then
+    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
+    echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
+  fi
+else
+    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
+    echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
+fi
 
 DISTRO=""
 PKGMGR=""
 IFLAG=""
 
+
 if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
   
+  echo -e "🐧️ Detecting distro...\n"
+
   OSR=$(cat /etc/os-release |grep ^NAME)
   OSRNV=${OSR:5}
   DIST=${OSRNV:1:${#OSRNV}-2}
@@ -73,49 +167,12 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
     PKGMGR="zypper"
     IFLAG="install"
   fi
+ 
+  echo -e "\n🛸️ Distro: $DISTRO"
+  echo -e "📦️ Native: $PKGMGR\n"
 
-  read -p "Would you like to install Flatpak? (Y/n) " FLATPAK
-  if [[ $FLATPAK != "N" ]] && [[ $FLATPAK != "n" ]]; then
-   sudo $PKGMGR $IFLAG flatpak
-   if [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
-    U=$USER
-    sudo adduser $U _flatpak
-    sudo flatpak repair
-   fi
-   flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-  fi
-
-  if [[ "$DISTRO" != "opensuse-leap" ]]; then
-    read -p "Would you like to install Snap? (Y/n) " SNAP
-    if [[ $SNAP != "N" ]] && [[ $SNAP != "n" ]]; then
-      if [[ "$DISTRO" == "arch" ]] || [[ "$DISTRO" == "garuda" ]] || [[ "$DISTRO" == "manjaro" ]] || [[ "$DISTRO" == "Endeavour" ]]; then
-        OPATH=$(pwd)
-        cd /tmp/
-        git clone https://aur.archlinux.org/snapd.git
-        cd snapd
-        makepkg -si
-        sudo systemctl enable --now snapd.socket
-        sudo ln -s /var/lib/snapd/snap /snap
-        echo "export PATH=\$PATH:\/snap/bin/" | sudo tee -a /etc/profile
-        source /etc/profile
-        cd $OPATH
-      else
-        sudo $PKGMGR $IFLAG snapcraft
-      fi
-    fi
-  fi
-
-  echo -e "\n"
-  if [[ "$DISTRO" == "linuxmint" ]] || [[ "$DISTRO" == "debian" ]]; then
-    read -p  "Add software-properties-common? (Y/n) " SPC
-    if [[ "$SPC" != "N" ]] && [[ "$SPC" != "n" ]]; then
-			sudo apt install software-properties-common
-    fi
-  fi
-   
-  echo -e "\n"
   if [[ "$DISTRO" == "debian" ]] || [[ "$DISTRO" == "ubuntu" ]] || [[ "$DISTRO" == "pop" ]]; then
-    read -p  "Add longsleep-ubuntu-golang-backports? (Y/n) " BACKPORTS
+    read -p  "❔️ Add longsleep-ubuntu-golang-backports? (Y/n) " BACKPORTS
     if [[ "$BACKPORTS" != "N" ]] && [[ "$BACKPORTS" != "n" ]]; then
       # sudo echo -e "deb https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu/ jammy main\n# deb-src https://ppa.launchpadcontent.net/longsleep/golang-backports/ubuntu/ jammy main" |sudo tee /etc/apt/sources.list.d/longsleep-ubuntu-golang-backports-jammy.list
       # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys F6BC817356A3D45E
@@ -124,7 +181,7 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
     fi
   fi
    
-  read -p  "Install Go? Only say no if you already have it installed... (Y/n) " GOLANG
+  read -p  "❔️ Install Go? Only say no if you already have it installed... (Y/n) " GOLANG
   if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
 		if [[ "$DISTRO" == "fedora" ]] || [[ "$DISTRO" == "rocky" ]] || [[ "$DISTRO" == "almalinux" ]] || [[ "$DISTRO" == "centos" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "ol" ]] || [[ "$DISTRO" == "clear-linux-os" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
 			wget -O /tmp/go1.22.4.linux-amd64.tar.gz https://go.dev/dl/go1.22.4.linux-amd64.tar.gz  
@@ -140,30 +197,37 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   echo -e "\nOS: macos\n"
   PKGMGR="brew"
-  read -p "Install Homebrew? (Y/n) " HOMEBREW
+  read -p "❔️ Install Homebrew? (Y/n) " HOMEBREW
   if [[ "$HOMEBREW" != "N" ]] && [[ "$HOMEBREW" != "n" ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   fi
-  read -p "Install Go? Only say no if you already have it installed (Y/n) " GOLANG
+  read -p "❔️ Install Go? Only say no if you already have it installed (Y/n) " GOLANG
   if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
     echo -e "Installing Go...\n"
     brew install golang
   fi
 elif [[ "$OSTYPE" == "freebsd"* ]]; then
-  read -p "Install Go? Only say no if you already have it installed (Y/n) " GOLANG
+  read -p "❔️ Install Go? Only say no if you already have it installed (Y/n) " GOLANG
   if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
     echo -e "Installing Go...\n"
     sudo pkg install golang
   fi
 fi
 
+echo -e "\n🛰️ Getting modules...\n"
 go mod tidy
-echo -e "Compiling app...\n"
+echo -e "🛠️ Compiling app...\n"
 go build
-echo -e "Copying app to $HOME/.local/bin...\n"
+echo -e "💾️ Copying app to $HOME/.local/bin...\n"
 cp app $HOME/.local/bin/
-echo -e "\n********"
-echo -e "COMPLETE"
-echo -e "********\n"
 
-echo -e "You will need to logout and log back in to ensure that app is in PATH...\n"
+
+
+echo -e "\n${GREEN}**************"
+echo -e " 💯️ COMPLETED"
+echo -e "**************${NC}\n"
+
+echo -e "⚠️  You may need to close and reopen your existing terminal windows for app to work as expected...\n"
+
+
+
