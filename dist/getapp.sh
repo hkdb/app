@@ -4,7 +4,7 @@
 # app installer #
 #################
 
-VER="v0.13"
+VER="v0.14"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
@@ -22,13 +22,16 @@ ${NC}"
 echo -e "🚀️ ${GREEN}The Cross-Platform Package Management Assistant with Super Powers${NC}\n"
 
 USEROS=""
-echo -e "🐧️ Detecting OS...\n"
-if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+echo -e "🐧️ Detecting OS..."
+if [[ "$OSTYPE" == "linux"* ]]; then
   USEROS="linux"
+  echo -e "\n🐧️ Linux\n"
 elif [[ "$OSTYPE" == "freebsd"* ]]; then
   USEROS="freebsd"
+  echo -e "\n🅱️  FreeBSD\n"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  USEROS="darwin"
+  USEROS="macos"
+  echo -e "\n🍎️ MacOS"
 else
   echo -e "❌️ Operating System not supported... Exiting...\n"
   exit 1

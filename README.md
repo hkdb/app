@@ -179,6 +179,12 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.14
+
+- Fixed install.sh, update.sh, getapp.sh, updateapp.sh for Suse
+- Added show OS during install and `app -m app update`
+
+
 #### v0.13
 
 - Fixed FreeBSD native package manager check logic
