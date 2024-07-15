@@ -107,6 +107,7 @@ func ListSystemSearch(pkg string) {
 func Update() {
 
 	fmt.Println("This is an apt only command. Just use app -m cargo upgrade...")
+	fmt.Println("")
 
 }
 

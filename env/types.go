@@ -34,5 +34,6 @@ var Pip = true
 var PipCmd = "/usr/bin/pip"
 var Cargo = true
 var CargoCmd = "/usr/bin/cargo"
+var CargoLocalCmd = HomeDir + "/.cargo/bin/cargo"
 var AppImage = true
 var AutoYes = false

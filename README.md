@@ -179,6 +179,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.15
+
+- Fixed cargo command check to include $HOME/.cargo/bin/cargo so that it handles non-package-manager installed cargo properly
+
+
 #### v0.14
 
 - Fixed install.sh, update.sh, getapp.sh, updateapp.sh for Suse

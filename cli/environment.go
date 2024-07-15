@@ -230,7 +230,8 @@ func GetEnv() {
 
 	if env.Cargo == true {
 		cargo, _ := utils.CheckIfExists(env.CargoCmd)
-		if cargo == false {
+		cargoLocal, _ := utils.CheckIfExists(env.CargoLocalCmd)
+		if cargo == false && cargoLocal == false {
 			fmt.Println(utils.ColorYellow, "Temporarily disabling Cargo because it's not installed on your system. Suppress this message by disabling Cargo on app by running \"app -m cargo disable\"...\n", utils.ColorReset)
 		}
 	}
