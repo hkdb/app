@@ -91,7 +91,7 @@ func GetEnv() {
 			env.AppImage = false
 		}
 
-		id, err := exec.Command(env.Bash, "-c", "cat /etc/*-release | grep \"^ID=\" | head -1 | cut -d '=' -f 2").Output()
+		id, err := exec.Command(env.Bash, "-c", "cat /etc/os-release | grep \"^ID=\" | head -1 | cut -d '=' -f 2").Output()
 		if err != nil {
 			fmt.Print(utils.ColorRed, "Unable to determine distribution... Exiting...\n\n", utils.ColorReset)
 			os.Exit(1)
@@ -101,7 +101,7 @@ func GetEnv() {
 		//fmt.Println("Distro:", distro)
 		env.Distro = distro
 
-		i, err := exec.Command(env.Bash, "-c", "cat /etc/*-release").Output()
+		i, err := exec.Command(env.Bash, "-c", "cat /etc/os-release").Output()
 		if err != nil {
 			fmt.Print(utils.ColorRed, "Unable to determine base distribution... Exiting...\n\n", utils.ColorReset)
 			os.Exit(1)

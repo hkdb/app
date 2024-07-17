@@ -179,6 +179,13 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+
+#### v0.16
+
+- Really fixed cargo command check this time... v0.15 didn't do the trick
+- Fixed distro support regression identified by @AnonJervis specifically making LinuxMint work again
+
+
 #### v0.15
 
 - Fixed cargo command check to include $HOME/.cargo/bin/cargo so that it handles non-package-manager installed cargo properly
