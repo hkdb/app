@@ -13,10 +13,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var deb_base = []string{"debian", "ubuntu"}
-var rh_base = []string{"redhat", "fedora", "clear"}
+var deb_base = []string{"debian", "ubuntu", "pop", "mx", "kali", "raspbian", "linuxmint"}
+var rh_base = []string{"redhat", "fedora", "clearos", "oracle", "rocky", "amazonami" }
 var suse_base = []string{"opensuse", "opensuse-leap", "suse"}
-var arch_base = []string{"arch"}
+var arch_base = []string{"arch", "garuda", "manjaro", "endeavour"}
 
 // Load envfile and get environment variables
 func GetEnv() {
@@ -230,7 +230,7 @@ func GetEnv() {
 
 	if env.Cargo == true {
 		cargo, _ := utils.CheckIfExists(env.CargoCmd)
-		cargoLocal, _ := utils.CheckIfExists(env.CargoLocalCmd)
+		cargoLocal, _ := utils.CheckIfExists(env.HomeDir + env.CargoLocalCmd)
 		if cargo == false && cargoLocal == false {
 			fmt.Println(utils.ColorYellow, "Temporarily disabling Cargo because it's not installed on your system. Suppress this message by disabling Cargo on app by running \"app -m cargo disable\"...\n", utils.ColorReset)
 		}
