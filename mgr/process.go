@@ -75,6 +75,8 @@ func restoreAll() {
 			case "suse":
 				restore.RestoreAllRepos("suse")
 				arch.InstallAll()
+			case "nixos":
+				fmt.Println("Skipping nix-env... It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 			}
 		}
 		if env.Base == "arch" && env.Yay == true {
@@ -210,6 +212,11 @@ func restoreOne(r string) {
 			} else {
 				utils.PrintErrorMsgExit("Error:", "You are trying to restore with dnf on a non-zypper system...\n")
 			}
+		case "nix-env":
+			npm := utils.GetNativePkgMgr()
+			if npm == "nix-env" {
+				utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
+			}
 		case "flatpak":
 			if env.Flatpak == false {
 				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run", "app -m "+r+" enable\n")
@@ -288,6 +295,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.Install(p)
 		case "zypper":
 			suse.Install(p)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.Install(p)
 		case "snap":
@@ -320,6 +329,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.Remove(p)
 		case "zypper":
 			suse.Remove(p)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.Remove(p)
 		case "snap":
@@ -352,6 +363,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.Purge(p)
 		case "zypper":
 			suse.Purge(p)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.Purge(p)
 		case "snap":
@@ -382,6 +395,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.Search(p)
 		case "zypper":
 			suse.Search(p)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.Search(p)
 		case "snap":
@@ -412,6 +427,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.Update()
 		case "zypper":
 			suse.Update()
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.Update()
 		case "snap":
@@ -446,6 +463,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				freebsd.Upgrade()
 			case "zypper":
 				suse.Upgrade()
+			case "nix-env":
+				utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 			case "flatpak":
 				flatpak.Upgrade()
 			case "snap":
@@ -484,6 +503,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				fmt.Println("\nUpgrading with ZYPPER:\n")
 				suse.Update()
 				suse.Upgrade()
+			case "nix-env":
+				utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 			case "brew":
 				if env.OSType != "Mac" {
 					utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
@@ -556,6 +577,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				freebsd.DistUpgrade()
 			case "zypper":
 				suse.DistUpgrade()
+			case "nix-env":
+				utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 			case "flatpak":
 				flatpak.DistUpgrade()
 			case "snap":
@@ -591,6 +614,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			case "zypper":
 				fmt.Println("\nUpgrading with ZYPPER:\n")
 				suse.DistUpgrade()
+			case "nix-env":
+				fmt.Println("Skipping nix-env: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 			}
 			if m == "pacman" && env.Yay != false {
 				fmt.Println("\nUpgrade with YAY:\n")
@@ -643,6 +668,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.AutoRemove()
 		case "zypper":
 			suse.AutoRemove()
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.AutoRemove()
 		case "snap":
@@ -697,6 +724,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			} else {
 				suse.ListSystemSearch(p)
 			}
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			if p == "" {
 				flatpak.ListSystem()
@@ -741,6 +770,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		switch m {
 		case "apt", "dnf", "pacman", "yay", "pkg", "zypper", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
 			utils.History(m, p, sort)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		default:
 			fmt.Println("Unsupported package manager... Exiting...\n")
 			os.Exit(1)
@@ -753,6 +784,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			env.Yay = true
 			utils.EditSettings("YAY = ", "y")
 			fmt.Println("Yay has been enabled...\n")
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			env.Flatpak = true
 			utils.EditSettings("FLATPAK = ", "y")
@@ -794,6 +827,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			env.Yay = false
 			utils.EditSettings("YAY = ", "n")
 			fmt.Println("Yay has been disabled...\n")
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			env.Flatpak = false
 			utils.EditSettings("FLATPAK = ", "n")
@@ -843,6 +878,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.AddRepo(p, g)
 		case "zypper":
 			suse.AddRepo(p, g)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.AddRepo(p, g)
 		default:
@@ -863,6 +900,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			freebsd.RemoveRepo(p)
 		case "zypper":
 			suse.RemoveRepo(p)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			flatpak.RemoveRepo(p)
 		default:
@@ -873,6 +912,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		switch m {
 		case "apt", "dnf", "pacman", "yay", "zypper", "flatpak", "snap":
 			utils.ListRepo(m, p)
+		case "nix-env":
+			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		default:
 			fmt.Println("Unsupported pacakge manager...\n")
 			os.Exit(1)

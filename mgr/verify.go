@@ -7,7 +7,7 @@ import (
 func isEnabled(pm string) bool {
 
 	switch pm {
-	case "apt", "dnf", "pacman", "pkg", "zypper", "app":
+	case "apt", "dnf", "pacman", "pkg", "zypper", "nix-env", "app":
 		return true
 	case "yay":
 		if env.Yay == false {

@@ -4,7 +4,7 @@
 # app updater #
 ###############
 
-VER="v0.16"
+VER="v0.17"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
@@ -43,11 +43,15 @@ else
 fi
 
 echo -e "✅️ Dependencies check...\n"
-if [[ ! -f "/usr/bin/unzip" ]] && [[ ! -f "/usr/local/bin/unzip" ]]; then
+UCHECK="$(whereis unzip)"
+UL=${#UCHECK}
+if [[ $UL -lt 7 ]]; then
   echo -e "\n❌️ unzip is not installed on this system. Install it and run the install command again...\n"
   exit 1
 fi
-if [[ ! -f "/usr/bin/curl" ]] && [[ ! -f "/usr/local/bin/curl" ]]; then
+CCHECK="$(whereis curl 2>&1)"
+CL=${#CCHECK}
+if [[ $CL -lt 6 ]]; then
   echo -e "\n❌️ curl is not installed on this system. Install it and run the install command again...\n"
   exit 1
 fi

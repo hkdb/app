@@ -17,6 +17,8 @@ func GetNativePkgMgr() string {
 			return "pacman"
 		case "suse":
 			return "zypper"
+		case "nixos":
+			return "nix-env"
 		default:
 			PrintErrorMsgExit("Error: Distro not supported...", "")
 		}

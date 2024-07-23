@@ -244,6 +244,8 @@ func defaultPkgMgr() string {
 			return "zypper"
 		case "arch":
 			return "pacman"
+		case "nixos":
+			return "nix-env"
 		default:
 			fmt.Println(utils.ColorRed, "\nDistro not supported...\n", utils.ColorReset)
 			os.Exit(1)

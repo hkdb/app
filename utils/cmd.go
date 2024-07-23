@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func RunCmd(c *exec.Cmd, msg string) {
@@ -18,6 +19,21 @@ func RunCmd(c *exec.Cmd, msg string) {
 	}
 
 	fmt.Println()
+
+}
+
+func RunCmdReturn(c *exec.Cmd) (string, error) {
+	
+	cmd := c
+	var outbuf strings.Builder
+	cmd.Stdout = &outbuf
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	if err := cmd.Run(); err != nil {
+		return "", err
+	}
+	stdout := outbuf.String()
+	return stdout, nil
 
 }
 

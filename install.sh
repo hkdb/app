@@ -54,11 +54,16 @@ else
 fi
 
 echo -e "✅️ Dependencies check...\n"
-if [[ ! -f "/usr/bin/unzip" ]] && [[ ! -f "/usr/local/bin/unzip" ]]; then
+UCHECK="$(whereis unzip)"
+UL=${#UCHECK}
+if [[ $UL -lt 7 ]]; then
   echo -e "\n❌️ unzip is not installed on this system. Install it and run the install command again...\n"
   exit 1
 fi
-if [[ ! -f "/usr/bin/curl" ]] && [[ ! -f "/usr/local/bin/curl" ]]; then
+
+CCHECK="$(whereis curl 2>&1)"
+CL=${#CCHECK}
+if [[ $CL -lt 6 ]]; then
   echo -e "\n❌️ curl is not installed on this system. Install it and run the install command again...\n"
   exit 1
 fi
@@ -183,19 +188,28 @@ if [[ "$OSTYPE" == "linux-gnu"* ]] || [[ "$OSTYPE" == "linux" ]]; then
       sudo apt update -y
     fi
   fi
-   
-  read -p  "❔️ Install Go? Only say no if you already have it installed... (Y/n) " GOLANG
-  if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
-		if [[ "$DISTRO" == "fedora" ]] || [[ "$DISTRO" == "rocky" ]] || [[ "$DISTRO" == "almalinux" ]] || [[ "$DISTRO" == "centos" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "ol" ]] || [[ "$DISTRO" == "clear-linux-os" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
-			wget -O /tmp/go1.22.4.linux-amd64.tar.gz https://go.dev/dl/go1.22.4.linux-amd64.tar.gz  
-			sudo tar -C /usr/local -xzf /tmp/go1.22.4.linux-amd64.tar.gz
-			export PATH=$PATH:/usr/local/go/bin
-			echo -e "if [[ -d /usr/local/go/bin ]]; then\n\tPATH=$PATH:/usr/local/go/bin\nfi" >> $HOME/.bashrc
-    elif [[ "$DISTRO" == "opensuse" ]] || [[ "$DISTRO" == "opensuse-leap" ]] || [[ "$DISTRO" == "suse" ]]; then
-      sudo $PKGMGR $IFLAG go1.22
-		else
-    	sudo $PKGMGR $IFLAG golang
-		fi
+
+  if [[ $DISTRO == "nixos" ]]; then
+    GCHECK="$(whereis go)"
+    GL=${#GCHECK}
+    if [[ $GL -lt 3 ]]; then
+      echo -e "\n❌️ Golang is not installed on this system. Install it and run the install command again...\n"
+      exit 1
+    fi
+  else 
+    read -p  "❔️ Install Go? Only say no if you already have it installed... (Y/n) " GOLANG
+    if [[ "$GOLANG" != "N" ]] && [[ "$GOLANG" != "n" ]]; then
+      if [[ "$DISTRO" == "fedora" ]] || [[ "$DISTRO" == "rocky" ]] || [[ "$DISTRO" == "almalinux" ]] || [[ "$DISTRO" == "centos" ]] || [[ "$DISTRO" == "RedHatEnterpriseServer" ]] || [[  "$DISTRO" == "ol" ]] || [[ "$DISTRO" == "clear-linux-os" ]] || [[ "$DISTRO" == "AmazonAMI" ]]; then
+        wget -O /tmp/go1.22.4.linux-amd64.tar.gz https://go.dev/dl/go1.22.4.linux-amd64.tar.gz  
+        sudo tar -C /usr/local -xzf /tmp/go1.22.4.linux-amd64.tar.gz
+        export PATH=$PATH:/usr/local/go/bin
+        echo -e "if [[ -d /usr/local/go/bin ]]; then\n\tPATH=$PATH:/usr/local/go/bin\nfi" >> $HOME/.bashrc
+      elif [[ "$DISTRO" == "opensuse" ]] || [[ "$DISTRO" == "opensuse-leap" ]] || [[ "$DISTRO" == "suse" ]]; then
+        sudo $PKGMGR $IFLAG go1.22
+      else
+        sudo $PKGMGR $IFLAG golang
+      fi
+    fi
   fi
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   echo -e "\nOS: macos\n"

@@ -17,6 +17,7 @@ var deb_base = []string{"debian", "ubuntu", "pop", "mx", "kali", "raspbian", "li
 var rh_base = []string{"redhat", "fedora", "clearos", "oracle", "rocky", "amazonami" }
 var suse_base = []string{"opensuse", "opensuse-leap", "suse"}
 var arch_base = []string{"arch", "garuda", "manjaro", "endeavour"}
+var nixos_base = []string{"nixos"}
 
 // Load envfile and get environment variables
 func GetEnv() {
@@ -91,7 +92,7 @@ func GetEnv() {
 			env.AppImage = false
 		}
 
-		id, err := exec.Command(env.Bash, "-c", "cat /etc/os-release | grep \"^ID=\" | head -1 | cut -d '=' -f 2").Output()
+		id, err := exec.Command(env.Env, env.Bash, "-c", "cat /etc/os-release | grep \"^ID=\" | head -1 | cut -d '=' -f 2").Output()
 		if err != nil {
 			fmt.Print(utils.ColorRed, "Unable to determine distribution... Exiting...\n\n", utils.ColorReset)
 			os.Exit(1)
@@ -101,7 +102,7 @@ func GetEnv() {
 		//fmt.Println("Distro:", distro)
 		env.Distro = distro
 
-		i, err := exec.Command(env.Bash, "-c", "cat /etc/os-release").Output()
+		i, err := exec.Command(env.Env, env.Bash, "-c", "cat /etc/os-release").Output()
 		if err != nil {
 			fmt.Print(utils.ColorRed, "Unable to determine base distribution... Exiting...\n\n", utils.ColorReset)
 			os.Exit(1)
@@ -139,6 +140,16 @@ func GetEnv() {
 			}
 		}
 
+		// Check if it's a Nixos based
+		for i := 0; i < len(nixos_base); i++ {
+			if strings.Contains(infos, nixos_base[i]) {
+				dBase = "nixos"
+				//fmt.Println("Base:", dBase + "\n")
+				env.Base = dBase
+				break
+			}
+		}
+
 		// Check if it's a Suse based
 		for i := 0; i < len(suse_base); i++ {
 			if strings.Contains(infos, suse_base[i]) {
@@ -157,8 +168,11 @@ func GetEnv() {
 			}
 		}
 
-		if env.Flatpak == true {
+		if env.Flatpak == true { 
 			flatpak, _ := utils.CheckIfExists(env.FlatpakCmd)
+			if env.Base == "nixos" {
+				flatpak = nixosCheck("flatpak", 8)
+			}
 			if flatpak == false {
 				fmt.Println(utils.ColorYellow, "Temporarily disabling Flatpak because it's not installed on your system. Suppress this message by disabling Flatpak on app by running \"app -m flatpak disable\"...\n", utils.ColorReset)
 			}
@@ -166,6 +180,9 @@ func GetEnv() {
 
 		if env.Snap == true {
 			snap, _ := utils.CheckIfExists(env.SnapCmd)
+			if env.Base == "nixos" {
+				snap = nixosCheck("snap", 5)
+			}
 			if snap == false {
 				fmt.Println(utils.ColorYellow, "Temporarily disabling Snap because it's not installed on your system. Suppress this message by disabling Snap on app by running \"app -m snap disable\"...\n", utils.ColorReset)
 			}
@@ -177,10 +194,10 @@ func GetEnv() {
 		}
 
 		env.Brew = true
-		bsdPath()
+		// bsdPath()
 	case "freebsd":
-		bashPath()
-		bsdPath()
+		// bashPath()
+		// bsdPath()
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}
@@ -216,6 +233,9 @@ func GetEnv() {
 
 	if env.Go == true {
 		golang, _ := utils.CheckIfExists(env.GoCmd)
+		if env.Base == "nixos" {
+			golang = nixosCheck("go", 3)
+		}
 		if golang == false {
 			fmt.Println(utils.ColorYellow, "Temporarily disabling Go because it's not installed on your system. Suppress this message by disabling Go on app by running \"app -m go disable\"...\n", utils.ColorReset)
 		}
@@ -223,6 +243,9 @@ func GetEnv() {
 
 	if env.Pip == true {
 		pip, _ := utils.CheckIfExists(env.PipCmd)
+		if env.Base == "nixos" {
+			pip = nixosCheck("pip", 4)
+		}
 		if pip == false {
 			fmt.Println(utils.ColorYellow, "Temporarily disabling Pip because it's not installed on your system. Suppress this message by disabling Pip on app by running \"app -m pip disable\"...\n", utils.ColorReset)
 		}
@@ -230,6 +253,9 @@ func GetEnv() {
 
 	if env.Cargo == true {
 		cargo, _ := utils.CheckIfExists(env.CargoCmd)
+		if env.Base == "nixos" {
+			cargo = nixosCheck("cargo", 6)
+		}
 		cargoLocal, _ := utils.CheckIfExists(env.HomeDir + env.CargoLocalCmd)
 		if cargo == false && cargoLocal == false {
 			fmt.Println(utils.ColorYellow, "Temporarily disabling Cargo because it's not installed on your system. Suppress this message by disabling Cargo on app by running \"app -m cargo disable\"...\n", utils.ColorReset)
@@ -237,6 +263,24 @@ func GetEnv() {
 	}
 
 }
+
+
+func nixosCheck(c string, l int) bool {
+
+	cmd := exec.Command("whereis", c)
+	out, err := utils.RunCmdReturn(cmd)
+	if err != nil {
+		utils.PrintErrorExit("Error:", err)
+	}
+	// Number of characters in command + :
+	if len(out) <= l {
+		return false
+	}
+	return true
+
+}
+
+/*
 
 func bashPath() {
 
@@ -251,3 +295,5 @@ func bsdPath() {
 	env.CargoCmd = "/usr/local/bin/pip"
 
 }
+
+*/

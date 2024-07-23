@@ -145,7 +145,7 @@ Some distros are easily supported by just simply identifying them under each of 
 
 Also, I primarily use Pop, Ubuntu, Debian, Fedora, Arch, and Garuda so other distros are a bit less tested. If you notice any issues on the other "supported" distros, please let me know by submitting an issue here.
 
-Immutable distros and distros like nixos will most likely never make it to this list since for example, nixos' package manager pretty much addresses the same problem but just in a different way and perhaps maybe even better...
+The native package manager of immutable distros and distros like nixos will most likely never make it to this list since for example, nixos' declarative package management pretty much addresses the same problem but just in a different way and perhaps maybe even better...
 
 `Caveat`: Arch Derivatives
 
@@ -178,6 +178,12 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 
 ### VERSIONS
+
+
+#### v0.17
+
+- Added nixos support so that app can be used to handle Flatpak, Snap, Go, Pip, and Cargo if desired.
+- Note: `whereis` must be installed on nixos for this to work.
 
 
 #### v0.16

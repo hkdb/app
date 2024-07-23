@@ -19,7 +19,8 @@ var Distro string
 var Base string
 var HomeDir string
 var DBDir string
-var Bash = "/bin/bash"
+var Env = "/usr/bin/env"
+var Bash = "bash"
 var Header = true
 var Yay = true
 var YayCmd = "/usr/bin/yay"
