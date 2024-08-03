@@ -288,6 +288,8 @@ func bashPath() {
 
 }
 
+*/
+
 func bsdPath() {
 
 	env.GoCmd = "/usr/local/bin/go"
@@ -296,4 +298,3 @@ func bsdPath() {
 
 }
 
-*/

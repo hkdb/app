@@ -181,7 +181,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 #### v0.18
 
-- Fixed FreeBSD path regression
+- Fixed FreeBSD & Mac path regression
 
 
 #### v0.17
