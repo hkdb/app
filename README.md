@@ -179,6 +179,10 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.18
+
+- Fixed FreeBSD path regression
+
 
 #### v0.17
 

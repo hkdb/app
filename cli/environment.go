@@ -194,10 +194,10 @@ func GetEnv() {
 		}
 
 		env.Brew = true
-		// bsdPath()
+		bsdPath()
 	case "freebsd":
 		// bashPath()
-		// bsdPath()
+		bsdPath()
 	case "windows":
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}
