@@ -4,7 +4,7 @@
 # app installer #
 #################
 
-VER="v0.18"
+VER="v0.19"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
@@ -45,7 +45,7 @@ echo -e "🏰️: $UNAMEM\n"
 
 if [[ "$UNAMEM" == "x86_64" ]] || [[ "$UNAMEM" == "amd64" ]]; then
   CPUARCH="amd64"
-elif [[ "$UNAMEM" == "arm" ]]; then
+elif [[ "$UNAMEM" == "arm64" ]]; then
   CPUARCH="arm64"
 else
   echo -e "❌️ CPU Architecture not supported... Exiting...\n"
