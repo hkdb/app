@@ -20,7 +20,7 @@ elif [[ "$OSTYPE" == "freebsd"* ]]; then
   USEROS="freebsd"
   echo -e "\n🅱️  FreeBSD\n"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-  USEROS="macos"
+  USEROS="darwin"
   echo -e "\n🍎️ MacOS"
 else
   echo -e "❌️ Operating System not supported... Exiting...\n"
