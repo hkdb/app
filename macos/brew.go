@@ -5,13 +5,14 @@ import (
 
 	"github.com/hkdb/app/db"
 	"github.com/hkdb/app/utils"
+	"github.com/hkdb/app/env"
 
 	"fmt"
 	"os"
 	"os/exec"
 )
 
-var mgr = "brew"
+var mgr = env.BrewCmd
 
 func Install(pkg string) {
 

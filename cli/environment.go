@@ -188,11 +188,15 @@ func GetEnv() {
 			}
 		}
 	case "darwin":
-
-		if werr := utils.WriteToFile("BREW = y", dir+"/settings.conf"); werr != nil {
-			utils.PrintErrorExit("Write settings.conf Error:", werr)
+		settings := os.Getenv("BREW")
+		sCount := len(settings)
+		if sCount == 0 {
+			utils.AppendToFile("BREW = y", env.DBDir+"/settings.conf")
+			err := godotenv.Load(dir + "/settings.conf")
+			if err != nil {
+				fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
+			}
 		}
-
 		env.Brew = true
 		bsdPath()
 	case "freebsd":
@@ -229,6 +233,13 @@ func GetEnv() {
 	}
 	if cargo == "" || cargo == " " {
 		utils.AppendToFile("CARGO = n", env.DBDir+"/settings.conf")
+	}
+
+	if env.Brew == true {
+		brew, _ := utils.CheckIfExists(env.BrewCmd)
+		if brew == false {
+			fmt.Println(utils.ColorYellow, "Temporarily disabling Brew because it's not installed on your system. Suppress this message by disabling Brew on app by running \"app-m brew disable\"...\n", utils.ColorReset)
+		}
 	}
 
 	if env.Go == true {
@@ -295,6 +306,9 @@ func bsdPath() {
 	env.GoCmd = "/usr/local/bin/go"
 	env.PipCmd = "/usr/local/bin/pip"
 	env.CargoCmd = "/usr/local/bin/pip"
+	
+	if runtime.GOARCH == "arm64" && runtime.GOOS =="darwin" {
+		env.BrewCmd = env.BrewSiliconCmd
+	}
 
 }
-
