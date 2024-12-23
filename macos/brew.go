@@ -26,6 +26,7 @@ func Install(pkg string) {
 		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
+	loadMgr()
 	install := exec.Command(mgr, "install", pkg)
 	utils.RunCmd(install, "Installation Error:")
 
@@ -49,6 +50,7 @@ func Remove(pkg string) {
 		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
+	loadMgr()
 	remove := exec.Command(mgr, "uninstall", pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
@@ -74,6 +76,7 @@ func AutoRemove() {
 
 func ListSystem() {
 
+	loadMgr()
 	list := exec.Command(mgr, "list")
 	utils.RunCmd(list, "List Package Error:")
 
@@ -81,12 +84,14 @@ func ListSystem() {
 
 func ListSystemSearch(pkg string) {
 
+	loadMgr()
 	listSearch := exec.Command(mgr, "list", "|", "grep", pkg)
 	utils.RunCmd(listSearch, "List Package Search Error:")
 }
 
 func Update() {
 
+	loadMgr()
 	update := exec.Command(mgr, "update")
 	utils.RunCmd(update, "Update Error:")
 
@@ -94,6 +99,7 @@ func Update() {
 
 func Upgrade() {
 
+	loadMgr()
 	upgrade := exec.Command(mgr, "update")
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
@@ -107,6 +113,7 @@ func DistUpgrade() {
 
 func Search(pkg string) {
 
+	loadMgr()
 	search := exec.Command(mgr, "search", pkg)
 	utils.RunCmd(search, "Search Error:")
 
@@ -122,7 +129,12 @@ func InstallAll() {
 		os.Exit(1)
 	}
 	args := append([]string{"install"}, strings.Split(pkgs, " ")...)
+	loadMgr()
 	installAll := exec.Command(mgr, args...)
 	utils.RunCmd(installAll, "Installation Error:")
 
+}
+
+func loadMgr() {
+	mgr = env.BrewCmd
 }
