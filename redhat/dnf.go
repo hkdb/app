@@ -127,7 +127,16 @@ func Update() {
 	}
 
 	update := exec.Command(sudo[0], sudo[1], sudo[2], command)
-	utils.RunCmd(update, "Update Error:")
+
+	update.Stdin = os.Stdin
+	update.Stdout = os.Stdout
+	update.Stderr = os.Stderr
+	update.Env = os.Environ()
+	if err := update.Run(); err != nil && err.ExitCode() != 100 {
+		utils.PrintErrorExit(msg, err)
+	}
+
+	fmt.Println()
 
 }
 
