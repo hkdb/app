@@ -132,8 +132,8 @@ func Update() {
 	update.Stdout = os.Stdout
 	update.Stderr = os.Stderr
 	update.Env = os.Environ()
-	if err := update.Run(); err != nil && err.ExitCode() != 100 {
-		utils.PrintErrorExit(msg, err)
+	if err := update.Run(); err != nil && err.Error() != "exit status 100" {
+		utils.PrintErrorExit("Update Error:", err)
 	}
 
 	fmt.Println()
