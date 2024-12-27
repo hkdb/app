@@ -179,6 +179,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.22
+
+- Fixed mac self update
+
+
 #### v0.21
 
 - Fixed regression of brew not working in Linux derived from v0.19 changes
