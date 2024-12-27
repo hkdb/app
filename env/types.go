@@ -30,6 +30,7 @@ var Snap = true
 var SnapCmd = "/usr/bin/snap"
 var Brew = true
 var BrewIntelCmd = "/usr/local/bin/brew"
+var BrewLinuxCmd = "/home/linuxbrew/.linuxbrew/bin/brew"
 var BrewSiliconCmd = "/opt/homebrew/bin/brew"
 var BrewCmd = BrewIntelCmd
 var Go = true

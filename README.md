@@ -179,6 +179,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.21
+
+- Fixed Linux brew regression from v0.19 changes
+
+
 #### v0.20
 
 - Fixed dnf update error handling [#13](https://github.com/hkdb/app/issues/13)

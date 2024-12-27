@@ -85,6 +85,7 @@ func GetEnv() {
 		if snap := os.Getenv("SNAP"); snap != "y" {
 			env.Snap = false
 		}
+		env.BrewCmd = env.BrewLinuxCmd
 		if brew := os.Getenv("BREW"); brew != "y" {
 			env.Brew = false
 		}
