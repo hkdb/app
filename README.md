@@ -181,7 +181,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 #### v0.21
 
-- Fixed Linux brew regression from v0.19 changes
+- Fixed regression of brew not working in Linux derived from v0.19 changes
 
 
 #### v0.20
