@@ -276,7 +276,7 @@ func restoreOne(r string) {
 
 func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 
-	if env.OSType == "Mac" && (m != "brew" || m != "app") {
+	if env.OSType == "Mac" && m != "brew" && m != "app" {
 		utils.PrintErrorMsgExit("Error:", "macOS currently only supports Homebrew...")
 	}
 

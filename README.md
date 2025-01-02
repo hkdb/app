@@ -179,6 +179,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.23
+
+- Really fixed mac self update...
+
+
 #### v0.22
 
 - Fixed mac self update
