@@ -179,6 +179,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.24
+
+- Fixed restoration of .sh added repositories
+
+
 #### v0.23
 
 - Really fixed mac self update...

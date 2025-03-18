@@ -27,7 +27,7 @@ func RestoreAllRepos(pm string) {
 		utils.PrintErrorExit("Read Repo List Error:", err)
 	}
 
-	for i := 0; i < len(repos); i++ {
+	for i := 1; i < len(repos); i++ {
 		name := repos[i]
 		rType := utils.GetRepoRestoreType(pm, repos[i])
 		switch pm {
@@ -36,7 +36,7 @@ func RestoreAllRepos(pm string) {
 			case "ppa":
 				debian.AddRepo(name, "")
 			case "sh":
-				debian.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
+				debian.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
 			case "json":
 				utils.PrintErrorMsgExit("Url/Gpg repo records are not supported for Debian based distros...", "")
 			default:
@@ -45,7 +45,7 @@ func RestoreAllRepos(pm string) {
 		case "dnf":
 			switch rType {
 			case "sh":
-				redhat.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
+				redhat.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
 			case "json":
 				r, g, err := db.GetSetup(pm, repos[i])
 				if err != nil {
@@ -58,7 +58,7 @@ func RestoreAllRepos(pm string) {
 		case "zypper":
 			switch rType {
 			case "sh":
-				suse.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
+				suse.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
 			case "json":
 				r, g, err := db.GetSetup(pm, repos[i])
 				if err != nil {
@@ -71,7 +71,7 @@ func RestoreAllRepos(pm string) {
 		case "pacman":
 			switch rType {
 			case "sh":
-				arch.AddRepo(env.DBDir+"/packages/repos/local/"+pm+"/"+name+".sh", "")
+				arch.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
 			}

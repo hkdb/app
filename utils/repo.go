@@ -162,11 +162,11 @@ func GetRepoRestoreType(pm, repo string) string {
 
 	rType := ""
 	prFile := env.DBDir + "/packages/repo/local/" + pm + "/" + repo + ".json"
-	if _, err := os.Stat(prFile); os.IsExist(err) {
+	if _, err := os.Stat(prFile); err == nil {
 		rType = "json"
 	}
 	psFile := env.DBDir + "/packages/repo/local/" + pm + "/" + repo + ".sh"
-	if _, err := os.Stat(psFile); os.IsExist(err) {
+	if _, err := os.Stat(psFile); err == nil {
 		if rType == "json" {
 			PrintErrorMsgExit("Record Error:", "Something is wrong with your app records. There should not be both a .json and .sh file referencing "+repo+"...")
 		}
