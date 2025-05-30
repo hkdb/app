@@ -134,17 +134,9 @@ echo -e "✅️ Making sure $HOME/.local/bin is in PATH...\n"
 
 # Notice: Fish shell uses a different syntax for setting variables.
 if [[ $SHELLTYPE = "fish" ]]; then 
-  SHELLPROFILE_CONTENTS="\
-    if test -d $HOME.local/bin; \n\
-      set -gx PATH "$HOME.local/bin:$PATH"; \n\
-    end\
-  ";
+  SHELLPROFILE_CONTENTS="if test -d $HOME.local/bin;\n  set -gx PATH "$HOME.local/bin:$PATH";\nend";
 else
-  SHELLPROFILE_CONTENTS=" \
-    if [ -d \"$HOME/.local/bin\" ]; then \n\
-      PATH=\"$HOME/.local/bin:\$PATH\"\n\
-    fi\
-  ";
+  SHELLPROFILE_CONTENTS="if [ -d \"$HOME/.local/bin\" ]; then\n  PATH=\"$HOME/.local/bin:\$PATH\"\nfi";
 fi
 
 SOURCES_STRING="\
