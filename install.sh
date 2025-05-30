@@ -102,7 +102,7 @@ if [[ $SHELLTYPE == "zsh" ]]; then
 fi
 
 if [[ $SHELLTYPE == "fish" ]]; then
-  SHELLRC="$HOME/.config/fish/config.fish"
+  SHELLRC="$HOME/.config/fish/conf.d/00-app.fish"
 fi
 
 if [[ $SHELLRC == "none" ]]; then
@@ -131,15 +131,36 @@ if [[ ! -d "$HOME/.local/bin" ]]; then
 fi
 
 echo -e "✅️ Making sure $HOME/.local/bin is in PATH...\n"
+
+# Notice: Fish shell uses a different syntax for setting variables.
+if [[ $SHELLTYPE = "fish" ]]; then 
+  SHELLPROFILE_CONTENTS="\
+    if test -d $HOME.local/bin; \n\
+      set -gx PATH "$HOME.local/bin:$PATH"; \n\
+    end\
+  ";
+else
+  SHELLPROFILE_CONTENTS=" \
+    if [ -d \"$HOME/.local/bin\" ]; then \n\
+      PATH=\"$HOME/.local/bin:\$PATH\"\n\
+    fi\
+  ";
+fi
+
+SOURCES_STRING="\
+  # Added by app (https://github.com/hkdb/app) installation \n\
+  source $SHELLPROFILE \
+";
+
 if [[ -f $SHELLPROFILE ]]; then
   PCHECK=$(grep ".local/bin" $SHELLPROFILE)
   if [[ "$PCHECK" == "" ]]; then
-    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
-    echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
+    echo -e $SHELLPROFILE_CONTENTS >> $SHELLPROFILE
+    echo -e $SOURCES_STRING >> $SHELLRC
   fi
 else
-    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
-    echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
+    echo -e $SHELLPROFILE_CONTENTS >> $SHELLPROFILE
+    echo -e $SOURCES_STRING >> $SHELLRC
 fi
 
 DISTRO=""
