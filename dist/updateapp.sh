@@ -4,7 +4,7 @@
 # app updater #
 ###############
 
-VER="v0.24"
+VER="v0.25"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
@@ -37,6 +37,8 @@ if [[ "$UNAMEM" == "x86_64" ]] || [[ "$UNAMEM" == "amd64" ]]; then
   CPUARCH="amd64"
 elif [[ "$UNAMEM" == "arm64" ]]; then
   CPUARCH="arm64"
+elif [[ "$UNAMEM" == "aarch64" ]]; then
+  CPUARCH="aarch64"
 else
   echo -e "❌️ CPU Architecture not supported... Exiting...\n"
   exit 1
@@ -58,7 +60,7 @@ fi
 
 echo -e "✅️ Making sure there's a $HOME/.local/bin...\n"
 if [[ ! -d "$HOME/.local/bin" ]]; then
-  echo -e "\n❌️ $HOME/.local/bin does not exist... Exiting...\n"
+  echo -e "\n❌️ $HOME/.local/bin does not exist... Use the install script instead... Exiting...\n"
   exit 1
 fi
 

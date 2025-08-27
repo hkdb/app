@@ -4,7 +4,7 @@
 # app installer #
 #################
 
-VER="v0.24"
+VER="v0.25"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
@@ -47,6 +47,8 @@ if [[ "$UNAMEM" == "x86_64" ]] || [[ "$UNAMEM" == "amd64" ]]; then
   CPUARCH="amd64"
 elif [[ "$UNAMEM" == "arm64" ]]; then
   CPUARCH="arm64"
+elif [[ "$UNAMEM" == "aarch64" ]]; then
+  CPUARCH="aarch64"
 else
   echo -e "❌️ CPU Architecture not supported... Exiting...\n"
   exit 1
@@ -136,7 +138,11 @@ if [[ -f $SHELLPROFILE ]]; then
     echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
   fi
 else
-    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
+    if [[ $SHELLTYPE == "fish" ]]; then
+      echo -e "if test -d \"$HOME/.local/bin\"\n   set -U fish_user_paths $HOME/.local/bin \$PATH\nend" >> $SHELLPROFILE
+    else
+      echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
+    fi
     echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
 fi
 
@@ -152,7 +158,7 @@ unzip -d $HOME/.local/bin/ $HOME/.local/bin/app-$USEROS-$CPUARCH-$VER.zip
 mv $HOME/.local/bin/app-$USEROS-$CPUARCH $HOME/.local/bin/app
 
 echo -e "\n🧹️ Clean-up...\n"
-#rm $HOME/.local/bin/app-$USEROS-$CPUARCH-$VER.zip
+rm $HOME/.local/bin/app-$USEROS-$CPUARCH-$VER.zip
 
 echo -e "\n${GREEN}**************"
 echo -e " 💯️ COMPLETED"

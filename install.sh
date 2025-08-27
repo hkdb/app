@@ -48,6 +48,8 @@ if [[ "$UNAMEM" == "x86_64" ]] || [[ "$UNAMEM" == "amd64" ]]; then
   CPUARCH="amd64"
 elif [[ "$UNAMEM" == "arm" ]]; then
   CPUARCH="arm64"
+elif [[ "$UNAMEM" == "aarch64" ]]; then
+  CPUARCH="aarch64"
 else
   echo -e "❌️ CPU Architecture not supported... Exiting...\n"
   exit 1
@@ -138,7 +140,11 @@ if [[ -f $SHELLPROFILE ]]; then
     echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
   fi
 else
-    echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
+    if [[ $SHELLTYPE == "fish" ]]; then
+      echo -e "if test -d \"$HOME/.local/bin\"\n   set -U fish_user_paths $HOME/.local/bin \$PATH\nend" >> $SHELLPROFILE
+    else
+      echo -e "\nif [ -d \"$HOME/.local/bin\" ]; then\n\tPATH=\"$HOME/.local/bin:\$PATH\"\nfi" >> $SHELLPROFILE
+    fi
     echo -e "\n# Added by app (https://github.com/hkdb/app) installation\nsource $SHELLPROFILE" >> $SHELLRC
 fi
 

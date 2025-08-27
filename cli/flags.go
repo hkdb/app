@@ -39,6 +39,13 @@ func ParseFlags() env.Flags {
 		utils.PrintErrorMsgExit("Input Error:", "If you are trying to specify multiple packages, wrap the pacakges with single quotes....")
 	}
 
+	// Adding enable reminder
+	if a == "enable" || a == "disable" {
+		if p != "" {
+			utils.PrintErrorMsgExit("Syntax Error:", "The proper command to " + a + " " + p + " is:\n\n\t\tapp -m " + p + " " + a)
+		}
+	}
+
 	// For app update
 	if *m == "app" && a != "update" {
 		utils.PrintErrorMsgExit("Input Error:", "app can only be specified to update itself...")

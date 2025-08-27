@@ -179,6 +179,14 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.25
+
+- Changed single installation command to be more universal
+- Fixed fish shell support
+- Added aarch64 support #22
+- Added reminder for enable/disable synatax errors #23
+
+
 #### v0.24
 
 - Fixed restoration of .sh added repositories
