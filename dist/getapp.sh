@@ -48,7 +48,7 @@ if [[ "$UNAMEM" == "x86_64" ]] || [[ "$UNAMEM" == "amd64" ]]; then
 elif [[ "$UNAMEM" == "arm64" ]]; then
   CPUARCH="arm64"
 elif [[ "$UNAMEM" == "aarch64" ]]; then
-  CPUARCH="aarch64"
+  CPUARCH="arm64"
 else
   echo -e "❌️ CPU Architecture not supported... Exiting...\n"
   exit 1

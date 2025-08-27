@@ -183,7 +183,7 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 - Changed single installation command to be more universal
 - Fixed fish shell support
-- Added aarch64 support [#22](https://github.com/hkdb/app/issues/22)
+- Fixed aarch64 support [#22](https://github.com/hkdb/app/issues/22)
 - Added reminder for enable/disable synatax errors [#23](https://github.com/hkdb/app/issues/23)
 
 
