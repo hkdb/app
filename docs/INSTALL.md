@@ -3,7 +3,7 @@
 Run the below command in the terminal:
 
 ```
-bash <(curl -sL https://hkdb.github.io/app/getapp.sh)
+curl -sL https://hkdb.github.io/app/getapp.sh | bash
 ```
 
 You can also install app by compiling yourself:

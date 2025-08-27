@@ -64,7 +64,7 @@ See [USAGE EXAMPLES](docs/EXAMPLES.md) to see a more complete dive into how to u
 Run the below command in the terminal:
 
 ```
-bash <(curl -sL https://hkdb.github.io/app/getapp.sh)
+curl -sL https://hkdb.github.io/app/getapp.sh | bash
 ```
 
 You can also install app by compiling yourself:
