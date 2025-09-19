@@ -110,7 +110,7 @@ Tracking main branch:
   - Redhat derivatives
     - Fedora, RHEL, Rocky, CentOS, Oracle, ClearOS, AmazonAMI
   - Arch derivatives
-    - Arch, Manjaro, Garuda, Endeavour
+    - Arch, Manjaro, Garuda, Endeavour, CachyOS
   - Suse derivatives
     - OpenSUSE Leap
     - SLES
@@ -143,19 +143,19 @@ If there are enabled package managers that you absolutely hate and want out of t
 
 Some distros are easily supported by just simply identifying them under each of the 3 base distros respectively so if there's a distro that it doesn't support already, feel free to submit an issue including the output of `cat /etc/*-release` to request for it to be added and I will try to find time to get it added on.
 
-Also, I primarily use Pop, Ubuntu, Debian, Fedora, Arch, and Garuda so other distros are a bit less tested. If you notice any issues on the other "supported" distros, please let me know by submitting an issue here.
+Also, I primarily use Pop, Ubuntu, Debian, Fedora, Arch, Garuda, CachyOS so other distros are a bit less tested. If you notice any issues on the other "supported" distros, please let me know by submitting an issue here.
 
 The native package manager of immutable distros and distros like nixos will most likely never make it to this list since for example, nixos' declarative package management pretty much addresses the same problem but just in a different way and perhaps maybe even better...
 
 `Caveat`: Arch Derivatives
 
-add-repo and rm-repo actions for Arch based distros only take bash scripts as arguments and only for pacman (not yay). There are various reasons why. Among them all, perhaps the more important ones are:
+add-repo and rm-repo actions for Arch based distros only take bash scripts as arguments ~~and only for pacman (not yay)~~. There are various reasons why. Among them all, perhaps the more important ones are:
 
-- The concept of AUR repos are largestly different than the traditional distros and Arch has AUR helpers like yay that simplfies everything already so there's really no point for this feature to be in app. However, I did make this action a scriptable input in case there are certain things you want to automate prior to doing a restore all. I don't recommend using this feature unless you really know what you are doing though.
+- The concept of AUR repos are largestly different than the traditional distros and Arch has AUR helpers like yay/paru that simplfies everything already so there's really no point for this feature to be in app. However, I did make this action a scriptable input in case there are certain things you want to automate prior to doing a restore all. I don't recommend using this feature unless you really know what you are doing though.
 - Users in Arch often don't have to add that many AURs. So it's not necessarily worth the time to automate this.
-- Yay is already a wrapper that does a great job with pretty much all that you need out-of-the-box, beyond tracking the packages users install with it, along with the above reasons, there's really no point in having add-repo and rm-repo for yay.
+- ~~yay is already a wrapper that does a great job with pretty much all that you need out-of-the-box, beyond tracking the packages users install with it, along with the above reasons, there's really no point in having add-repo and rm-repo for yay.~~
 
-app does not handle local packages for Arch based distros as most of the time, users in Arch that deal with local packages are compiling their own packages from source which is sort of out of scope for what app is trying to solve. Unless someone tells me I am wrong, there aren't really pre-compiled packages out there that you can't really get from a combination of pacman, Arch AUR, and Chaotic. If someone tells me that they have a use case that says otherwise, it's most likely involving only 1 or 2 packages or some very specific dev project related subset which again, makes this feature fall under "not worth the time to automate" and "out of scope".
+app currently does not handle local packages for Arch based distros~~as most of the time, users in Arch that deal with local packages are compiling their own packages from source which is sort of out of scope for what app is trying to solve. Unless someone tells me I am wrong, there aren't really pre-compiled packages out there that you can't really get from a combination of pacman, Arch AUR, and Chaotic. If someone tells me that they have a use case that says otherwise, it's most likely involving only 1 or 2 packages or some very specific dev project related subset which again, makes this feature fall under "not worth the time to automate" and "out of scope"~~.
 
 `Caveat`: Snap
 
@@ -178,6 +178,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 
 ### VERSIONS
+
+#### v0.26
+
+- Arch, AUR, & Enable/Disable Native Package Managers [#24](https://github.com/hkdb/app/issues/24)
+
 
 #### v0.25
 

@@ -10,7 +10,7 @@ import (
 	"os/exec"
 )
 
-func YayAddRepo(s, g string) {
+func ParuAddRepo(s, g string) {
 
 	repo := s
 	if sExt := utils.GetFileExtension(s); sExt == "sh" {
@@ -18,7 +18,7 @@ func YayAddRepo(s, g string) {
 	} else {
 		utils.PrintErrorMsgExit("Input Error:", "Arch based distros will only take bash scripts as the add-repo arg...")
 	}
-	exists, err := db.RepoExists("yay", repo)
+	exists, err := db.RepoExists("paru", repo)
 	if err != nil {
 		utils.PrintErrorExit("Error:", err)
 	}
@@ -41,19 +41,19 @@ func YayAddRepo(s, g string) {
 	os.Chmod(sFull, 0755)
 	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
 	utils.RunCmd(runScript, "Script Error:")
-	utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/yay")
-	utils.Copy(sFull, env.DBDir+"/packages/repo/local/yay/"+s)
+	utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/paru")
+	utils.Copy(sFull, env.DBDir+"/packages/repo/local/paru/"+s)
 	name := utils.GetFileName(s)
 
 	fmt.Println("\n" + name + " has been added...\n")
 	// Record added repo
-	if err := db.RecordRepo("yay", name); err != nil {
+	if err := db.RecordRepo("paru", name); err != nil {
 		utils.PrintErrorExit("Repo Record Error:", err)
 	}
 
 }
 
-func YayRemoveRepo(s string) {
+func ParuRemoveRepo(s string) {
 
 	repo := s
 	if sExt := utils.GetFileExtension(s); sExt == "sh" {
@@ -61,7 +61,7 @@ func YayRemoveRepo(s string) {
 	} else {
 		utils.PrintErrorMsgExit("Input Error:", "Arch based distros will only take bash scripts as the rm-repo arg...")
 	}
-	exists, err := db.RepoExists("yay", repo)
+	exists, err := db.RepoExists("paru", repo)
 	if err != nil {
 		utils.PrintErrorExit("Error:", err)
 	}
@@ -86,11 +86,11 @@ func YayRemoveRepo(s string) {
 	utils.RunCmd(runScript, "Script Error:")
 
 	// Record removed repo
-	if err = db.RemoveRepo("yay", "sh", repo); err != nil {
+	if err = db.RemoveRepo("paru", "sh", repo); err != nil {
 		utils.PrintErrorExit("Repo Remove Error:", err)
 	}
 
-	utils.DeleteDirIfEmpty(env.DBDir + "/packages/repo/local/yay")
+	utils.DeleteDirIfEmpty(env.DBDir + "/packages/repo/local/paru")
 
 	fmt.Println(repo + " has been removed...\n")
 

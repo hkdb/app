@@ -22,8 +22,15 @@ var DBDir string
 var Env = "/usr/bin/env"
 var Bash = "bash"
 var Header = true
+var Apt = true
+var Dnf = true
+var Pacman = true
+var Zypper = true
 var Yay = true
 var YayCmd = "/usr/bin/yay"
+var Paru = true
+var ParuCmd = "/usr/bin/paru"
+var NixEnv = true
 var Flatpak = true
 var FlatpakCmd = "/usr/bin/flatpak"
 var Snap = true

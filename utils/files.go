@@ -290,6 +290,31 @@ func EditSettings(lType, value string) {
 
 }
 
+func AppendSetting(s string) {
+	err := AppendToFile(s, env.DBDir+"/settings.conf")
+	if err != nil {
+		PrintErrorExit("Append settings Error:", err)
+	}
+}
+
+func SearchSetting(lType string) bool {
+
+	input, err := ioutil.ReadFile(env.DBDir + "/settings.conf")
+	if err != nil {
+		PrintErrorExit("Read settings Error:", err)
+	}
+
+	lines := strings.Split(string(input), "\n")
+
+	for i := 0; i < len(lines); i++ {
+		if strings.Contains(lines[i], lType) {
+			return true
+		}
+	}
+	return false
+
+}
+
 func ReadDotDesktop(file string) (*DotDesktop, error) {
 
 	dd := &DotDesktop{}

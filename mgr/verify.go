@@ -7,10 +7,40 @@ import (
 func isEnabled(pm string) bool {
 
 	switch pm {
-	case "apt", "dnf", "pacman", "pkg", "zypper", "nix-env", "app":
+	case "pkg", "app":
+		return true
+	case "apt":
+		if env.Apt == false {
+			return false
+		}
+		return true
+	case "dnf":
+		if env.Dnf == false {
+			return false
+		}
+		return true
+	case "pacman":
+		if env.Pacman == false {
+			return false
+		}
+		return true
+	case "zypper":
+		if env.Zypper == false {
+			return false
+		}
+		return true
+	case "nix-env":
+		if env.NixEnv == false {
+			return false
+		}
 		return true
 	case "yay":
 		if env.Yay == false {
+			return false
+		}
+		return true
+	case "paru":
+		if env.Paru == false {
 			return false
 		}
 		return true

@@ -75,6 +75,20 @@ func RestoreAllRepos(pm string) {
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
 			}
+		case "yay":
+			switch rType {
+			case "sh":
+				arch.YayAddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+			default:
+				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
+			}
+		case "paru":
+			switch rType {
+			case "sh":
+				arch.ParuAddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+			default:
+				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
+			}
 		case "flatpak":
 			switch rType {
 			case "json":

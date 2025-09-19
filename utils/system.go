@@ -5,7 +5,6 @@ import (
 )
 
 func GetNativePkgMgr() string {
-
 	switch env.OSType {
 	case "Linux":
 		switch env.Base {
@@ -20,7 +19,7 @@ func GetNativePkgMgr() string {
 		case "nixos":
 			return "nix-env"
 		default:
-			PrintErrorMsgExit("Error: Distro not supported...", "")
+			PrintErrorMsgExit("Get Native PM Error: Distro not supported...", "")
 		}
 	case "macos":
 		PrintErrorMsgExit("macos is not implemented yet...", "")
@@ -32,4 +31,25 @@ func GetNativePkgMgr() string {
 
 	return ""
 
+}
+
+func IsNativeEnabled() bool {
+	pm := GetNativePkgMgr()
+
+	switch pm {
+	case "apt":
+		return env.Apt
+	case "dnf":
+		return env.Dnf
+	case "pacman":
+		return env.Pacman
+	case "zypper":
+		return env.Zypper
+	case "nix-env":
+		return env.NixEnv
+	default:
+		PrintErrorMsgExit("Native PM Check Error:", "This native package amanger is not supported...")
+	}
+
+	return false
 }

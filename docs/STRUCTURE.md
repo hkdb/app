@@ -87,6 +87,8 @@ The config directory app creates on your machine has the following structure to 
           |_ snap.json
           |
           |_ yay.json
+          |
+          |_ paru.json
 ```
 
 You can of course choose to work backwards and mannually edit/compose the data inside this directory but you better know what you are doing or something really wrong could happen. Be warned.... 

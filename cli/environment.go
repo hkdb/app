@@ -16,7 +16,7 @@ import (
 var deb_base = []string{"debian", "ubuntu", "pop", "mx", "kali", "raspbian", "linuxmint"}
 var rh_base = []string{"redhat", "fedora", "clearos", "oracle", "rocky", "amazonami" }
 var suse_base = []string{"opensuse", "opensuse-leap", "suse"}
-var arch_base = []string{"arch", "garuda", "manjaro", "endeavour"}
+var arch_base = []string{"arch", "garuda", "manjaro", "endeavour", "cachyos"}
 var nixos_base = []string{"nixos"}
 
 // Load envfile and get environment variables
@@ -69,21 +69,41 @@ func GetEnv() {
 			}
 		}
 
-		if werr := utils.WriteToFile("YAY = n\nFLATPAK = n\nSNAP = n\nAPPIMAGE = n", dir+"/settings.conf"); werr != nil {
+		if werr := utils.WriteToFile("FLATPAK = n\nSNAP = n\nAPPIMAGE = n", dir+"/settings.conf"); werr != nil {
 			utils.PrintErrorExit("Write settings.conf Error:", werr)
 		}
+
 	}
 
 	switch osType {
 	case "linux":
-		if yay := os.Getenv("YAY"); yay != "y" {
+		yay := os.Getenv("YAY")
+		if yay != "y" {
 			env.Yay = false
 		}
-		if flatpak := os.Getenv("FLATPAK"); flatpak != "y" {
+		if yay == "" || yay == " " {
+			utils.AppendToFile("YAY = n", env.DBDir+"/settings.conf")
+		}
+		paru := os.Getenv("PARU")
+		if paru != "y" {
+			env.Paru = false
+		}
+		if paru == "" || paru == " " {
+			utils.AppendToFile("PARU = n", env.DBDir+"/settings.conf")
+		}
+		flatpak := os.Getenv("FLATPAK")
+		if flatpak != "y" {
 			env.Flatpak = false
 		}
-		if snap := os.Getenv("SNAP"); snap != "y" {
+		if flatpak == "" || flatpak == " " {
+			utils.AppendToFile("FLATPAK = n", env.DBDir+"/settings.conf")
+		}
+		snap := os.Getenv("SNAP")
+		if snap != "y" {
 			env.Snap = false
+		}
+		if snap == "" || snap == " " {
+			utils.AppendToFile("SNAP = n", env.DBDir+"/settings.conf")
 		}
 		env.BrewCmd = env.BrewLinuxCmd
 		if brew := os.Getenv("BREW"); brew != "y" {
@@ -161,11 +181,77 @@ func GetEnv() {
 			}
 		}
 
+		npm := utils.GetNativePkgMgr()
+		apt := os.Getenv("APT")
+		onoroff := "n"
+		if apt != "y" {
+			env.Apt = false
+		}
+		if apt == "" || apt == " " {
+			if npm == "apt" {
+				onoroff = "y"
+			}
+			utils.AppendToFile("APT = " + onoroff, env.DBDir+"/settings.conf")
+			onoroff = "n"
+		}
+		dnf := os.Getenv("DNF")
+		if dnf != "y" {
+			env.Dnf = false
+		}
+		if dnf == "" || dnf == " " {
+			if npm == "dnf" {
+				onoroff = "y"
+			}
+			utils.AppendToFile("DNF = " + onoroff, env.DBDir+"/settings.conf")
+			onoroff = "n"
+		}
+		pacman := os.Getenv("PACMAN")
+		if pacman != "y" {
+			env.Pacman = false
+		}
+		if pacman == "" || pacman == " " {
+			if npm == "pacman" {
+				onoroff = "y"
+			}
+			utils.AppendToFile("PACMAN = " + onoroff, env.DBDir+"/settings.conf")
+			onoroff = "n"
+		}
+		zypper := os.Getenv("ZYPPER")
+		if zypper != "y" {
+			env.Pacman = false
+		}
+		if zypper == "" || zypper == " " {
+			if npm == "zypper" {
+				onoroff = "y"
+			}
+			utils.AppendToFile("ZYPPER = " + onoroff, env.DBDir+"/settings.conf")
+			onoroff = "n"
+		}
+		nixenv := os.Getenv("NIXENV")
+		if nixenv != "y" {
+			env.NixEnv = false
+		}
+		if nixenv == "" || nixenv == " " {
+			if npm == "nix-env" {
+				onoroff = "y"
+			}
+			utils.AppendToFile("NIXENV = " + onoroff, env.DBDir+"/settings.conf")
+			onoroff = "n"
+		}
+
+
 		// Temporarily disabling package manager that don't exist
 		if env.Base == "arch" && env.Yay == true {
 			yay, _ := utils.CheckIfExists(env.YayCmd)
 			if yay == false {
 				fmt.Println(utils.ColorYellow, "Temporarily disabling Yay because it's not installed on your system. Suppress this message by disabling Yay on app by running \"app -m yay disable\"...\n", utils.ColorReset)
+			}
+		}
+
+		if env.Base == "arch" && env.Paru == true {
+			paru, _ := utils.CheckIfExists(env.ParuCmd)
+			if paru == false {
+				fmt.Println(utils.ColorYellow, "Temporarily disabling Paru because it's not installed on your system. Suppress this message by disabling Paru on app by running \"app -m paru disable\"...\n", utils.ColorReset)
 			}
 		}
 

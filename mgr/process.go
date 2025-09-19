@@ -56,35 +56,66 @@ func restoreAll() {
 	switch env.OSType {
 	case "Linux":
 		pm := utils.GetNativePkgMgr()
-		fmt.Print("Restore all " + pm + " repos and packages? (Y/n) ")
-		native := utils.Confirm()
-		if native == true {
-			switch env.Base {
-			case "debian":
-				restore.RestoreAllRepos("apt")
-				debian.InstallAll()
-				//fmt.Println("Debain Install All")
-			case "redhat":
-				restore.RestoreAllRepos("dnf")
-				redhat.InstallAll()
-				//fmt.Println("Redhat Install All")
-			case "arch":
-				restore.RestoreAllRepos("pacman")
-				arch.InstallAll()
-				//fmt.Println("Arch Install All")
-			case "suse":
-				restore.RestoreAllRepos("suse")
-				arch.InstallAll()
-			case "nixos":
-				fmt.Println("Skipping nix-env... It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
+		nable := false
+		switch pm {
+		case "apt":
+			if env.Apt == true {
+				nable = true
+			} 
+		case "dnf":
+			if env.Dnf == true {
+				nable = true
+			}
+		case "pacman":
+			if env.Pacman == true {
+				nable = true
+			}
+		case "zypper":
+			if env.Zypper == true {
+				nable = true
 			}
 		}
+		if nable == true {
+			fmt.Print("Restore all " + pm + " repos and packages? (Y/n) ")
+			native := utils.Confirm()
+			if native == true {
+				switch env.Base {
+				case "debian":
+					restore.RestoreAllRepos("apt")
+					debian.InstallAll()
+					//fmt.Println("Debain Install All")
+				case "redhat":
+					restore.RestoreAllRepos("dnf")
+					redhat.InstallAll()
+					//fmt.Println("Redhat Install All")
+				case "arch":
+					restore.RestoreAllRepos("pacman")
+					arch.InstallAll()
+					//fmt.Println("Arch Install All")
+				case "suse":
+					restore.RestoreAllRepos("suse")
+					arch.InstallAll()
+				case "nixos":
+					fmt.Println("Skipping nix-env... It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
+				}
+			}
+		}
+		
 		if env.Base == "arch" && env.Yay == true {
-			fmt.Print("Restore all yay apps? (Y/n) ")
+			fmt.Print("Restore all yay repos and packages? (Y/n) ")
 			fp := utils.Confirm()
 			if fp == true {
 				restore.RestoreAllRepos("yay")
-				flatpak.InstallAll()
+				arch.YayInstallAll()
+			}
+		}
+
+		if env.Base == "arch" && env.Paru == true {
+			fmt.Print("Restore all paru repos and packages? (Y/n) ")
+			fp := utils.Confirm()
+			if fp == true {
+				restore.RestoreAllRepos("paru")
+				arch.ParuInstallAll()
 			}
 		}
 
@@ -187,6 +218,9 @@ func restoreOne(r string) {
 				utils.PrintErrorMsgExit("Error:", "You are trying to restore with dnf on a non-dnf system...\n")
 			}
 		case "pacman":
+			if env.Pacman == false {
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run", "app -m "+r+" enable\n")
+			}
 			npm := utils.GetNativePkgMgr()
 			if npm == "pacman" {
 				restore.RestoreAllRepos("pacman")
@@ -203,6 +237,16 @@ func restoreOne(r string) {
 				arch.YayInstallAll()
 			} else {
 				utils.PrintErrorMsgExit("Error:", "You are trying to restore with yay on a non-Arch system...\n")
+			}
+		case "paru":
+			if env.Paru == false {
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run", "app -m "+r+" enable\n")
+			}
+			npm := utils.GetNativePkgMgr()
+			if npm == "pacman" {
+				arch.ParuInstallAll()
+			} else {
+				utils.PrintErrorMsgExit("Error:", "You are trying to restore with paru on a non-Arch system...\n")
 			}
 		case "zypper":
 			npm := utils.GetNativePkgMgr()
@@ -291,6 +335,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.Install(p)
 		case "yay":
 			arch.YayInstall(p)
+		case "paru":
+			arch.ParuInstall(p)
 		case "pkg":
 			freebsd.Install(p)
 		case "zypper":
@@ -325,6 +371,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.Remove(p)
 		case "yay":
 			arch.YayRemove(p)
+		case "paru":
+			arch.ParuRemove(p)
 		case "pkg":
 			freebsd.Remove(p)
 		case "zypper":
@@ -359,6 +407,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.Purge(p)
 		case "yay":
 			arch.YayPurge(p)
+		case "paru":
+			arch.ParuPurge(p)
 		case "pkg":
 			freebsd.Purge(p)
 		case "zypper":
@@ -391,6 +441,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.Search(p)
 		case "yay":
 			arch.YaySearch(p)
+		case "paru":
+			arch.ParuSearch(p)
 		case "pkg":
 			freebsd.Search(p)
 		case "zypper":
@@ -423,6 +475,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.Update()
 		case "yay":
 			arch.YayUpdate()
+		case "paru":
+			arch.ParuUpdate()
 		case "pkg":
 			freebsd.Update()
 		case "zypper":
@@ -459,6 +513,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				arch.Upgrade()
 			case "yay":
 				arch.YayUpgrade()
+			case "paru":
+				arch.ParuUpgrade()
 			case "pkg":
 				freebsd.Upgrade()
 			case "zypper":
@@ -482,44 +538,55 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				os.Exit(1)
 			}
 		case "all":
-			switch m {
-			case "apt":
-				fmt.Println("Updating APT repos:\n")
-				debian.Update()
-				fmt.Println("\nUpgrading with APT:\n")
-				debian.Upgrade()
-			case "dnf":
-				fmt.Println("\nUpgrading with DNF:\n")
-				redhat.Update()
-				redhat.Upgrade()
-			case "pacman":
-				fmt.Println("\nUpgrading with PACMAN:\n")
-				arch.Upgrade()
-			case "pkg":
-				fmt.Println("\nUpgrading with PKG:\n")
-				freebsd.Update()
-				freebsd.Upgrade()
-			case "zypper":
-				fmt.Println("\nUpgrading with ZYPPER:\n")
-				suse.Update()
-				suse.Upgrade()
-			case "nix-env":
-				utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
-			case "brew":
-				if env.OSType != "Mac" {
+			nabled := utils.IsNativeEnabled()
+			if nabled == true {
+				switch m {
+				case "apt":
+					fmt.Println("Updating APT repos:\n")
+					debian.Update()
+					fmt.Println("\nUpgrading with APT:\n")
+					debian.Upgrade()
+				case "dnf":
+					fmt.Println("\nUpgrading with DNF:\n")
+					redhat.Update()
+					redhat.Upgrade()
+				case "pacman":
+					fmt.Println("\nUpgrading with PACMAN:\n")
+					arch.Upgrade()
+				case "pkg":
+					fmt.Println("\nUpgrading with PKG:\n")
+					freebsd.Update()
+					freebsd.Upgrade()
+				case "zypper":
+					fmt.Println("\nUpgrading with ZYPPER:\n")
+					suse.Update()
+					suse.Upgrade()
+				case "nix-env":
+					utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
+				case "brew":
+					if env.OSType != "Mac" {
+						utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
+					}
+				default:
 					utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
 				}
-			default:
-				utils.PrintErrorMsgExit("Unsupported OS/Distro....\n", "")
 			}
 
 			if env.OSType == "Linux" {
-				if m == "pacman" && env.Yay != false {
+				npm := utils.GetNativePkgMgr()
+				if npm == "pacman" && env.Yay == true {
 					fmt.Println("\nUpgrade with YAY:\n")
 					arch.YayUpgrade()
 				}
-				if m == "pacman" && env.Yay == false {
+				if npm == "pacman" && env.Yay == false {
 					fmt.Println("Yay is disabled... Skipping...\n")
+				}
+				if npm == "pacman" && env.Paru == true {
+					fmt.Println("\nUpgrade with PARU:\n")
+					arch.ParuUpgrade()
+				}
+				if npm == "pacman" && env.Paru == false {
+					fmt.Println("Paru is disabled... Skipping...\n")
 				}
 				if env.Flatpak != false {
 					fmt.Println("\nUpgrading with FLATPAK:\n")
@@ -573,6 +640,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				arch.DistUpgrade()
 			case "yay":
 				arch.YayDistUpgrade()
+			case "paru":
+				arch.ParuDistUpgrade()
 			case "pkg":
 				freebsd.DistUpgrade()
 			case "zypper":
@@ -617,9 +686,14 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			case "nix-env":
 				fmt.Println("Skipping nix-env: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 			}
-			if m == "pacman" && env.Yay != false {
+			npm := utils.GetNativePkgMgr()
+			if npm == "pacman" && env.Yay != false {
 				fmt.Println("\nUpgrade with YAY:\n")
 				arch.YayDistUpgrade()
+			}
+			if npm == "pacman" && env.Paru != false {
+				fmt.Println("\nUpgrade with PARU:\n")
+				arch.ParuDistUpgrade()
 			}
 			if env.Flatpak != false {
 				fmt.Println("\nUpgrading with FLATPAK:\n")
@@ -664,6 +738,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.AutoRemove()
 		case "yay":
 			arch.YayAutoRemove()
+		case "paru":
+			arch.ParuAutoRemove()
 		case "pkg":
 			freebsd.AutoRemove()
 		case "zypper":
@@ -711,6 +787,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				arch.YayListSystem()
 			} else {
 				arch.YayListSystemSearch(p)
+			}
+		case "paru":
+			if p == "" {
+				arch.ParuListSystem()
+			} else {
+				arch.ParuListSystemSearch(p)
 			}
 		case "pkg":
 			if p == "" {
@@ -768,7 +850,7 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		}
 	case "history":
 		switch m {
-		case "apt", "dnf", "pacman", "yay", "pkg", "zypper", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
+		case "apt", "dnf", "pacman", "yay", "paru", "pkg", "zypper", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
 			utils.History(m, p, sort)
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
@@ -777,13 +859,31 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			os.Exit(1)
 		}
 	case "enable":
-
-		fmt.Println(m)
 		switch m {
+		case "apt":
+			env.Apt = true
+			utils.EditSettings("APT = ", "y")
+			fmt.Println("Apt has been enabled...\n")
+		case "dnf":
+			env.Dnf = true
+			utils.EditSettings("DNF = ", "y")
+			fmt.Println("Dnf has been enabled...\n")
+		case "pacman":
+			env.Yay = true
+			utils.EditSettings("PACMAN = ", "y")
+			fmt.Println("Pacman has been enabled...\n")
+		case "zypper":
+			env.Yay = true
+			utils.EditSettings("ZYPPER = ", "y")
+			fmt.Println("Zypper has been enabled...\n")
 		case "yay":
 			env.Yay = true
 			utils.EditSettings("YAY = ", "y")
 			fmt.Println("Yay has been enabled...\n")
+		case "paru":
+			env.Paru = true
+			utils.EditSettings("PARU = ", "y")
+			fmt.Println("Paru has been enabled...\n")
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
@@ -823,10 +923,30 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		}
 	case "disable":
 		switch m {
+		case "apt":
+			env.Apt = false
+			utils.EditSettings("APT = ", "n")
+			fmt.Println("Apt has been disabled...\n")
+		case "dnf":
+			env.Dnf = false
+			utils.EditSettings("DNF = ", "n")
+			fmt.Println("Dnf has been disabled...\n")
+		case "pacman":
+			env.Yay = false
+			utils.EditSettings("PACMAN = ", "n")
+			fmt.Println("Pacman has been disabled...\n")
+		case "zypper":
+			env.Yay = false
+			utils.EditSettings("ZYPPER = ", "n")
+			fmt.Println("Zypper has been disabled...\n")
 		case "yay":
 			env.Yay = false
 			utils.EditSettings("YAY = ", "n")
 			fmt.Println("Yay has been disabled...\n")
+		case "paru":
+			env.Paru = false
+			utils.EditSettings("PARU = ", "n")
+			fmt.Println("Paru has been disabled...\n")
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
@@ -874,6 +994,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.AddRepo(p, g)
 		case "yay":
 			arch.YayAddRepo(p, g)
+		case "paru":
+			arch.ParuAddRepo(p, g)
 		case "pkg":
 			freebsd.AddRepo(p, g)
 		case "zypper":
@@ -896,6 +1018,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			arch.RemoveRepo(p)
 		case "yay":
 			arch.YayRemoveRepo(p)
+		case "paru":
+			arch.ParuRemoveRepo(p)
 		case "pkg":
 			freebsd.RemoveRepo(p)
 		case "zypper":
@@ -910,7 +1034,7 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		}
 	case "ls-repo":
 		switch m {
-		case "apt", "dnf", "pacman", "yay", "zypper", "flatpak", "snap":
+		case "apt", "dnf", "pacman", "yay", "paru", "zypper", "flatpak", "snap":
 			utils.ListRepo(m, p)
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
@@ -921,8 +1045,40 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 	case "settings":
 		fmt.Println("Package Managers:\n")
 		if env.OSType == "Linux" {
+			npm := utils.GetNativePkgMgr()
+			fmt.Print(npm + ": ")
+			nabled := false
+			switch npm {
+			case "apt":
+				if env.Apt == true {
+					nabled = true
+				}
+			case "dnf":
+				if env.Dnf == true {
+					nabled = true
+				}
+			case "pacman":
+				if env.Pacman == true {
+					nabled = true
+				}
+			case "zypper":
+				if env.Zypper == true {
+					nabled = true
+				}
+			}
+			if nabled == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
 			fmt.Print("yay: ")
 			if env.Yay == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("paru: ")
+			if env.Paru == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
