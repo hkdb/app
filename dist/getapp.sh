@@ -4,7 +4,7 @@
 # app installer #
 #################
 
-VER="v0.25"
+VER="v0.26"
 CYAN='\033[0;36m'
 GREEN='\033[1;32m'
 NC='\033[0m' 
@@ -159,6 +159,8 @@ mv $HOME/.local/bin/app-$USEROS-$CPUARCH $HOME/.local/bin/app
 
 echo -e "\n🧹️ Clean-up...\n"
 rm $HOME/.local/bin/app-$USEROS-$CPUARCH-$VER.zip
+
+$HOME/.local/bin/app settings > /dev/null
 
 echo -e "\n${GREEN}**************"
 echo -e " 💯️ COMPLETED"
