@@ -34,9 +34,9 @@ func RestoreAllRepos(pm string) {
 		case "apt":
 			switch rType {
 			case "ppa":
-				debian.AddRepo(name, "")
+				debian.AddRepo(name, "", true)
 			case "sh":
-				debian.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+				debian.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "", true)
 			case "json":
 				utils.PrintErrorMsgExit("Url/Gpg repo records are not supported for Debian based distros...", "")
 			default:
@@ -45,47 +45,47 @@ func RestoreAllRepos(pm string) {
 		case "dnf":
 			switch rType {
 			case "sh":
-				redhat.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+				redhat.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "", true)
 			case "json":
 				r, g, err := db.GetSetup(pm, repos[i])
 				if err != nil {
 					utils.PrintErrorExit("Read Repo Error:", err)
 				}
-				redhat.AddRepo(r, g)
+				redhat.AddRepo(r, g, true)
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Redhat based distros...")
 			}
 		case "zypper":
 			switch rType {
 			case "sh":
-				suse.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+				suse.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "", true)
 			case "json":
 				r, g, err := db.GetSetup(pm, repos[i])
 				if err != nil {
 					utils.PrintErrorExit("Read Repo Error:", err)
 				}
-				suse.AddRepo(r, g)
+				suse.AddRepo(r, g, true)
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Suse based distros...")
 			}
 		case "pacman":
 			switch rType {
 			case "sh":
-				arch.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+				arch.AddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "", true)
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
 			}
 		case "yay":
 			switch rType {
 			case "sh":
-				arch.YayAddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+				arch.YayAddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "", true)
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
 			}
 		case "paru":
 			switch rType {
 			case "sh":
-				arch.ParuAddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "")
+				arch.ParuAddRepo(env.DBDir+"/packages/repo/local/"+pm+"/"+name+".sh", "", true)
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Arch based distros...")
 			}
@@ -96,7 +96,7 @@ func RestoreAllRepos(pm string) {
 				if err != nil {
 					utils.PrintErrorExit("Read Repo Error:", err)
 				}
-				flatpak.AddRepo(r, g)
+				flatpak.AddRepo(r, g, true)
 			default:
 				utils.PrintErrorMsgExit("Repo Records Error:", "Unrecognized record type for Flatpak...")
 			}

@@ -10,7 +10,7 @@ import (
 	"os/exec"
 )
 
-func YayAddRepo(s, g string) {
+func YayAddRepo(s, g string, restore bool) {
 
 	repo := s
 	if sExt := utils.GetFileExtension(s); sExt == "sh" {
@@ -18,12 +18,15 @@ func YayAddRepo(s, g string) {
 	} else {
 		utils.PrintErrorMsgExit("Input Error:", "Arch based distros will only take bash scripts as the add-repo arg...")
 	}
-	exists, err := db.RepoExists("yay", repo)
-	if err != nil {
-		utils.PrintErrorExit("Error:", err)
-	}
-	if exists == true {
-		utils.PrintErrorMsgExit("Error:", "This repo has already been added to app before...")
+
+	if restore == true { 
+		exists, err := db.RepoExists("yay", repo)
+		if err != nil {
+			utils.PrintErrorExit("Error:", err)
+		}
+		if exists == true {
+			utils.PrintErrorMsgExit("Error:", "This repo has already been added to app before...")
+		}
 	}
 
 	if ws := utils.HasWhiteSpace(s); ws == true {

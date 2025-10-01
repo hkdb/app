@@ -286,7 +286,7 @@ func restoreOne(r string) {
 			if env.Go == false {
 				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
-			brew.InstallAll()
+			golang.InstallAll()
 		case "pip":
 			if env.Pip == false {
 				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
@@ -987,23 +987,23 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 	case "add-repo":
 		switch m {
 		case "apt":
-			debian.AddRepo(p, g)
+			debian.AddRepo(p, g, false)
 		case "dnf":
-			redhat.AddRepo(p, g)
+			redhat.AddRepo(p, g, false)
 		case "pacman":
-			arch.AddRepo(p, g)
+			arch.AddRepo(p, g, false)
 		case "yay":
-			arch.YayAddRepo(p, g)
+			arch.YayAddRepo(p, g, false)
 		case "paru":
-			arch.ParuAddRepo(p, g)
+			arch.ParuAddRepo(p, g, false)
 		case "pkg":
 			freebsd.AddRepo(p, g)
 		case "zypper":
-			suse.AddRepo(p, g)
+			suse.AddRepo(p, g, false)
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
-			flatpak.AddRepo(p, g)
+			flatpak.AddRepo(p, g, false)
 		default:
 			fmt.Println("Unsupported pacakge manager...\n")
 			os.Exit(1)

@@ -11,7 +11,7 @@ import (
 
 func GitExists(pm, r string) (bool, error) {
 
-	aRepos := strings.Split(r, " ")
+	aRepos := strings.Fields(r)
 	repos, err := ReadPkgSlice("packages", "repo", pm)
 	if err != nil {
 		return false, err
@@ -20,7 +20,12 @@ func GitExists(pm, r string) (bool, error) {
 	for i := 0; i < len(aRepos); i++ {
 		installed := slices.Contains(repos, aRepos[i])
 		if installed == true {
-			return true, nil
+			if len(aRepos[i]) < 4 {
+				return false, nil
+			}
+			if aRepos[i][:4] == "http" { 
+				return true, nil
+			}
 		}
 	}
 

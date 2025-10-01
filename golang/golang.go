@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 var mgr = "go"
@@ -128,7 +129,11 @@ func InstallAll() {
 		utils.PrintErrorExit("go - Read ERROR:", fperr)
 		os.Exit(1)
 	}
-	installAll := exec.Command(mgr, "install", pkgs)
-	utils.RunCmd(installAll, "Installation Error:")
+	
+	pslice := strings.Fields(pkgs)
+	for i := 0; i < len(pslice);  i++ {
+		installAll := exec.Command(mgr, "install", pslice[i])
+		utils.RunCmd(installAll, "Installation Error:")
+	}
 
 }

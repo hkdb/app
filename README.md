@@ -179,6 +179,13 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.27
+
+- Fixed restore repositories
+- Fixed restore go packages
+- Fixed restore cargo packages
+
+
 #### v0.26
 
 - Arch, AUR, & Enable/Disable Native Package Managers [#24](https://github.com/hkdb/app/issues/24)

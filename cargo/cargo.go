@@ -158,6 +158,7 @@ func InstallAll() {
 			utils.PrintErrorExit("Cargo - Read Repo ERROR:", err)
 		}
 		if git == true {
+			fmt.Println("GIT Package:",  p)
 			url, tag, err := db.GetGitSetup(mgr, p)
 			if err != nil {
 				utils.PrintErrorExit("Cargo - Get Repo Data ERROR:", err)
@@ -165,6 +166,7 @@ func InstallAll() {
 			install := exec.Command(env.Env, env.Bash, "-c", mgr+" install --git "+url+" --tag "+tag)
 			utils.RunCmd(install, "Installation Error:")
 		} else {
+			fmt.Println("REG Package:",  p)
 			install := exec.Command(mgr, "install", p)
 			utils.RunCmd(install, "Installation Error:")
 		}

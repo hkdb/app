@@ -11,18 +11,21 @@ import (
 	"strings"
 )
 
-func AddRepo(s, g string) {
+func AddRepo(s, g string, restore bool) {
 
 	pkg := s
 	if sExt := utils.GetFileExtension(s); sExt == "sh" {
 		pkg = utils.GetFileName(s)
 	}
-	exists, err := db.RepoExists("zypper", pkg)
-	if err != nil {
-		utils.PrintErrorExit("Error:", err)
-	}
-	if exists == true {
-		utils.PrintErrorMsgExit("Error:", "This repo has already been added to app before...")
+	
+	if restore == true {
+		exists, err := db.RepoExists("zypper", pkg)
+		if err != nil {
+			utils.PrintErrorExit("Error:", err)
+		}
+		if exists == true {
+			utils.PrintErrorMsgExit("Error:", "This repo has already been added to app before...")
+		}
 	}
 
 	if ws := utils.HasWhiteSpace(s); ws == true {

@@ -210,7 +210,7 @@ func ReadPkgSlice(root, col, pm string) ([]string, error) {
 		return []string{""}, err
 	}
 
-	pkgSlice := strings.Split(pkgs, " ")
+	pkgSlice := strings.Fields(pkgs)
 
 	return pkgSlice, nil
 
