@@ -11,7 +11,7 @@ import (
 	"syscall"
 )
 
-var sudo = [3]string{"/usr/local/bin/sudo", "/bin/sh", "-c"}
+var sudo = [4]string{"/usr/local/bin/sudo", "-S", "/bin/sh", "-c"}
 var cmd = "/usr/sbin/pkg"
 
 func Install(pkg string) {
@@ -39,7 +39,7 @@ func Install(pkg string) {
 		command = cmd + " -y" + action
 	}
 
-	install := exec.Command(sudo[0], sudo[1], sudo[2], command+pkg)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command+pkg)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
@@ -68,7 +68,7 @@ func Remove(pkg string) {
 		command = cmd + " -y" + action
 	}
 
-	remove := exec.Command(sudo[0], sudo[1], sudo[2], command+pkg)
+	remove := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command+pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -93,7 +93,7 @@ func AutoRemove() {
 		command = cmd + " -y" + action
 	}
 
-	err := syscall.Exec(sudo[0], []string{sudo[0], sudo[1], sudo[2], command}, os.Environ())
+	err := syscall.Exec(sudo[0], []string{sudo[0], sudo[1], sudo[2], sudo[3], command}, os.Environ())
 	if err != nil {
 		utils.PrintErrorExit("Auto Remove Error:", err)
 	}
@@ -126,7 +126,7 @@ func Update() {
 		command = command + " -y" + action
 	}
 
-	update := exec.Command(sudo[0], sudo[1], sudo[2], command)
+	update := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command)
 	utils.RunCmd(update, "Update Error:")
 
 }
@@ -139,7 +139,7 @@ func Upgrade() {
 		command = cmd + " -y" + action
 	}
 
-	upgrade := exec.Command(sudo[0], sudo[1], sudo[2], command)
+	upgrade := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command)
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
 }
@@ -173,7 +173,7 @@ func InstallAll() {
 		command = cmd + " -y" + action
 	}
 
-	install := exec.Command(sudo[0], sudo[1], sudo[2], command+pkgs)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command+pkgs)
 	utils.RunCmd(install, "Installation Error:")
 
 }

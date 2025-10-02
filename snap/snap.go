@@ -11,7 +11,7 @@ import (
 	"syscall"
 )
 
-var sudo = [3]string{"/usr/bin/sudo", "/bin/sh", "-c"}
+var sudo = [4]string{"/usr/bin/sudo", "-S", "/bin/sh", "-c"}
 var mgr = "/usr/bin/snap"
 
 func Install(pkg, c string, classic bool) {
@@ -39,7 +39,7 @@ func Install(pkg, c string, classic bool) {
 	if classic == true {
 		end = " --classic"
 	}
-	install := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/snap "+cmd+pkg+end)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "/usr/bin/snap "+cmd+pkg+end)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
@@ -72,7 +72,7 @@ func Remove(pkg string) {
 		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
-	remove := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/snap remove "+pkg)
+	remove := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "/usr/bin/snap remove "+pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -128,7 +128,7 @@ func ListSystemSearch(pkg string) {
 
 func Update() {
 
-	err := syscall.Exec(sudo[0], []string{sudo[0], sudo[1], sudo[2], "/usr/bin/snap refresh"}, os.Environ())
+	err := syscall.Exec(sudo[0], []string{sudo[0], sudo[1], sudo[2], sudo[3], "/usr/bin/snap refresh"}, os.Environ())
 	if err != nil {
 		utils.PrintErrorExit("Update Error:", err)
 	}
@@ -137,7 +137,7 @@ func Update() {
 
 func Upgrade() {
 
-	upgrade := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/snap refresh")
+	upgrade := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "/usr/bin/snap refresh")
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
 }
@@ -179,7 +179,7 @@ func InstallAll() {
 		if isClassic == true {
 			classic = " --classic"
 		}
-		install := exec.Command(sudo[0], sudo[1], sudo[2], command+" "+pkgs+classic)
+		install := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command+" "+pkgs+classic)
 		utils.RunCmd(install, "Installation Error:")
 	} else {
 		pkgs, sperr := db.ReadPkgSlice("", "packages", "snap")
@@ -207,7 +207,7 @@ func InstallAll() {
 				classic = " --classic"
 			}
 
-			install := exec.Command(sudo[0], sudo[1], sudo[2], command+" "+pkgs[i]+classic)
+			install := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command+" "+pkgs[i]+classic)
 			utils.RunCmd(install, "Installation Error:")
 		}
 	}

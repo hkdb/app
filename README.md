@@ -179,6 +179,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.28
+
+- Added -S (--stdin) to all sudo commands so that users can directly run app inside a container from the host(ie. `incus exec container -- app -r all`)
+
+
 #### v0.27
 
 - Fixed restore repositories

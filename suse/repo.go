@@ -42,9 +42,9 @@ func AddRepo(s, g string, restore bool) {
 			utils.PrintErrorMsgExit("Input Error:", "No gpg url was specified...")
 		}
 		_, sFile := utils.GetNameFromUrl(s)
-		gpg := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/rpm --import "+g)
+		gpg := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "/usr/bin/rpm --import "+g)
 		utils.RunCmd(gpg, "Import PGP Key Error:")
-		cmd := exec.Command(sudo[0], sudo[1], sudo[2], "zypper addrepo "+s)
+		cmd := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "zypper addrepo "+s)
 		utils.RunCmd(cmd, "Add Repo Error:")
 		name = sFile
 		db.RecordSetup("zypper", name, s, g)
@@ -58,7 +58,7 @@ func AddRepo(s, g string, restore bool) {
 			utils.PrintErrorMsgExit("File Syntax Error:", "Did you add #!/bin/bash to the top of the script?")
 		}
 		os.Chmod(sFull, 0755)
-		runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
+		runScript := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], sFull)
 		utils.RunCmd(runScript, "Script Error:")
 		utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/zypper")
 		utils.Copy(sFull, env.DBDir+"/packages/repo/local/zypper/"+s)
@@ -91,7 +91,7 @@ func RemoveRepo(s string) {
 	sources := strings.Split(s, " ")
 	for i := 0; i < len(sources); i++ {
 		fmt.Println("Removing zypper repo " + sources[i] + " with sudo:")
-		rmRepo := exec.Command(sudo[0], sudo[1], sudo[2], "zypper removerepo "+ sources[i])
+		rmRepo := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "zypper removerepo "+ sources[i])
 		utils.RunCmd(rmRepo, "Repo Remove Error:")
 	}
 

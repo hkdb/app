@@ -42,7 +42,7 @@ func ParuAddRepo(s, g string, restore bool) {
 		utils.PrintErrorMsgExit("File Syntax Error:", "Did you add #!/bin/bash to the top of the script?")
 	}
 	os.Chmod(sFull, 0755)
-	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
+	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], sFull)
 	utils.RunCmd(runScript, "Script Error:")
 	utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/paru")
 	utils.Copy(sFull, env.DBDir+"/packages/repo/local/paru/"+s)
@@ -85,7 +85,7 @@ func ParuRemoveRepo(s string) {
 		utils.PrintErrorMsgExit("File Syntax Error:", "Did you add #!/bin/bash to the top of the script?")
 	}
 	os.Chmod(sFull, 0755)
-	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
+	runScript := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], sFull)
 	utils.RunCmd(runScript, "Script Error:")
 
 	// Record removed repo

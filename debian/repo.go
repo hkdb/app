@@ -38,7 +38,7 @@ func AddRepo(s, g string, restore bool) {
 
 	switch sType {
 	case "ppa":
-		cmd := exec.Command(sudo[0], sudo[1], sudo[2], "add-apt-repository "+s)
+		cmd := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "add-apt-repository "+s)
 		utils.RunCmd(cmd, "Add Repo Error:")
 		name = s
 	case "sh":
@@ -56,7 +56,7 @@ func AddRepo(s, g string, restore bool) {
 			utils.PrintErrorMsgExit("File Syntax Error:", "Did you add #!/bin/bash to the top of the script?")
 		}
 		os.Chmod(sFull, 0755)
-		runScript := exec.Command(sudo[0], sudo[1], sudo[2], sFull)
+		runScript := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], sFull)
 		utils.RunCmd(runScript, "Script Error:")
 		utils.CreateDirIfNotExist(env.DBDir + "/packages/repo/local/apt")
 		utils.Copy(sFull, env.DBDir+"/packages/repo/local/apt/"+s)
@@ -94,13 +94,13 @@ func RemoveRepo(s string) {
 
 	switch sType {
 	case "ppa":
-		cmd := exec.Command(sudo[0], sudo[1], sudo[2], "add-apt-repository --remove "+s)
+		cmd := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "add-apt-repository --remove "+s)
 		utils.RunCmd(cmd, "Remove Repo Error:")
 	default:
 		sources := strings.Split(s, " ")
 		for i := 0; i < len(sources); i++ {
 			fmt.Println("Removing /etc/apt/sources.list.d/" + sources[i] + ".list with sudo:")
-			rmRepo := exec.Command("/usr/bin/sudo", "/bin/bash", "-c", "rm /etc/apt/sources.list.d/"+sources[i]+".list")
+			rmRepo := exec.Command("/usr/bin/sudo", "-S", "/bin/bash", "-c", "rm /etc/apt/sources.list.d/"+sources[i]+".list")
 			utils.RunCmd(rmRepo, "Repo Remove Error:")
 		}
 	}

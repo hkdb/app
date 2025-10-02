@@ -11,7 +11,7 @@ import (
 	"syscall"
 )
 
-var sudo = [3]string{"/usr/bin/sudo", "/bin/sh", "-c"}
+var sudo = [4]string{"/usr/bin/sudo", "-S", "/bin/sh", "-c"}
 var cmd = "/usr/bin/pacman"
 
 func Install(pkg string) {
@@ -26,7 +26,7 @@ func Install(pkg string) {
 		utils.PrintErrorMsgExit(pkg+" is already installed...", "")
 	}
 
-	install := exec.Command(sudo[0], sudo[1], sudo[2], cmd+" -S "+pkg)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], cmd+" -S "+pkg)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
@@ -49,7 +49,7 @@ func Remove(pkg string) {
 		utils.PrintErrorMsgExit(pkg+" was not installed by app...", "")
 	}
 
-	remove := exec.Command(sudo[0], sudo[1], sudo[2], cmd+" -R "+pkg)
+	remove := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], cmd+" -R "+pkg)
 	utils.RunCmd(remove, "Remove Error:")
 
 	fmt.Println("\n Removing " + pkg + " from app history...\n")
@@ -78,7 +78,7 @@ func AutoRemove() {
 		fmt.Println("No packages need to be automatically removed...\n")
 		os.Exit(1)
 	}
-	aRemove := exec.Command(sudo[0], sudo[1], sudo[2], "/usr/bin/pacman -Rns "+rmList)
+	aRemove := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], "/usr/bin/pacman -Rns "+rmList)
 	utils.RunCmd(aRemove, "Auto Remove Error:")
 
 }
@@ -104,7 +104,7 @@ func Update() {
 	action := " -Syy"
 	command := cmd + action
 
-	update := exec.Command(sudo[0], sudo[1], sudo[2], command)
+	update := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command)
 	utils.RunCmd(update, "Update Error:")
 
 }
@@ -116,7 +116,7 @@ func Upgrade() {
 		upgrade := exec.Command("/usr/bin/garuda-update")
 		utils.RunCmd(upgrade, "Upgrade Error:")
 	default:
-		upgrade := exec.Command(sudo[0], sudo[1], sudo[2], cmd+" -Syyu")
+		upgrade := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], cmd+" -Syyu")
 		utils.RunCmd(upgrade, "Upgrade Error:")
 	}
 
@@ -147,7 +147,7 @@ func InstallAll() {
 	}
 
 	command := cmd + " -S "
-	install := exec.Command(sudo[0], sudo[1], sudo[2], command+pkgs)
+	install := exec.Command(sudo[0], sudo[1], sudo[2], sudo[3], command+pkgs)
 	utils.RunCmd(install, "Installation Error:")
 
 }
