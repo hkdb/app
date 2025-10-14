@@ -48,7 +48,7 @@ func GetEnv() {
 	case "windows":
 		env.OSType = "Windows"
 	default:
-		fmt.Print(utils.ColorRed, "Unsupported Operating System... Exiting...\n\n", utils.ColorReset)
+		fmt.Print(utils.ColorRed, "🚨 Unsupported Operating System... Exiting...\n\n", utils.ColorReset)
 		os.Exit(1)
 	}
 
@@ -56,20 +56,34 @@ func GetEnv() {
 	if _, conferr := os.Stat(dir + "/settings.conf"); conferr == nil {
 		err := godotenv.Load(dir + "/settings.conf")
 		if err != nil {
-			fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
+			fmt.Println(utils.ColorRed, "🚨 Error loading settings.conf", utils.ColorReset)
+		}
+		migration := migrationNeeded(dir+"/settings.conf")
+		if migration {
+			fmt.Println("🏗️ Settings file requires a migration to the latest format...\n")
+			err := migrateConf(dir+"/settings.conf")
+			if err != nil {
+				utils.PrintErrorExit("Migration Error:", err)
+			}
+			fmt.Println("🚀 Settings file migration completed...\n")
+			fmt.Println("⚓ Reloading settings file...\n")
+			lerr := godotenv.Load(dir + "/settings.conf")
+			if lerr != nil {
+				fmt.Println(utils.ColorRed, "🚨 Error loading settings.conf", utils.ColorReset)
+			}
 		}
 	} else {
 		if _, err := os.Stat(dir); os.IsNotExist(err) {
-			fmt.Println(utils.ColorYellow, "\nFirst time running... Creating config dir...\n\n", utils.ColorReset)
+			fmt.Println(utils.ColorYellow, "\n🏗️ First time running... Creating config dir...\n\n", utils.ColorReset)
 			err := os.MkdirAll(dir, 0700)
 			if err != nil {
-				fmt.Println("Error:", err)
+				fmt.Println("🚨 Error:", err)
 				fmt.Println("Exiting...\n")
 				os.Exit(1)
 			}
 		}
 
-		if werr := utils.WriteToFile("FLATPAK = n\nSNAP = n\nAPPIMAGE = n", dir+"/settings.conf"); werr != nil {
+		if werr := utils.WriteToFile("APP_FLATPAK = n\nAPP_SNAP = n\nAPP_APPIMAGE = n", dir+"/settings.conf"); werr != nil {
 			utils.PrintErrorExit("Write settings.conf Error:", werr)
 		}
 
@@ -77,39 +91,39 @@ func GetEnv() {
 
 	switch osType {
 	case "linux":
-		yay := os.Getenv("YAY")
+		yay := os.Getenv("APP_YAY")
 		if yay != "y" {
 			env.Yay = false
 		}
 		if yay == "" || yay == " " {
-			utils.AppendToFile("YAY = n", env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_YAY = n", env.DBDir+"/settings.conf")
 		}
-		paru := os.Getenv("PARU")
+		paru := os.Getenv("APP_PARU")
 		if paru != "y" {
 			env.Paru = false
 		}
 		if paru == "" || paru == " " {
-			utils.AppendToFile("PARU = n", env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_PARU = n", env.DBDir+"/settings.conf")
 		}
-		flatpak := os.Getenv("FLATPAK")
+		flatpak := os.Getenv("APP_FLATPAK")
 		if flatpak != "y" {
 			env.Flatpak = false
 		}
 		if flatpak == "" || flatpak == " " {
-			utils.AppendToFile("FLATPAK = n", env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_FLATPAK = n", env.DBDir+"/settings.conf")
 		}
-		snap := os.Getenv("SNAP")
+		snap := os.Getenv("APP_SNAP")
 		if snap != "y" {
 			env.Snap = false
 		}
 		if snap == "" || snap == " " {
-			utils.AppendToFile("SNAP = n", env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_SNAP = n", env.DBDir+"/settings.conf")
 		}
 		env.BrewCmd = env.BrewLinuxCmd
-		if brew := os.Getenv("BREW"); brew != "y" {
+		if brew := os.Getenv("APP_BREW"); brew != "y" {
 			env.Brew = false
 		}
-		if appimage := os.Getenv("APPIMAGE"); appimage != "y" {
+		if appimage := os.Getenv("APP_APPIMAGE"); appimage != "y" {
 			env.AppImage = false
 		}
 
@@ -182,7 +196,7 @@ func GetEnv() {
 		}
 
 		npm := utils.GetNativePkgMgr()
-		apt := os.Getenv("APT")
+		apt := os.Getenv("APP_APT")
 		onoroff := "n"
 		if apt != "y" {
 			env.Apt = false
@@ -191,10 +205,10 @@ func GetEnv() {
 			if npm == "apt" {
 				onoroff = "y"
 			}
-			utils.AppendToFile("APT = " + onoroff, env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_APT = " + onoroff, env.DBDir+"/settings.conf")
 			onoroff = "n"
 		}
-		dnf := os.Getenv("DNF")
+		dnf := os.Getenv("APP_DNF")
 		if dnf != "y" {
 			env.Dnf = false
 		}
@@ -202,10 +216,10 @@ func GetEnv() {
 			if npm == "dnf" {
 				onoroff = "y"
 			}
-			utils.AppendToFile("DNF = " + onoroff, env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_DNF = " + onoroff, env.DBDir+"/settings.conf")
 			onoroff = "n"
 		}
-		pacman := os.Getenv("PACMAN")
+		pacman := os.Getenv("APP_PACMAN")
 		if pacman != "y" {
 			env.Pacman = false
 		}
@@ -213,10 +227,10 @@ func GetEnv() {
 			if npm == "pacman" {
 				onoroff = "y"
 			}
-			utils.AppendToFile("PACMAN = " + onoroff, env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_PACMAN = " + onoroff, env.DBDir+"/settings.conf")
 			onoroff = "n"
 		}
-		zypper := os.Getenv("ZYPPER")
+		zypper := os.Getenv("APP_ZYPPER")
 		if zypper != "y" {
 			env.Pacman = false
 		}
@@ -224,10 +238,10 @@ func GetEnv() {
 			if npm == "zypper" {
 				onoroff = "y"
 			}
-			utils.AppendToFile("ZYPPER = " + onoroff, env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_ZYPPER = " + onoroff, env.DBDir+"/settings.conf")
 			onoroff = "n"
 		}
-		nixenv := os.Getenv("NIXENV")
+		nixenv := os.Getenv("APP_NIXENV")
 		if nixenv != "y" {
 			env.NixEnv = false
 		}
@@ -235,7 +249,7 @@ func GetEnv() {
 			if npm == "nix-env" {
 				onoroff = "y"
 			}
-			utils.AppendToFile("NIXENV = " + onoroff, env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_NIXENV = " + onoroff, env.DBDir+"/settings.conf")
 			onoroff = "n"
 		}
 
@@ -275,10 +289,10 @@ func GetEnv() {
 			}
 		}
 	case "darwin":
-		settings := os.Getenv("BREW")
+		settings := os.Getenv("APP_BREW")
 		sCount := len(settings)
 		if sCount == 0 {
-			utils.AppendToFile("BREW = y", env.DBDir+"/settings.conf")
+			utils.AppendToFile("APP_BREW = y", env.DBDir+"/settings.conf")
 			err := godotenv.Load(dir + "/settings.conf")
 			if err != nil {
 				fmt.Println(utils.ColorRed, "Error loading settings.conf", utils.ColorReset)
@@ -293,33 +307,33 @@ func GetEnv() {
 		utils.PrintErrorMsgExit("Error:", "Windows is not supported yet...")
 	}
 
-	brew := os.Getenv("BREW")
+	brew := os.Getenv("APP_BREW")
 	if brew != "y" {
 		env.Brew = false
 	}
 	if brew == "" || brew == " " {
-		utils.AppendToFile("BREW = n", env.DBDir+"/settings.conf")
+		utils.AppendToFile("APP_BREW = n", env.DBDir+"/settings.conf")
 	}
-	golang := os.Getenv("GOLANG")
+	golang := os.Getenv("APP_GOLANG")
 	if golang != "y" {
 		env.Go = false
 	}
 	if golang == "" || golang == " " {
-		utils.AppendToFile("GOLANG = n", env.DBDir+"/settings.conf")
+		utils.AppendToFile("APP_GOLANG = n", env.DBDir+"/settings.conf")
 	}
-	pip := os.Getenv("PIP")
+	pip := os.Getenv("APP_PIP")
 	if pip != "y" {
 		env.Pip = false
 	}
 	if pip == "" || pip == " " {
-		utils.AppendToFile("PIP = n", env.DBDir+"/settings.conf")
+		utils.AppendToFile("APP_PIP = n", env.DBDir+"/settings.conf")
 	}
-	cargo := os.Getenv("CARGO")
+	cargo := os.Getenv("APP_CARGO")
 	if cargo != "y" {
 		env.Cargo = false
 	}
 	if cargo == "" || cargo == " " {
-		utils.AppendToFile("CARGO = n", env.DBDir+"/settings.conf")
+		utils.AppendToFile("APP_CARGO = n", env.DBDir+"/settings.conf")
 	}
 
 	if env.Brew == true {
@@ -398,4 +412,32 @@ func bsdPath() {
 		env.BrewCmd = env.BrewSiliconCmd
 	}
 
+}
+
+func migrationNeeded(s string) bool {
+	confver := os.Getenv("APP_CONFIG_VER")
+	if confver != env.ConfVer {
+		return true
+	}
+	return false
+}
+
+func migrateConf(s string) error {
+	content, err := os.ReadFile(s)
+	if err != nil {
+			return err
+	}
+
+  // Add APP_ prefix to each line
+	lines := strings.Split(string(content), "\n")
+	for i, line := range lines {
+			if strings.TrimSpace(line) != "" && strings.Contains(line, "=") {
+					lines[i] = "APP_" + line
+			}
+	}
+
+	// Add version at the top
+  newContent := "APP_CONFIG_VER = 2\n" + strings.Join(lines, "\n")
+
+	return os.WriteFile(s, []byte(newContent), 0644)
 }

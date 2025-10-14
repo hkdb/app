@@ -179,6 +179,12 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.29
+
+- Changed settings.conf format to resolve paru and yay variable naming conflict that causes installations to fail
+- Auto-migration of settings file to v2 format.
+
+
 #### v0.28
 
 - Added -S (--stdin) to all sudo commands so that users can directly run app inside a container from the host(ie. `incus exec container -- app -r all`)

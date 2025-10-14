@@ -14,6 +14,7 @@ type Flags struct {
 }
 
 var Version string
+var ConfVer = "2"
 var OSType string
 var Distro string
 var Base string

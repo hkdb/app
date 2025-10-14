@@ -13,6 +13,7 @@ func RunCmd(c *exec.Cmd, msg string) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+
 	cmd.Env = os.Environ()
 	if err := cmd.Run(); err != nil {
 		PrintErrorExit(msg, err)
