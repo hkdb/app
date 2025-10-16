@@ -603,6 +603,7 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			}
 			if env.Brew != false {
 				fmt.Println("\nUpgrading with HOMEBREW:\n")
+				brew.Update()
 				brew.Upgrade()
 			} else {
 				fmt.Println("Brew is disabled... Skipping...\n")

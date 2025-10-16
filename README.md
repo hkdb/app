@@ -179,6 +179,11 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.30
+
+- Fixed brew upgrade
+
+
 #### v0.29
 
 - Changed settings.conf format to resolve paru and yay variable naming conflict that causes installations to fail

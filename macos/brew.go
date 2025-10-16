@@ -100,7 +100,7 @@ func Update() {
 func Upgrade() {
 
 	loadMgr()
-	upgrade := exec.Command(mgr, "update")
+	upgrade := exec.Command(mgr, "upgrade")
 	utils.RunCmd(upgrade, "Upgrade Error:")
 
 }
