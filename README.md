@@ -179,6 +179,14 @@ If this repo was useful to you, feel free to buy us some coffee! :)
 
 ### VERSIONS
 
+#### v0.31
+
+v0.29 breaks enable/disable and also pretty much cripples app from working for first time installers. This release fixes that:
+
+- Fixed enable/disable of package managers
+- Fixed first time install logic
+
+
 #### v0.30
 
 - Fixed brew upgrade

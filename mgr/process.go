@@ -863,60 +863,60 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		switch m {
 		case "apt":
 			env.Apt = true
-			utils.EditSettings("APT = ", "y")
+			utils.EditSettings("APP_APT = ", "y")
 			fmt.Println("Apt has been enabled...\n")
 		case "dnf":
 			env.Dnf = true
-			utils.EditSettings("DNF = ", "y")
+			utils.EditSettings("APP_DNF = ", "y")
 			fmt.Println("Dnf has been enabled...\n")
 		case "pacman":
 			env.Yay = true
-			utils.EditSettings("PACMAN = ", "y")
+			utils.EditSettings("APP_PACMAN = ", "y")
 			fmt.Println("Pacman has been enabled...\n")
 		case "zypper":
 			env.Yay = true
-			utils.EditSettings("ZYPPER = ", "y")
+			utils.EditSettings("APP_ZYPPER = ", "y")
 			fmt.Println("Zypper has been enabled...\n")
 		case "yay":
 			env.Yay = true
-			utils.EditSettings("YAY = ", "y")
+			utils.EditSettings("APP_YAY = ", "y")
 			fmt.Println("Yay has been enabled...\n")
 		case "paru":
 			env.Paru = true
-			utils.EditSettings("PARU = ", "y")
+			utils.EditSettings("APP_PARU = ", "y")
 			fmt.Println("Paru has been enabled...\n")
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			env.Flatpak = true
-			utils.EditSettings("FLATPAK = ", "y")
+			utils.EditSettings("APP_FLATPAK = ", "y")
 			fmt.Println("Flatpak has been enabled...\n")
 		case "snap":
 			env.Snap = true
-			utils.EditSettings("SNAP = ", "y")
+			utils.EditSettings("APP_SNAP = ", "y")
 			fmt.Println("Snap has been enabled...\n")
 		case "brew":
 			if env.OSType == "Mac" {
 				utils.PrintErrorMsgExit("", "Homebrew is the default for macOS. It's already enabled...")
 			}
 			env.Brew = true
-			utils.EditSettings("BREW = ", "y")
+			utils.EditSettings("APP_BREW = ", "y")
 			fmt.Println("Homebrew has been enabled...\n")
 		case "go":
 			env.Go = true
-			utils.EditSettings("GOLANG = ", "y")
+			utils.EditSettings("APP_GOLANG = ", "y")
 			fmt.Println("Go has been enabled...\n")
 		case "pip":
 			env.Pip = true
-			utils.EditSettings("PIP = ", "y")
+			utils.EditSettings("APP_PIP = ", "y")
 			fmt.Println("Pip has been enabled...\n")
 		case "cargo":
 			env.Cargo = true
-			utils.EditSettings("CARGO = ", "y")
+			utils.EditSettings("APP_CARGO = ", "y")
 			fmt.Println("Cargo has been enabled...\n")
 		case "appimage":
 			env.AppImage = true
-			utils.EditSettings("APPIMAGE = ", "y")
+			utils.EditSettings("APP_APPIMAGE = ", "y")
 			fmt.Println("AppImage has been enabled...\n")
 		default:
 			fmt.Println("Can't enable... Unsupported package manager...\n")
@@ -926,60 +926,60 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		switch m {
 		case "apt":
 			env.Apt = false
-			utils.EditSettings("APT = ", "n")
+			utils.EditSettings("APP_APT = ", "n")
 			fmt.Println("Apt has been disabled...\n")
 		case "dnf":
 			env.Dnf = false
-			utils.EditSettings("DNF = ", "n")
+			utils.EditSettings("APP_DNF = ", "n")
 			fmt.Println("Dnf has been disabled...\n")
 		case "pacman":
 			env.Yay = false
-			utils.EditSettings("PACMAN = ", "n")
+			utils.EditSettings("APP_PACMAN = ", "n")
 			fmt.Println("Pacman has been disabled...\n")
 		case "zypper":
 			env.Yay = false
-			utils.EditSettings("ZYPPER = ", "n")
+			utils.EditSettings("APP_ZYPPER = ", "n")
 			fmt.Println("Zypper has been disabled...\n")
 		case "yay":
 			env.Yay = false
-			utils.EditSettings("YAY = ", "n")
+			utils.EditSettings("APP_YAY = ", "n")
 			fmt.Println("Yay has been disabled...\n")
 		case "paru":
 			env.Paru = false
-			utils.EditSettings("PARU = ", "n")
+			utils.EditSettings("APP_PARU = ", "n")
 			fmt.Println("Paru has been disabled...\n")
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 		case "flatpak":
 			env.Flatpak = false
-			utils.EditSettings("FLATPAK = ", "n")
+			utils.EditSettings("APP_FLATPAK = ", "n")
 			fmt.Println("Flatpak has been disabled...\n")
 		case "snap":
 			env.Snap = false
-			utils.EditSettings("SNAP = ", "n")
+			utils.EditSettings("APP_SNAP = ", "n")
 			fmt.Println("Snap has been disabled...\n")
 		case "brew":
 			if env.OSType == "Mac" {
 				utils.PrintErrorMsgExit("Error:", "Homebrew is the default for macOS. It can't be disabled...")
 			}
 			env.Brew = false
-			utils.EditSettings("BREW = ", "n")
+			utils.EditSettings("APP_BREW = ", "n")
 			fmt.Println("Homebrew has been disabled...\n")
 		case "go":
 			env.Go = false
-			utils.EditSettings("GOLANG = ", "n")
+			utils.EditSettings("APP_GOLANG = ", "n")
 			fmt.Println("Go has been disabled...\n")
 		case "pip":
 			env.Pip = false
-			utils.EditSettings("PIP = ", "n")
+			utils.EditSettings("APP_PIP = ", "n")
 			fmt.Println("Pip has been disabled...\n")
 		case "cargo":
 			env.Cargo = false
-			utils.EditSettings("CARGO = ", "n")
+			utils.EditSettings("APP_CARGO = ", "n")
 			fmt.Println("Cargo has been disabled...\n")
 		case "appimage":
 			env.AppImage = false
-			utils.EditSettings("APPIMAGE = ", "n")
+			utils.EditSettings("APP_APPIMAGE = ", "n")
 			fmt.Println("AppImage has been disabled...\n")
 		default:
 			fmt.Println("Can't disable... Unsupported package manager...\n")

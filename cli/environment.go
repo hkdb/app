@@ -83,7 +83,7 @@ func GetEnv() {
 			}
 		}
 
-		if werr := utils.WriteToFile("APP_FLATPAK = n\nAPP_SNAP = n\nAPP_APPIMAGE = n", dir+"/settings.conf"); werr != nil {
+		if werr := utils.WriteToFile("APP_CONFIG_VER = 2\nAPP_FLATPAK = n\nAPP_SNAP = n\nAPP_APPIMAGE = n", dir+"/settings.conf"); werr != nil {
 			utils.PrintErrorExit("Write settings.conf Error:", werr)
 		}
 
@@ -232,7 +232,7 @@ func GetEnv() {
 		}
 		zypper := os.Getenv("APP_ZYPPER")
 		if zypper != "y" {
-			env.Pacman = false
+			env.Zypper = false
 		}
 		if zypper == "" || zypper == " " {
 			if npm == "zypper" {
