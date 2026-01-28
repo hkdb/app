@@ -74,6 +74,11 @@ func isEnabled(pm string) bool {
 			return false
 		}
 		return true
+	case "pipx":
+		if env.PipX == false {
+			return false
+		}
+		return true
 	case "cargo":
 		if env.Cargo == false {
 			return false

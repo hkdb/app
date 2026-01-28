@@ -11,6 +11,7 @@ import (
 	"github.com/hkdb/app/golang"
 	brew "github.com/hkdb/app/macos"
 	"github.com/hkdb/app/pip"
+	"github.com/hkdb/app/pipx"
 	"github.com/hkdb/app/redhat"
 	"github.com/hkdb/app/suse"
 	"github.com/hkdb/app/restore"
@@ -185,6 +186,14 @@ func restoreAll() {
 		}
 	}
 
+	if env.PipX == true {
+		fmt.Print("Restore all Python(pipx) apps? (Y/n) ")
+		s := utils.Confirm()
+		if s == true {
+			pipx.InstallAll()
+		}
+	}
+
 	if env.Cargo == true {
 		fmt.Print("Restore all Rust(cargo) apps? (Y/n) ")
 		s := utils.Confirm()
@@ -292,6 +301,11 @@ func restoreOne(r string) {
 				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
 			}
 			pip.InstallAll()
+		case "pipx":
+			if env.PipX == false {
+				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
+			}
+			pipx.InstallAll()
 		case "cargo":
 			if env.Cargo == false {
 				utils.PrintErrorMsgExit(r+" is disabled... To enable it, run ", "app -m "+r+" enable\n")
@@ -353,6 +367,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			golang.Install(p)
 		case "pip":
 			pip.Install(p)
+		case "pipx":
+			pipx.Install(p)
 		case "cargo":
 			cargo.Install(p, tag)
 		case "appimage":
@@ -389,6 +405,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			golang.Remove(p)
 		case "pip":
 			pip.Remove(p)
+		case "pipx":
+			pipx.Remove(p)
 		case "cargo":
 			cargo.Remove(p)
 		case "appimage":
@@ -425,6 +443,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			golang.Purge(p)
 		case "pip":
 			pip.Purge(p)
+		case "pipx":
+			pipx.Purge(p)
 		case "cargo":
 			cargo.Purge(p)
 		default:
@@ -459,6 +479,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			golang.Search(p)
 		case "pip":
 			pip.Search(p)
+		case "pipx":
+			pipx.Search(p)
 		case "cargo":
 			cargo.Search(p)
 		default:
@@ -493,6 +515,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			golang.Update()
 		case "pip":
 			pip.Update()
+		case "pipx":
+			pipx.Update()
 		case "cargo":
 			cargo.Update()
 		case "app":
@@ -531,6 +555,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				golang.Upgrade()
 			case "pip":
 				pip.Upgrade()
+			case "pipx":
+				pipx.Upgrade()
 			case "cargo":
 				cargo.Upgrade()
 			default:
@@ -620,6 +646,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			} else {
 				fmt.Println("PIP is disabled... Skipping...\n")
 			}
+			if env.PipX != false {
+				fmt.Println("\nUpgrading with PIPX installed packages:\n")
+				pipx.Upgrade()
+			} else {
+				fmt.Println("PIPX is disabled... Skipping...\n")
+			}
 			if env.Cargo != false {
 				fmt.Println("\nUpgrading with CARGO:\n")
 				cargo.Upgrade()
@@ -659,6 +691,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 				golang.DistUpgrade()
 			case "pip":
 				pip.DistUpgrade()
+			case "pipx":
+				pipx.DistUpgrade()
 			case "cargo":
 				cargo.DistUpgrade()
 			default:
@@ -720,6 +754,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			} else {
 				fmt.Println("PIP is disabled... Skipping...\n")
 			}
+			if env.PipX != false {
+				fmt.Println("\nUpgrading with PIPX installed packages:\n")
+				pipx.Upgrade()
+			} else {
+				fmt.Println("PIPX is disabled... Skipping...\n")
+			}
 			if env.Cargo != false {
 				fmt.Println("\nUpgrading with CARGO:\n")
 				cargo.Upgrade()
@@ -757,6 +797,8 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			golang.AutoRemove()
 		case "pip":
 			pip.AutoRemove()
+		case "pipx":
+			pipx.AutoRemove()
 		case "cargo":
 			cargo.AutoRemove()
 		default:
@@ -839,6 +881,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			} else {
 				pip.ListSystemSearch(p)
 			}
+		case "pipx":
+			if p == "" {
+				pipx.ListSystem()
+			} else {
+				pipx.ListSystemSearch(p)
+			}
 		case "cargo":
 			if p == "" {
 				cargo.ListSystem()
@@ -851,7 +899,7 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 		}
 	case "history":
 		switch m {
-		case "apt", "dnf", "pacman", "yay", "paru", "pkg", "zypper", "flatpak", "snap", "brew", "go", "pip", "cargo", "appimage":
+		case "apt", "dnf", "pacman", "yay", "paru", "pkg", "zypper", "flatpak", "snap", "brew", "go", "pip", "pipx", "cargo", "appimage":
 			utils.History(m, p, sort)
 		case "nix-env":
 			utils.PrintErrorMsgExit("Error: It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
@@ -910,6 +958,10 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			env.Pip = true
 			utils.EditSettings("APP_PIP = ", "y")
 			fmt.Println("Pip has been enabled...\n")
+		case "pipx":
+			env.PipX = true
+			utils.EditSettings("APP_PIPX = ", "y")
+			fmt.Println("PIPX has been enabled...\n")
 		case "cargo":
 			env.Cargo = true
 			utils.EditSettings("APP_CARGO = ", "y")
@@ -973,6 +1025,10 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			env.Pip = false
 			utils.EditSettings("APP_PIP = ", "n")
 			fmt.Println("Pip has been disabled...\n")
+		case "pipx":
+			env.PipX = false
+			utils.EditSettings("APP_PIPX = ", "n")
+			fmt.Println("PIPX has been disabled...\n")
 		case "cargo":
 			env.Cargo = false
 			utils.EditSettings("APP_CARGO = ", "n")
@@ -1120,6 +1176,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
 			}
+			fmt.Print("pipx: ")
+			if env.PipX == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
 			fmt.Print("cargo: ")
 			if env.Cargo == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
@@ -1137,6 +1199,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			}
 			fmt.Print("pip: ")
 			if env.Pip == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("pipx: ")
+			if env.PipX == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
@@ -1164,6 +1232,12 @@ func execute(m, a, p, g, c string, classic bool, tag string, sort bool) {
 			}
 			fmt.Print("pip: ")
 			if env.Pip == true {
+				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
+			} else {
+				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)
+			}
+			fmt.Print("pipx: ")
+			if env.PipX == true {
 				fmt.Println(utils.ColorGreen, "Enabled", utils.ColorReset)
 			} else {
 				fmt.Println(utils.ColorRed, "Disabled", utils.ColorReset)

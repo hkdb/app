@@ -6,4 +6,4 @@
 3. Change version on `dist/updateapp.sh`
 4. Change version on `dist/version.txt`
 5. Change version on `dist/index.html`
-6. Add release notes to `README.md`
+6. Add release notes to `CHANGELOG.md`

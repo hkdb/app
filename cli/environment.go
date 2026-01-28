@@ -328,6 +328,13 @@ func GetEnv() {
 	if pip == "" || pip == " " {
 		utils.AppendToFile("APP_PIP = n", env.DBDir+"/settings.conf")
 	}
+	pipx := os.Getenv("APP_PIPX")
+	if pipx != "y" {
+		env.PipX = false
+	}
+	if pipx == "" || pipx == " " {
+		utils.AppendToFile("APP_PIPX = n", env.DBDir+"/settings.conf")
+	}
 	cargo := os.Getenv("APP_CARGO")
 	if cargo != "y" {
 		env.Cargo = false
@@ -360,6 +367,16 @@ func GetEnv() {
 		}
 		if pip == false {
 			fmt.Println(utils.ColorYellow, "Temporarily disabling Pip because it's not installed on your system. Suppress this message by disabling Pip on app by running \"app -m pip disable\"...\n", utils.ColorReset)
+		}
+	}
+
+	if env.PipX == true {
+		pipx, _ := utils.CheckIfExists(env.PipXCmd)
+		if env.Base == "nixos" {
+			pipx = nixosCheck("pipx", 5)
+		}
+		if pipx == false {
+			fmt.Println(utils.ColorYellow, "Temporarily disabling PipX because it's not installed on your system. Suppress this message by disabling PipX on app by running \"app -m pipx disable\"...\n", utils.ColorReset)
 		}
 	}
 
@@ -406,7 +423,8 @@ func bsdPath() {
 
 	env.GoCmd = "/usr/local/bin/go"
 	env.PipCmd = "/usr/local/bin/pip"
-	env.CargoCmd = "/usr/local/bin/pip"
+	env.PipXCmd = "/usr/local/bin/pipx"
+	env.CargoCmd = "/usr/local/bin/cargo"
 	
 	if runtime.GOARCH == "arm64" && runtime.GOOS =="darwin" {
 		env.BrewCmd = env.BrewSiliconCmd
