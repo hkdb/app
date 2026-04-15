@@ -1,5 +1,13 @@
 # CHANGELOG
 
+#### v0.33
+
+- Fixed suse InstallAll
+- Fixed suse RestoreAll
+- Fixed output typo
+- Fixed brew install multiple packages
+
+
 #### v0.32
 
 - Added `pipx` support

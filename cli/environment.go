@@ -346,7 +346,7 @@ func GetEnv() {
 	if env.Brew == true {
 		brew, _ := utils.CheckIfExists(env.BrewCmd)
 		if brew == false {
-			fmt.Println(utils.ColorYellow, "Temporarily disabling Brew because it's not installed on your system. Suppress this message by disabling Brew on app by running \"app-m brew disable\"...\n", utils.ColorReset)
+			fmt.Println(utils.ColorYellow, "Temporarily disabling Brew because it's not installed on your system. Suppress this message by disabling Brew on app by running \"app -m brew disable\"...\n", utils.ColorReset)
 		}
 	}
 

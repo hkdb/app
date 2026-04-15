@@ -95,7 +95,7 @@ func restoreAll() {
 					//fmt.Println("Arch Install All")
 				case "suse":
 					restore.RestoreAllRepos("suse")
-					arch.InstallAll()
+					suse.InstallAll()
 				case "nixos":
 					fmt.Println("Skipping nix-env... It's redundant to use app for nix-env packages when you can just install packages by adding packages to /etc/nixos/configurations.nix. app is only meant for managing other package managers that are used on nixos...", "")
 				}
@@ -261,7 +261,7 @@ func restoreOne(r string) {
 			npm := utils.GetNativePkgMgr()
 			if npm == "zypper" {
 				restore.RestoreAllRepos("zypper")
-				redhat.InstallAll()
+				suse.InstallAll()
 			} else {
 				utils.PrintErrorMsgExit("Error:", "You are trying to restore with dnf on a non-zypper system...\n")
 			}

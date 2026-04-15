@@ -27,7 +27,8 @@ func Install(pkg string) {
 	}
 
 	loadMgr()
-	install := exec.Command(mgr, "install", pkg)
+	args := append([]string{"install"}, strings.Split(pkg, " ")...)
+	install := exec.Command(mgr, args...)
 	utils.RunCmd(install, "Installation Error:")
 
 	fmt.Println("\n Recording " + pkg + " to app history...\n")
